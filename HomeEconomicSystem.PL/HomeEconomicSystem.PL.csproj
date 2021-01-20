@@ -53,6 +53,7 @@
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -92,6 +93,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+    <Folder Include="ViewModel\" />
+    <Folder Include="View\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HomeEconomicSystem.BE\HomeEconomicSystem.BE.csproj">
+      <Project>{6f102a29-acf6-4070-9662-ee8dab89ae4e}</Project>
+      <Name>HomeEconomicSystem.BE</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeEconomicSystem.BL\HomeEconomicSystem.BL.csproj">
+      <Project>{4a021c71-853d-4440-929d-59704b9e864e}</Project>
+      <Name>HomeEconomicSystem.BL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
