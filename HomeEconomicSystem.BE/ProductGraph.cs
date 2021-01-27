@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.BE
 {
-    class ProductGraph : BasicGraph
+    public class ProductGraph : BasicGraph
     {
         /// <summary>
         /// The items to show graph for

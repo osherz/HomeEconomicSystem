@@ -54,6 +54,7 @@
     <Compile Include="StoreGraph.cs" />
     <Compile Include="TimeType.cs" />
     <Compile Include="Transaction.cs" />
+    <Compile Include="TransactionsGraph.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
