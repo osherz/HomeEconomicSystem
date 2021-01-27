@@ -7,6 +7,6 @@ namespace HomeEconomicSystem.BE
     {
         public int Id { get; set; }
         public DateTime DateTime{ get; set; }
-        public List<ProductTransaction> ProductTransactions { get; private set; }
+        public virtual List<ProductTransaction> ProductTransactions { get; private set; }
     }
 }
