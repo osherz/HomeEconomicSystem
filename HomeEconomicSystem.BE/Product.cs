@@ -12,6 +12,7 @@ namespace HomeEconomicSystem.BE
         public string BarCode { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string ImageFileName { get; set; }
         public virtual Category Category { get; set; }
         public virtual List<ProductTransaction> ProductTransactions { get; private set; }
     }
