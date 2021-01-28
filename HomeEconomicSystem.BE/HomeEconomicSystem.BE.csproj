@@ -50,6 +50,7 @@
     <Compile Include="ProductGraph.cs" />
     <Compile Include="ProductTransaction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QRData.cs" />
     <Compile Include="Store.cs" />
     <Compile Include="StoreGraph.cs" />
     <Compile Include="TimeType.cs" />
