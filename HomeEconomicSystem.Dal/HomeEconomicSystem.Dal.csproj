@@ -54,8 +54,11 @@
     <Compile Include="EntityFramework\DbSetCollection.cs" />
     <Compile Include="IDbCollection.cs" />
     <Compile Include="IDb.cs" />
+    <Compile Include="IQRCodeFetcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EntityFramework\HomeEconomicContext.cs" />
+    <Compile Include="QRcode.cs" />
+    <Compile Include="QRCodeFetcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HomeEconomicSystem.BE\HomeEconomicSystem.BE.csproj">

@@ -9,6 +9,7 @@ namespace HomeEconomicSystem.Dal
 {
     public interface IDb: IDisposable
     {
+        IDbCollection<QRData> QRDatas { get; }
         IDbCollection<Product> Products { get;}
         IDbCollection<Category> Categories { get; }
         IDbCollection<Store> Stores { get; }

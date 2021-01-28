@@ -14,6 +14,8 @@ namespace HomeEconomicSystem.Dal.EntityFramework
         {
         }
 
+        public DbSet<QRData> QRDatas { get; set; }
+
         public DbSet<Product> Products { get; set; }
 
         public DbSet<Category> Categories { get; set; }
@@ -33,7 +35,11 @@ namespace HomeEconomicSystem.Dal.EntityFramework
         public DbSet<TransactionsGraph> TransactionsGraphs { get; set; }
 
 
+
         #region Implement IDb
+
+        IDbCollection<QRData> IDb.QRDatas => new DbSetCollection<QRData>(QRDatas);
+
         IDbCollection<Product> IDb.Products => new DbSetCollection<Product>(Products);
 
         IDbCollection<Category> IDb.Categories => new DbSetCollection<Category>(Categories);
