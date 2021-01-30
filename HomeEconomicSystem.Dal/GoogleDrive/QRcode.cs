@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeEconomicSystem.Dal
+namespace HomeEconomicSystem.Dal.GoogleDrive
 {
-    public class QRcode
+    public class QRcode : IQRcode
     {
         public byte[] ImageStream { get; internal set; }
         public string FileName { get; internal set; }
