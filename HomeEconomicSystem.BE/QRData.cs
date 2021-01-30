@@ -16,5 +16,6 @@ namespace HomeEconomicSystem.BE
         public string StoreName{ get; set; }
         public bool IsNew { get => (ProductTransaction is null); }
         public virtual ProductTransaction ProductTransaction { get; set; }
+
     }
 }
