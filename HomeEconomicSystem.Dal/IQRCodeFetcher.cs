@@ -8,12 +8,12 @@ namespace HomeEconomicSystem.Dal
 {
     public interface IQRCodeFetcher
     {
-        IEnumerable<QRcode> GetQRCode();
+        IEnumerable<IQRcode> GetQRCode();
         /// <summary>
         /// delete the QRcode.
         /// </summary>
         /// <param name="qrCodeToDelete">get list of QRcode to delete</param>
         /// <returns>return all QRcode that didnt manage to delete</returns>
-        IEnumerable<QRcode> DeleteQRcode(IEnumerable<QRcode> qrCodeToDelete);
+        IEnumerable<IQRcode> DeleteQRcode(IEnumerable<IQRcode> qrCodeToDelete);
     }
 }
