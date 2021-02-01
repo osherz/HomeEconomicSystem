@@ -350,4 +350,4 @@ MigrationBackup/
 .ionide/
 
 # Google drive credentials
-HomeEconomicSystem.Dal/credentials.json
+HomeEconomicSystem.Dal/GoogleDrive/credentials.json

@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DownloadFileException.cs" />
     <Compile Include="EntityFramework\DbSetCollection.cs" />
     <Compile Include="IDbCollection.cs" />
     <Compile Include="IDb.cs" />
@@ -90,9 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="credentials.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="GoogleDrive\credentials.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

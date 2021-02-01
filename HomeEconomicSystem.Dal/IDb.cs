@@ -19,8 +19,6 @@ namespace HomeEconomicSystem.Dal
         IDbCollection<ProductGraph> ProductGraphs { get; }
         IDbCollection<CategoryGraph> CategoryGraphs { get; }
         IDbCollection<TransactionsGraph> TransactionsGraphs { get; }
-
-
         void SaveChanges();
     }
 }
