@@ -15,7 +15,7 @@ namespace HomeEconomicSystem.Dal.GoogleDrive
     public class QRCodeFetcher : IQRCodeFetcher
     {
         private const string APPLICATION_NAME = "Home Economic System";
-        private const string CREDENTIALS_FILE = "credentials.json";
+        private const string CREDENTIALS_FILE = @"GoogleDrive\credentials.json";
         private const string TOKEN_FILE = "token.json";
         private const string USER_TO_AUTHORIZE = "user";
         private string[] _scopes;

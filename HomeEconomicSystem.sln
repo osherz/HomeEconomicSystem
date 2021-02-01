@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeEconomicSystem.BE", "Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeEconomicSystem.PL", "HomeEconomicSystem.PL\HomeEconomicSystem.PL.csproj", "{C1A45F95-FEBB-48D3-81E2-774A15C19CF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeEconomicSystem.Dal.Test", "HomeEconomicSystem.Dal.Test\HomeEconomicSystem.Dal.Test.csproj", "{97DF4018-4FB3-42C6-A578-C73F6E0297D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C1A45F95-FEBB-48D3-81E2-774A15C19CF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1A45F95-FEBB-48D3-81E2-774A15C19CF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1A45F95-FEBB-48D3-81E2-774A15C19CF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97DF4018-4FB3-42C6-A578-C73F6E0297D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97DF4018-4FB3-42C6-A578-C73F6E0297D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97DF4018-4FB3-42C6-A578-C73F6E0297D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97DF4018-4FB3-42C6-A578-C73F6E0297D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
