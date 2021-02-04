@@ -20,8 +20,9 @@ namespace HomeEconomicSystem.Dal.Test
                 {
                     img.Seek(0, SeekOrigin.Begin);
                     var bytes = file.ImageStream;
-                    img.Write(bytes, 0, bytes.Length);           
+                    img.Write(bytes, 0, bytes.Length);
                 }
+                qRCodeFetcher.DeleteQRcode(file.FileName);
             }
         }
 

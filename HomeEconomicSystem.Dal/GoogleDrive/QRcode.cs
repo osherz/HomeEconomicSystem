@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.Dal.GoogleDrive
 {
-    public class QRcode : IQRcode
+    internal class QRcode : IQRcode
     {
         public byte[] ImageStream { get; internal set; }
         public string FileName { get; internal set; }

@@ -8,12 +8,18 @@ namespace HomeEconomicSystem.Dal
 {
     public interface IQRCodeFetcher
     {
-        IEnumerable<IQRcode> GetQRCode();
         /// <summary>
-        /// delete the QRcode.
+        /// Return all QRCodes files (stream and name).
         /// </summary>
-        /// <param name="qrCodeToDelete">get list of QRcode to delete</param>
-        /// <returns>return all QRcode that didnt manage to delete</returns>
-        IEnumerable<IQRcode> DeleteQRcode(IEnumerable<IQRcode> qrCodeToDelete);
+        /// <exception cref="DownloadFileException">If failed to download</exception>
+        /// <returns></returns>
+        IEnumerable<IQRcode> GetQRCode();
+
+        /// <summary>
+        /// Delete the QRcode files by their names.
+        /// </summary>
+        /// <param name="qrCodeFilesNamesToDelete">Get list of QRcode names to delete</param>
+        /// <exception cref="DeleteFilesException">If some of the files failed to deletion</exception>
+        void DeleteQRcode(params string[] qrCodeFilesNamesToDelete);
     }
 }

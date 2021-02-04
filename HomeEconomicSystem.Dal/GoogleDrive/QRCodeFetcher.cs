@@ -68,24 +68,37 @@ namespace HomeEconomicSystem.Dal.GoogleDrive
             return service;
         }
 
-        private IEnumerable<FileDetails> GetQRCodeDetails(DriveService service)
+        /// <summary>
+        /// Fetch all files details from GoogleDrive.
+        /// </summary>
+        /// <param name="service">Service to use for the fetching</param>
+        /// <param name="fetchCondition">
+        /// Determine which files to fetch.
+        /// For conditions look here: https://developers.google.com/drive/api/v3/search-files
+        /// </param>
+        /// <returns>All file details</returns>
+        private IEnumerable<FileDetails> GetQRCodeDetails(DriveService service, string fetchCondition)
         {
-            //TODO: make sure that undefined page size dont interampt.
             // Define parameters of request.
             FilesResource.ListRequest listRequest = service.Files.List();
             listRequest.Fields = "files(id, name, mimeType)";
             //filter 
-            // For conditions look here: https://developers.google.com/drive/api/v3/search-files
-            listRequest.Q = "trashed = false and mimeType contains 'image/'";
+            listRequest.Q = fetchCondition;
             // List files
-            IList<Google.Apis.Drive.v3.Data.File> files =  listRequest.Execute().Files;
+            IList<Google.Apis.Drive.v3.Data.File> files = listRequest.Execute().Files;
             IEnumerable<FileDetails> filesDetails =
                 from file in files
-                select new FileDetails {Id = file.Id, Name = file.Name, MimeType = file.MimeType };
+                select new FileDetails { Id = file.Id, Name = file.Name, MimeType = file.MimeType };
 
             return filesDetails;
         }
 
+        /// <summary>
+        /// Download specific file from the GoogleDrive.
+        /// </summary>
+        /// <param name="service">Service to use</param>
+        /// <param name="file">File to download</param>
+        /// <returns>Stream of the downloaded file</returns>
         private byte[] DownloadFile(DriveService service, FileDetails file)
         {
             var stream = new System.IO.MemoryStream();
@@ -95,25 +108,65 @@ namespace HomeEconomicSystem.Dal.GoogleDrive
                 return stream.ToArray();
             }
             else
-            {   
+            {
                 throw new DownloadFileException();
-            }       
+            }
         }
 
         public IEnumerable<IQRcode> GetQRCode()
         {
             DriveService service = CreateDriveService();
-            IEnumerable<FileDetails> filesDetails = GetQRCodeDetails(service);
-            IEnumerable<QRcode> qRcodes = 
+            IEnumerable<FileDetails> filesDetails = GetQRCodeDetails(service, "trashed = false and mimeType contains 'image/'");
+            IEnumerable<QRcode> qRcodes =
                 from fileDetails in filesDetails
                 let fileContent = DownloadFile(service, fileDetails)
                 select new QRcode { FileName = fileDetails.Name, ImageStream = fileContent };
             return qRcodes;
         }
 
-        public IEnumerable<IQRcode> DeleteQRcode(IEnumerable<IQRcode> qrCodeToDelete)
+        /// <summary>
+        /// Get list of file names and return their files details.
+        /// </summary>
+        /// <param name="filesNames"></param>
+        /// <returns></returns>
+        private IEnumerable<FileDetails> FetchFilesByNames(DriveService service, IEnumerable<string> filesNames)
         {
-            throw new NotImplementedException();
+            IEnumerable<string> conditions = filesNames.Select(fileName => $"name = '{fileName}'");
+            string condition = string.Join(" or ", conditions);
+            return GetQRCodeDetails(service, condition);
+        }
+
+        public void DeleteQRcode(params string[] qrCodeFilesNamesToDelete)
+        {
+            var service = CreateDriveService();
+            var files = FetchFilesByNames(service, qrCodeFilesNamesToDelete);
+
+            var filesNamesFound = files.Select(file => file.Name);
+            List<string> filesNotFound = qrCodeFilesNamesToDelete.Except(filesNamesFound).ToList();
+            List<string> filesFailedToDelete = new List<string>();
+
+            foreach (var file in files)
+            {
+                try
+                {
+                    service.Files.Delete(file.Id).Execute();
+                }
+                catch (Google.GoogleApiException e)
+                {
+                    if (e.HttpStatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        filesNotFound.Add(file.Name);
+                    }
+                    else
+                    {
+                        filesFailedToDelete.Add(file.Name);
+                    }
+                }
+                catch
+                {
+                    filesFailedToDelete.Add(file.Name);
+                }
+            }
         }
 
         private class FileDetails
@@ -124,5 +177,5 @@ namespace HomeEconomicSystem.Dal.GoogleDrive
         }
 
     }
-   
+
 }
