@@ -75,6 +75,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DalFactory.cs" />
     <Compile Include="DeleteFilesException.cs" />
     <Compile Include="DownloadFileException.cs" />
     <Compile Include="EntityFramework\DbSetCollection.cs" />
