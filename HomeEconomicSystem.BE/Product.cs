@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.BE
 {
+
+
     public class Product
     {
         public int Id { get; set; }
@@ -14,6 +16,6 @@ namespace HomeEconomicSystem.BE
         public string Description { get; set; }
         public string ImageFileName { get; set; }
         public virtual Category Category { get; set; }
-        public virtual List<ProductTransaction> ProductTransactions { get; private set; }
+        public virtual ICollection<ProductTransaction> ProductTransactions { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace HomeEconomicSystem.BE
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public virtual List<Transaction> Transactions { get; private set; }
+        public string Address { get; set; }
+        public virtual ICollection<ProductTransaction> ProductTransaction { get; set; }
     }
 }
