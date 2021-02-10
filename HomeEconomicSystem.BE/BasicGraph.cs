@@ -17,9 +17,15 @@ namespace HomeEconomicSystem.BE
         /// <summary>
         /// Determine the aggregation timelaps.
         /// </summary>
-        public TimeType TimeType { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public TimeType AggregationTimeType { get; set; }
+        
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        /// <summary>
+        /// for "PastTimeAmount" = 3, the graph will show the last 3 "PastTimeType".
+        /// </summary>
+        public int? PastTimeAmount { get; set; }
+        public TimeType? PastTimeType { get; set; }
         public GraphType GraphType { get; set; }
         public AmountOrCost AmountOrCost { get; set; }
     }
