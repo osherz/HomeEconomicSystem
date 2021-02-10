@@ -13,6 +13,37 @@ namespace HomeEconomicSystem.Dal.EntityFramework
         internal HomeEconomicContext() : base()
         {
         }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Product>()
+                .HasIndex(p => p.BarCode)
+                .IsUnique();
+
+            modelBuilder.Entity<Store>()
+                .HasIndex(p => p.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<QRData>()
+                .HasIndex(p => p.BarCode)
+                .IsUnique();
+
+            modelBuilder.Entity<ProductGraph>()
+                .HasIndex(p => p.Title)
+                .IsUnique();
+
+            modelBuilder.Entity<CategoryGraph>()
+                .HasIndex(p => p.Title)
+                .IsUnique();
+
+            modelBuilder.Entity<StoreGraph>()
+               .HasIndex(p => p.Title)
+               .IsUnique();
+
+            modelBuilder.Entity<TransactionsGraph>()
+               .HasIndex(p => p.Title)
+               .IsUnique();
+        }
 
         public DbSet<QRData> QRDatas { get; set; }
 
