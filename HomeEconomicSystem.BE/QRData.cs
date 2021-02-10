@@ -14,7 +14,6 @@ namespace HomeEconomicSystem.BE
         public float Amount { get; set; }
         public float UnitPrice { get; set; }
         public string StoreName{ get; set; }
-        public bool IsNew { get => (ProductTransaction is null); }
         public virtual ProductTransaction ProductTransaction { get; set; }
 
     }
