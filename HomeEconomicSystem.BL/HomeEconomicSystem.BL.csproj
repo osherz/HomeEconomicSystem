@@ -47,6 +47,7 @@
     <Compile Include="IAssosiatonRule.cs" />
     <Compile Include="IDataManagement.cs" />
     <Compile Include="IGraphManagement.cs" />
+    <Compile Include="ITransactionAnalysis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
