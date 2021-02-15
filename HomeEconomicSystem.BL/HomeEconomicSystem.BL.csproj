@@ -41,8 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssosiatonRule.cs" />
     <Compile Include="FailedBecauseNotEmptyException.cs" />
+    <Compile Include="IAssosiationProductsAnalysis.cs" />
+    <Compile Include="IAssosiatonRule.cs" />
     <Compile Include="IDataManagement.cs" />
+    <Compile Include="IGraphManagement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
