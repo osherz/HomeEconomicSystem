@@ -49,13 +49,10 @@
     <Compile Include="IGraphManagement.cs" />
     <Compile Include="ITransactionAnalysis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<<<<<<< HEAD
     <Compile Include="V1\GraphManagement.cs" />
-=======
     <Compile Include="V1\AssosiatonRules.cs" />
     <Compile Include="V1\DataManagement.cs" />
     <Compile Include="V1\TransactionAnalysis.cs" />
->>>>>>> d618a7674a90c63678463c047090fd2f7934652c
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HomeEconomicSystem.BE\HomeEconomicSystem.BE.csproj">
