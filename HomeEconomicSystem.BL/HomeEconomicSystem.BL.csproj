@@ -49,6 +49,7 @@
     <Compile Include="IGraphManagement.cs" />
     <Compile Include="ITransactionAnalysis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="V1\GraphManagement.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HomeEconomicSystem.BE\HomeEconomicSystem.BE.csproj">
@@ -60,8 +61,6 @@
       <Name>HomeEconomicSystem.Dal</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="V1\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
