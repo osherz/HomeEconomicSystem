@@ -4,21 +4,45 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeEconomicSystem.PL"
-         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:UserControls="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:VM="clr-namespace:HomeEconomicSystem.PL.ViewModel"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
         TextElement.FontSize="13"
         TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"        
+        TextOptions.TextRenderingMode="Auto"       
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <StackPanel>
-            <materialDesign:Card Padding="32" Margin="16">
-                <TextBlock Style="{DynamicResource MaterialDesignHeadline6TextBlock}">My First Material Design App</TextBlock>
-            </materialDesign:Card>
-        </StackPanel>
-    </Grid>
+        Title="MainWindow" Height="450" Width="800"
+        FlowDirection="RightToLeft">
+    <materialDesign:DialogHost>
+        <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            <materialDesign:DrawerHost.LeftDrawerContent>
+                <DockPanel  MinWidth="220">
+                    <DockPanel>
+                        <ToggleButton DockPanel.Dock="Top" HorizontalAlignment="Left"
+                            Margin="10"
+                            Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                            IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
+                        <UserControls:MainMenu />
+                    </DockPanel>
+                </DockPanel>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <DockPanel>
+                <materialDesign:ColorZone DockPanel.Dock="Top" Mode="PrimaryDark">
+                    <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                        <ToggleButton
+                            Margin="10"
+                            x:Name="MenuToggleButton"
+                            Style="{StaticResource MaterialDesignHamburgerToggleButton}"
+                            IsChecked="False"/>
+                        <TextBlock Text="מערכת לניהול כלכלת הבית" VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
+                    </StackPanel>
+                </materialDesign:ColorZone>
+            </DockPanel>
+
+        </materialDesign:DrawerHost>
+    </materialDesign:DialogHost>
 </Window>
