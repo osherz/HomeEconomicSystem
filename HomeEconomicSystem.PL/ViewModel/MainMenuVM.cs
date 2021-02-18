@@ -11,11 +11,11 @@ namespace HomeEconomicSystem.PL.ViewModel
 {
     public class MainMenuVM
     {
-        public ObservableCollection<MenuItem> MenuItems { get; private set; }
+        public IReadOnlyList<MenuItem> MenuItems { get; private set; }
 
         public MainMenuVM(StateMachine stateMachine)
         {
-            MenuItems = new ObservableCollection<MenuItem>
+            MenuItems = new List<MenuItem>
             {
                 new MenuItem("בית", PackIconKind.Home, stateMachine.CreateCommand(Triggers.HomeSelected)),
                 new MenuItem("ניתוח נתונים", PackIconKind.BarChart,stateMachine.CreateCommand(Triggers.DataAnalysisSelected)),

@@ -22,27 +22,41 @@
         <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
             <materialDesign:DrawerHost.LeftDrawerContent>
                 <DockPanel  MinWidth="220">
-                    <DockPanel>
-                        <ToggleButton DockPanel.Dock="Top" HorizontalAlignment="Left"
-                            Margin="10"
+                    <ToggleButton DockPanel.Dock="Top" HorizontalAlignment="Left"
+                            Margin="10 10 5 0"
                             Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                             IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
-                        <UserControls:MainMenu DataContext="{Binding MainMenuVM}" />
-                    </DockPanel>
+                    <UserControls:MainMenu DataContext="{Binding MainMenuVM}" />
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
-            <DockPanel>
+            <DockPanel DataContext="{Binding PageDisplay}">
                 <materialDesign:ColorZone DockPanel.Dock="Top" Mode="PrimaryDark">
-                    <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                        <ToggleButton
+                    <DockPanel>
+                        <ListBox DockPanel.Dock="Right" ItemsSource="{Binding MenuItems}" >
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <UserControls:MenuItemUC DataContext="{Binding .}" Orientation="Vertical" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        
+                        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                            <ToggleButton
                             Margin="10"
                             x:Name="MenuToggleButton"
                             Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                             IsChecked="False"/>
-                        <TextBlock Text="מערכת לניהול כלכלת הבית" VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
-                    </StackPanel>
+                            <TextBlock Text="מערכת לניהול כלכלת הבית" VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
+                        </StackPanel>
+                    </DockPanel>
                 </materialDesign:ColorZone>
-                <Grid DataContext="{Binding PageDisplay}">
+                
+                <Grid>
                     <ContentControl Content="{Binding Content}" />
                 </Grid>
             </DockPanel>

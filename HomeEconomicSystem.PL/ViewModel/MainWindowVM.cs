@@ -25,7 +25,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         public MainWindowVM()
         {
             IPageDisplay homePageDisplay = new HomePageDisplay();
-            IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay();
+            IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay(_stateMachine);
             IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay();
             IPageDisplay transactionHistoryDisplay = new TransactionHistoryPageDisplay();
 

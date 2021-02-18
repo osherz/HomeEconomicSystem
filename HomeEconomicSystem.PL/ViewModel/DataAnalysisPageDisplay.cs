@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HomeEconomicSystem.PL.Extensions;
+using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,10 +15,15 @@ namespace HomeEconomicSystem.PL.ViewModel
 
         public UserControl Content { get; }
 
-        public DataAnalysisPageDisplay()
+        public DataAnalysisPageDisplay(StateMachine stateMachine)
         {
             Content = new View.DataAnalysisView();
-            MenuItems = new List<MenuItem>();
+            MenuItems = new List<MenuItem>
+            {
+                new MenuItem("שמורים", PackIconKind.StarCircle, stateMachine.CreateCommand(Triggers.DataAnalysisSelected)),
+                new MenuItem("AR", PackIconKind.ChartSankeyVariant, stateMachine.CreateCommand(Triggers.DataAnalysisSelected)),
+                 new MenuItem("טיוטה", PackIconKind.File, stateMachine.CreateCommand(Triggers.DataAnalysisSelected))
+            };
         }
     }
 }
