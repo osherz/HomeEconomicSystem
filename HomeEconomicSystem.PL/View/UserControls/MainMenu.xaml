@@ -19,24 +19,27 @@
 
     <ListBox x:Name="MenuItemsListBox"  
             Margin="0 0 0 0"
-            ItemsSource="{Binding MenuItems}">
+            ItemsSource="{Binding MenuItems}" 
+             HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+
         <ListBox.Resources>
             <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
         </ListBox.Resources>
+
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Horizontal">
-                    <materialDesign:PackIcon 
-                    Kind="{Binding IconKind}" 
-                    Margin="0 0 10 0" 
-                    Width="20" Height="auto"
-                    VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding Text}" VerticalAlignment="Center" />
-                    
+                <StackPanel Orientation="Horizontal" Background="Transparent">
+                        <materialDesign:PackIcon 
+                            Kind="{Binding IconKind}" 
+                            Margin="0 0 10 0" 
+                            Width="20" Height="auto"
+                            VerticalAlignment="Center" />   
+                        <TextBlock Text="{Binding Text}" VerticalAlignment="Center" />
                     <StackPanel.InputBindings>
                         <MouseBinding Command="{Binding Command}" Gesture="LeftClick" />
                     </StackPanel.InputBindings>
                 </StackPanel>
+
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
