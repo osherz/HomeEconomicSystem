@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using HomeEconomicSystem.PL.Extensions;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,14 +13,14 @@ namespace HomeEconomicSystem.PL.ViewModel
     {
         public ObservableCollection<MenuItem> MenuItems { get; private set; }
 
-        public MainMenuVM()
+        public MainMenuVM(StateMachine stateMachine)
         {
             MenuItems = new ObservableCollection<MenuItem>
             {
-                new MenuItem("בית", PackIconKind.Home, ),
-                new MenuItem("ניתוח נתונים", PackIconKind.BarChart,),
-                new MenuItem("קטלוג מוצרים", PackIconKind.Newspaper, ),
-                new MenuItem("היסטוריית קניות", PackIconKind.History,),
+                new MenuItem("בית", PackIconKind.Home, stateMachine.CreateCommand(Triggers.HomeSelected)),
+                new MenuItem("ניתוח נתונים", PackIconKind.BarChart,stateMachine.CreateCommand(Triggers.DataAnalysisSelected)),
+                new MenuItem("קטלוג מוצרים", PackIconKind.Newspaper, stateMachine.CreateCommand(Triggers.ProductCatalogSelected)),
+                new MenuItem("היסטוריית קניות", PackIconKind.History,stateMachine.CreateCommand(Triggers.TransactionHistorySelected)),
             };
         }
 
