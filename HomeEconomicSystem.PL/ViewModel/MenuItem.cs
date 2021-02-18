@@ -12,7 +12,7 @@ namespace HomeEconomicSystem.PL.ViewModel
     /// <summary>
     /// Represent view-model for menu item.
     /// </summary>
-    public class MenuItem : ViewModelBase
+    public class MenuItem
     {
         public string Text { get; private set; }
         public PackIconKind IconKind { get; private set; }
