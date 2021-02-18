@@ -16,11 +16,13 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             MenuItems = new ObservableCollection<MenuItem>
             {
-                new MenuItem("בית", PackIconKind.Home, new System.Windows.Controls.UserControl()),
-                new MenuItem("ניתוח נתונים", PackIconKind.BarChart, new System.Windows.Controls.UserControl()),
-                new MenuItem("קטלוג מוצרים", PackIconKind.Newspaper, new System.Windows.Controls.UserControl()),
-                new MenuItem("היסטוריית קניות", PackIconKind.History, new System.Windows.Controls.UserControl()),
+                new MenuItem("בית", PackIconKind.Home, ),
+                new MenuItem("ניתוח נתונים", PackIconKind.BarChart,),
+                new MenuItem("קטלוג מוצרים", PackIconKind.Newspaper, ),
+                new MenuItem("היסטוריית קניות", PackIconKind.History,),
             };
         }
+
+        
     }
 }
