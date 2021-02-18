@@ -204,13 +204,17 @@
     </ApplicationDefinition>
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Extensions\StateMachineExtensions.cs" />
+    <Compile Include="ViewModel\DataAnalysisPageDisplay.cs" />
+    <Compile Include="ViewModel\HomePageDisplay.cs" />
     <Compile Include="ViewModel\IPageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay.cs" />
+    <Compile Include="ViewModel\ProductCatalogPageDisplay.cs" />
     <Compile Include="ViewModel\StateMachine.cs" />
     <Compile Include="ViewModel\MainMenuVM.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Compile Include="ViewModel\MenuItem.cs" />
     <Compile Include="ViewModel\States.cs" />
+    <Compile Include="ViewModel\TransactionHistoryPageDisplay.cs" />
     <Compile Include="ViewModel\Triggers.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
     <Compile Include="View\DataAnalysisView.xaml.cs">

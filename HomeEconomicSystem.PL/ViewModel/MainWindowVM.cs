@@ -24,10 +24,10 @@ namespace HomeEconomicSystem.PL.ViewModel
 
         public MainWindowVM()
         {
-            IPageDisplay homePageDisplay = new PageDisplay(new View.HomeView(), null);
-            IPageDisplay dataAnalysisDisplay = new PageDisplay(new View.DataAnalysisView(), null);
-            IPageDisplay productCatalogDisplay = new PageDisplay(new View.ProductCatalogView(), null);
-            IPageDisplay transactionHistoryDisplay = new PageDisplay(new View.TransactionHistoryView(), null);
+            IPageDisplay homePageDisplay = new HomePageDisplay();
+            IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay();
+            IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay();
+            IPageDisplay transactionHistoryDisplay = new TransactionHistoryPageDisplay();
 
             _stateActionDict = new Dictionary<States, Action>
             {
