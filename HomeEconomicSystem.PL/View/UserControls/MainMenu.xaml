@@ -32,6 +32,10 @@
                     Width="20" Height="auto"
                     VerticalAlignment="Center" />
                     <TextBlock Text="{Binding Text}" VerticalAlignment="Center" />
+                    
+                    <StackPanel.InputBindings>
+                        <MouseBinding Command="{Binding Command}" Gesture="LeftClick" />
+                    </StackPanel.InputBindings>
                 </StackPanel>
             </DataTemplate>
         </ListBox.ItemTemplate>

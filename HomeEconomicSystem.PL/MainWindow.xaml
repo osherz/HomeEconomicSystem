@@ -42,8 +42,8 @@
                         <TextBlock Text="מערכת לניהול כלכלת הבית" VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
                     </StackPanel>
                 </materialDesign:ColorZone>
-                <Grid>
-                    
+                <Grid DataContext="{Binding PageDisplay}">
+                    <ContentControl Content="{Binding Content}" />
                 </Grid>
             </DockPanel>
 
