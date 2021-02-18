@@ -24,8 +24,6 @@ namespace HomeEconomicSystem.PL.View.UserControls
         public MainMenu()
         {
             InitializeComponent();
-
-            DataContext = new MainMenuVM();
         }
     }
 }
