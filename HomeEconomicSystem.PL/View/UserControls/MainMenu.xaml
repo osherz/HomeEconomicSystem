@@ -28,18 +28,7 @@
 
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Horizontal" Background="Transparent">
-                        <materialDesign:PackIcon 
-                            Kind="{Binding IconKind}" 
-                            Margin="0 0 10 0" 
-                            Width="20" Height="auto"
-                            VerticalAlignment="Center" />   
-                        <TextBlock Text="{Binding Text}" VerticalAlignment="Center" />
-                    <StackPanel.InputBindings>
-                        <MouseBinding Command="{Binding Command}" Gesture="LeftClick" />
-                    </StackPanel.InputBindings>
-                </StackPanel>
-
+                <local:MenuItemUC DataContext="{Binding .}" Orientation="Horizontal" />
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
