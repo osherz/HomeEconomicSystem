@@ -213,6 +213,18 @@
     <Compile Include="ViewModel\States.cs" />
     <Compile Include="ViewModel\Triggers.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
+    <Compile Include="View\DataAnalysisView.xaml.cs">
+      <DependentUpon>DataAnalysisView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HomeView.xaml.cs">
+      <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ProductCatalogView.xaml.cs">
+      <DependentUpon>ProductCatalogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TransactionHistoryView.xaml.cs">
+      <DependentUpon>TransactionHistoryView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserControls\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
@@ -228,6 +240,22 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\DataAnalysisView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ProductCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TransactionHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\UserControls\MainMenu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

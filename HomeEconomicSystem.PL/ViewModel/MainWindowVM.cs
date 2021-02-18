@@ -24,17 +24,17 @@ namespace HomeEconomicSystem.PL.ViewModel
 
         public MainWindowVM()
         {
-            UserControl userControl = new UserControl();
-            userControl.Background = new SolidColorBrush(Color.FromRgb(255, 0, 0));
-
-            IPageDisplay homePageDisplay = new PageDisplay(userControl, null);
+            IPageDisplay homePageDisplay = new PageDisplay(new View.HomeView(), null);
+            IPageDisplay dataAnalysisDisplay = new PageDisplay(new View.DataAnalysisView(), null);
+            IPageDisplay productCatalogDisplay = new PageDisplay(new View.ProductCatalogView(), null);
+            IPageDisplay transactionHistoryDisplay = new PageDisplay(new View.TransactionHistoryView(), null);
 
             _stateActionDict = new Dictionary<States, Action>
             {
                 {States.Home, ()=>PageDisplay=homePageDisplay },
-                {States.DataAnalysis, ()=>PageDisplay=homePageDisplay },
-                {States.ProductCatalog, ()=>PageDisplay=homePageDisplay },
-                {States.TransactionHistory, ()=>PageDisplay=homePageDisplay }
+                {States.DataAnalysis, ()=>PageDisplay=dataAnalysisDisplay },
+                {States.ProductCatalog, ()=>PageDisplay=productCatalogDisplay },
+                {States.TransactionHistory, ()=>PageDisplay=transactionHistoryDisplay }
             };
             _stateMachine = new StateMachine(_stateActionDict);
 
