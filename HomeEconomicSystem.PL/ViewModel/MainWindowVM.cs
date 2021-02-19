@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HomeEconomicSystem.PL.Extensions;
+using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         private StateMachine _stateMachine;
 
         public MainMenuVM MainMenuVM { get; private set; }
+        public IReadOnlyList<MenuItem> ToolBarItems { get; private set; }
 
         private IPageDisplay _pageDisplay;
         public IPageDisplay PageDisplay
@@ -39,6 +42,17 @@ namespace HomeEconomicSystem.PL.ViewModel
             _stateMachine = new StateMachine(_stateActionDict);
 
             MainMenuVM = new MainMenuVM(_stateMachine);
+            InitToolBarItems();
+        }
+
+        private void InitToolBarItems()
+        {
+            ToolBarItems = new List<MenuItem>
+            {
+                new MenuItem("צור רשימת קניות", PackIconKind.ListStatus, _stateMachine.CreateCommand(Triggers.HomeSelected)),
+                new MenuItem("", PackIconKind.CashCheck, _stateMachine.CreateCommand(Triggers.HomeSelected)),
+            };
+
         }
     }
 }

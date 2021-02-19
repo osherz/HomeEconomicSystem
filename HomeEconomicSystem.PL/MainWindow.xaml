@@ -9,7 +9,7 @@
         xmlns:VM="clr-namespace:HomeEconomicSystem.PL.ViewModel"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"
+        TextElement.FontSize="13"   
         TextOptions.TextFormattingMode="Ideal" 
         TextOptions.TextRenderingMode="Auto"       
         Background="{DynamicResource MaterialDesignPaper}"
@@ -33,12 +33,12 @@
             </materialDesign:DrawerHost.LeftDrawerContent>
             <!--#endregion End Side-Menu -->
             
-            <DockPanel DataContext="{Binding PageDisplay}">
+            <DockPanel>
                 <!--#region Top-->
                 <materialDesign:ColorZone DockPanel.Dock="Top" Mode="PrimaryDark">
                     <DockPanel>
                         <!--#region Page Specific ToolBar-->
-                        <ListBox DockPanel.Dock="Right" ItemsSource="{Binding MenuItems}" >
+                        <ListBox DockPanel.Dock="Right" DataContext="{Binding PageDisplay}" ItemsSource="{Binding MenuItems}" >
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal" />
@@ -67,7 +67,35 @@
                     </DockPanel>
                 </materialDesign:ColorZone>
                 <!--#endregion Top-->
-                
+
+                <!--#region Bottom-->
+                <materialDesign:ColorZone DockPanel.Dock="Bottom" Mode="PrimaryDark">
+                    <DockPanel>
+                        <!--#region Page Specific ToolBar-->
+                        <ListBox DockPanel.Dock="Right" ItemsSource="{Binding ToolBarItems}" >
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <UserControls:MenuItemUC DataContext="{Binding .}" Orientation="Vertical" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <!--#endregion Page Specific ToolBar-->
+
+                        <!--#region Right Stack-->
+                        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                            <TextBlock Text="שורת מצב" />
+                        </StackPanel>
+                        <!--#endregion Right Stack-->
+
+                    </DockPanel>
+                </materialDesign:ColorZone>
+                <!--#endregion Top-->
+
                 <!--#region Main-Content-->
                 <Grid>
                     <ContentControl Content="{Binding Content}" />
