@@ -20,6 +20,8 @@
         FlowDirection="RightToLeft">
     <materialDesign:DialogHost>
         <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+            
+            <!--#region Side-Menu -->
             <materialDesign:DrawerHost.LeftDrawerContent>
                 <DockPanel  MinWidth="220">
                     <ToggleButton DockPanel.Dock="Top" HorizontalAlignment="Left"
@@ -29,9 +31,13 @@
                     <UserControls:MainMenu DataContext="{Binding MainMenuVM}" />
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
+            <!--#endregion End Side-Menu -->
+            
             <DockPanel DataContext="{Binding PageDisplay}">
+                <!--#region Top-->
                 <materialDesign:ColorZone DockPanel.Dock="Top" Mode="PrimaryDark">
                     <DockPanel>
+                        <!--#region Page Specific ToolBar-->
                         <ListBox DockPanel.Dock="Right" ItemsSource="{Binding MenuItems}" >
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -44,8 +50,11 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        
+                        <!--#endregion Page Specific ToolBar-->
+
+                        <!--#region Right Stack-->
                         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                            <!-- Menu Toggle Button-->
                             <ToggleButton
                             Margin="10"
                             x:Name="MenuToggleButton"
@@ -53,12 +62,17 @@
                             IsChecked="False"/>
                             <TextBlock Text="מערכת לניהול כלכלת הבית" VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
                         </StackPanel>
+                        <!--#endregion Right Stack-->
+                        
                     </DockPanel>
                 </materialDesign:ColorZone>
+                <!--#endregion Top-->
                 
+                <!--#region Main-Content-->
                 <Grid>
                     <ContentControl Content="{Binding Content}" />
                 </Grid>
+                <!--#endregion Main-Content-->
             </DockPanel>
 
         </materialDesign:DrawerHost>

@@ -21,14 +21,17 @@
             Margin="0 0 0 0"
             ItemsSource="{Binding MenuItems}" 
              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-
+        <!-- We define HorizontalContentAlignment=Stretch and 
+        VerticalContentAlignment=Stretch in ListBox
+        and Background="Transparent" in the ListItem, 
+        so the ListItem fill his parent so it be clickable -->
         <ListBox.Resources>
             <Style TargetType="ScrollBar" BasedOn="{StaticResource MaterialDesignScrollBarMinimal}"/>
         </ListBox.Resources>
 
         <ListBox.ItemTemplate>
             <DataTemplate>
-                <local:MenuItemUC DataContext="{Binding .}" Orientation="Horizontal" />
+                <local:MenuItemUC DataContext="{Binding .}" Orientation="Horizontal" Background="Transparent" />
             </DataTemplate>
         </ListBox.ItemTemplate>
     </ListBox>
