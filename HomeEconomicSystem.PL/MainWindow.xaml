@@ -14,7 +14,7 @@
         TextOptions.TextRenderingMode="Auto"       
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        d:DataContext="{d:DesignInstance VM:MainWindowVM}"
+        d:DataContext="{d:DesignInstance VM:MainWindowVM, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         FlowDirection="RightToLeft">

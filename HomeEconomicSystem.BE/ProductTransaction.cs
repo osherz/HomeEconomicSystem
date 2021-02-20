@@ -1,4 +1,6 @@
-﻿namespace HomeEconomicSystem.BE
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace HomeEconomicSystem.BE
 {
     public class ProductTransaction
     {
@@ -8,9 +10,11 @@
         ///Amount of products.
         /// </summary>
         public float Amount { get; set; }
-        public virtual QRData QROriginalData { get; set; }
+        [Required]
+        public virtual QRData QRData { get; set; }
         public virtual Product Product { get; set; }
         public virtual Transaction Transaction { get; set; }
+        public virtual Store Store { get; set; }
 
     }
 }

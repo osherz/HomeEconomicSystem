@@ -24,17 +24,25 @@ namespace HomeEconomicSystem.Dal.EntityFramework
                 .HasIndex(p => p.Name)
                 .IsUnique();
 
-            modelBuilder.Entity<QRData>()
-                .HasIndex(p => p.BarCode)
-                .IsUnique();
+            modelBuilder.Entity<ProductGraph>()
+                .HasMany<Product>(s => s.Products)
+                .WithMany();
 
             modelBuilder.Entity<ProductGraph>()
                 .HasIndex(p => p.Title)
                 .IsUnique();
 
             modelBuilder.Entity<CategoryGraph>()
+                .HasMany<Category>(s => s.Categories)
+                .WithMany();
+
+            modelBuilder.Entity<CategoryGraph>()
                 .HasIndex(p => p.Title)
                 .IsUnique();
+
+            modelBuilder.Entity<StoreGraph>()
+                .HasMany<Store>(s => s.Stores)
+                .WithMany();
 
             modelBuilder.Entity<StoreGraph>()
                .HasIndex(p => p.Title)
