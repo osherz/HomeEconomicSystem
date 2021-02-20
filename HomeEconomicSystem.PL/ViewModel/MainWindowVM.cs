@@ -29,8 +29,8 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             IPageDisplay homePageDisplay = new HomePageDisplay();
             IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay(_stateMachine);
-            IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay();
-            IPageDisplay transactionHistoryDisplay = new TransactionHistoryPageDisplay();
+            IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay(_stateMachine);
+            IPageDisplay transactionHistoryDisplay = new TransactionHistoryPageDisplay(_stateMachine);
 
             _stateActionDict = new Dictionary<States, Action>
             {
@@ -39,6 +39,7 @@ namespace HomeEconomicSystem.PL.ViewModel
                 {States.ProductCatalog, ()=>PageDisplay=productCatalogDisplay },
                 {States.TransactionHistory, ()=>PageDisplay=transactionHistoryDisplay }
             };
+            PageDisplay = productCatalogDisplay;
             _stateMachine = new StateMachine(_stateActionDict);
 
             MainMenuVM = new MainMenuVM(_stateMachine);

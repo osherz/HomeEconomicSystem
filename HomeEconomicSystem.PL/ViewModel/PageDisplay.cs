@@ -12,6 +12,7 @@ namespace HomeEconomicSystem.PL.ViewModel
     /// </summary>
     public class PageDisplay : IPageDisplay
     {
+        public bool HasItems => MenuItems is not null || MenuItems.Count > 0;
         public IReadOnlyList<MenuItem> MenuItems { get; }
 
         public UserControl Content {get;}

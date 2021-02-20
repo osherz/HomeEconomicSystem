@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HomeEconomicSystem.PL.Extensions;
+using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,14 +11,22 @@ namespace HomeEconomicSystem.PL.ViewModel
 {
     class ProductCatalogPageDisplay : IPageDisplay
     {
+        
+
         public IReadOnlyList<MenuItem> MenuItems { get; }
 
         public UserControl Content { get; }
 
-        public ProductCatalogPageDisplay()
+        public bool HasItems => MenuItems is not null && MenuItems.Count > 0;
+
+        public ProductCatalogPageDisplay(StateMachine stateMachine)
         {
             Content = new View.ProductCatalogView();
-            MenuItems = new List<MenuItem>();
+            MenuItems = new List<MenuItem>
+            {
+                new MenuItem("קטלוג מוצרים", PackIconKind.ClipboardList, stateMachine.CreateCommand(Triggers.ProductCatalogSelected)),
+                new MenuItem("קטלוג קטגוריות", PackIconKind.Category, stateMachine.CreateCommand(Triggers.ProductCatalogSelected)),
+            };
         }
     }
 }

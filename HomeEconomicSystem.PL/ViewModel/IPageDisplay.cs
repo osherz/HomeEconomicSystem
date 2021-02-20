@@ -9,6 +9,7 @@ namespace HomeEconomicSystem.PL.ViewModel
 {
     public interface IPageDisplay
     {
+        bool HasItems { get; }
         IReadOnlyList<MenuItem> MenuItems { get; }
         UserControl Content { get; }
     }

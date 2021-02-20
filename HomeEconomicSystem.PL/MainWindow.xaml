@@ -20,7 +20,7 @@
         FlowDirection="RightToLeft">
     <materialDesign:DialogHost>
         <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
-            
+
             <!--#region Side-Menu -->
             <materialDesign:DrawerHost.LeftDrawerContent>
                 <DockPanel  MinWidth="220">
@@ -32,47 +32,53 @@
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
             <!--#endregion End Side-Menu -->
-            
-            <DockPanel>
+
+            <DockPanel LastChildFill="True">
                 <!--#region Top-->
                 <materialDesign:ColorZone DockPanel.Dock="Top" Mode="PrimaryDark">
                     <DockPanel>
                         <!--#region Page Specific ToolBar-->
-                        <ListBox DockPanel.Dock="Right" DataContext="{Binding PageDisplay}" ItemsSource="{Binding MenuItems}" >
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <UserControls:MenuItemUC DataContext="{Binding .}" Orientation="Vertical" />
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                        <materialDesign:DrawerHost DockPanel.Dock="Right" DataContext="{Binding PageDisplay}" IsRightDrawerOpen="{Binding HasItems, Mode=OneWay}">
+                            <materialDesign:DrawerHost.RightDrawerContent>
+                                <ListBox ItemsSource="{Binding MenuItems}" 
+                                  Style="{StaticResource MaterialDesignToolToggleListBox}" VerticalAlignment="Center" MinWidth="150">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <UserControls:MenuItemUC DataContext="{Binding .}" Orientation="Vertical" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </materialDesign:DrawerHost.RightDrawerContent>
+                        </materialDesign:DrawerHost>
+
                         <!--#endregion Page Specific ToolBar-->
 
-                        <!--#region Right Stack-->
-                        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                            <!-- Menu Toggle Button-->
-                            <ToggleButton
+                            <!--#region Right Stack-->
+                            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                                <!-- Menu Toggle Button-->
+                                <ToggleButton
                             Margin="10"
                             x:Name="MenuToggleButton"
                             Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                             IsChecked="False"/>
-                            <TextBlock Text="מערכת לניהול כלכלת הבית" VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
-                        </StackPanel>
-                        <!--#endregion Right Stack-->
-                        
+                                <TextBlock Text="מערכת לניהול כלכלת הבית" VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
+                            </StackPanel>
+                            <!--#endregion Right Stack-->
                     </DockPanel>
+                        
                 </materialDesign:ColorZone>
                 <!--#endregion Top-->
 
                 <!--#region Bottom-->
                 <materialDesign:ColorZone DockPanel.Dock="Bottom" Mode="PrimaryDark">
                     <DockPanel>
-                        <!--#region Page Specific ToolBar-->
-                        <ListBox DockPanel.Dock="Right" ItemsSource="{Binding ToolBarItems}" >
+                        <!--#region Main ToolBar-->
+                        <ListBox DockPanel.Dock="Right" ItemsSource="{Binding ToolBarItems}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal" />
@@ -84,7 +90,7 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                        <!--#endregion Page Specific ToolBar-->
+                        <!--#endregion Main ToolBar-->
 
                         <!--#region Right Stack-->
                         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
@@ -97,7 +103,7 @@
                 <!--#endregion Top-->
 
                 <!--#region Main-Content-->
-                <Grid>
+                <Grid DataContext="{Binding PageDisplay}">
                     <ContentControl Content="{Binding Content}" />
                 </Grid>
                 <!--#endregion Main-Content-->
