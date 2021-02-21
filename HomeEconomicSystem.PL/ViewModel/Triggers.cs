@@ -8,6 +8,8 @@ namespace HomeEconomicSystem.PL.ViewModel
 {
     public enum Triggers
     {
-        HomeSelected, DataAnalysisSelected, ProductCatalogSelected, TransactionHistorySelected
+        HomeSelected, DataAnalysisSelected, 
+        ProductCatalogSelected, TransactionHistorySelected,
+        Edit, Search, Delete, Create
     }
 }
