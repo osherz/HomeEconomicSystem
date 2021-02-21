@@ -23,6 +23,8 @@ namespace HomeEconomicSystem.PL.ViewModel
         CategorySelected,
         SearchCategoryComplete,
         CategoryNoSelected,
-        EditingCategory
+        EditingCategory,
+        CategoryCreated,
+        CategoryDeleted
     }
 }

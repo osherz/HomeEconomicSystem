@@ -59,6 +59,7 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
                 .OnEntry(GetStateAction(States.CategoryCatalog))
                 .Permit(Triggers.Search, States.SearchingCategory)
                 .Permit(Triggers.Select, States.CategorySelected)
+                .Permit(Triggers.Creat, States.CategoryCreated)
 
            Configure(States.SearchingCategory)
                 .SubstateOf(States.CategoryCatalog)
@@ -82,6 +83,16 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
                 .SubstateOf(States.CategoryCatalog)
                 .OnEntry(GetStateAction(States.CategoryNoSelected))
                 .Permit(Triggers.EndEdit, States.CategorySelected)
+                .Permit(Triggers.Delete, States.CategoryDeleted)
                 .Permit(Triggers.SaveChanges, States.SavingChangesCatalog)
+
+           Configure(States.CategoryCreated)
+                .SubstateOf(States.CategoryCatalog)
+                .OnEntry(GetStateAction(States.CategoryCreated))
+
+           Configure(States.CategoryDeleted)
+                .SubstateOf(States.CategoryCatalog)
+                .OnEntry(GetStateAction(States.CategoryDeleted))        
+                
         }
     }
