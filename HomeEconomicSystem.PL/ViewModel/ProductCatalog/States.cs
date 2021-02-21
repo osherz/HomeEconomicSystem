@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeEconomicSystem.PL.ViewModel
+namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
 {
     public enum States
     {
         MainState,
-        SavingChangesCatalog
+        SavingChangesCatalog,
 
         ProductCatalog, 
         SearchingProduct,
@@ -25,6 +25,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         CategoryNoSelected,
         EditingCategory,
         CategoryCreated,
-        CategoryDeleted
+        CategoryDeleted,
+        SearchComplete
     }
 }

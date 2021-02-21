@@ -5,12 +5,7 @@
         Start, 
         Home, 
         DataAnalysis,
-        FavoriteGraphs, EditFavorite, SavingChangesFavorite, 
-        AssociationRules,
-        Draft, 
-        DrafCreation,
-        ProductCatalog, CategoryCatalog, SearchingProduct, SearchingCategory, SearchFailed, SearchSucceeded, EditProduct, EditCategory,
-        SavingChangesCatalog, 
+        ProductCatalog,
         TransactionHistory
     }
 }

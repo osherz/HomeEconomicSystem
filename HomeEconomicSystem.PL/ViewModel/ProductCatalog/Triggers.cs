@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
 {
-    internal enum Triggers
+    public enum Triggers
     {
         Edit,
         EndEdit,
@@ -18,6 +18,7 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
         Select,
         DeSelect,
         CatalogSelected,
-        SaveChanges
+        SaveChanges,
+        ProductCatalogSelected
     }
 }
