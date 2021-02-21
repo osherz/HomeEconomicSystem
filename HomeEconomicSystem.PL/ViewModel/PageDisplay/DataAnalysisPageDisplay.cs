@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace HomeEconomicSystem.PL.ViewModel
+namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
     class DataAnalysisPageDisplay : IPageDisplay
     {
@@ -18,6 +18,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         public DataAnalysisPageDisplay(StateMachine stateMachine)
         {
             Content = new View.DataAnalysisView();
+            Content.DataContext = new DataAnalysisVM();
             MenuItems = new List<MenuItem>
             {
                 new MenuItem("שמורים", PackIconKind.StarCircle, stateMachine.CreateCommand(Triggers.DataAnalysisSelected)),

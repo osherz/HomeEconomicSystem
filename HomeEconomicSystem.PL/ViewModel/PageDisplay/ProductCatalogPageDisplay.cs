@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace HomeEconomicSystem.PL.ViewModel
+namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
     class ProductCatalogPageDisplay : IPageDisplay
     {
@@ -22,6 +22,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         public ProductCatalogPageDisplay(StateMachine stateMachine)
         {
             Content = new View.ProductCatalogView();
+            Content.DataContext = new ProductCatalogVM();
             MenuItems = new List<MenuItem>
             {
                 new MenuItem("קטלוג מוצרים", PackIconKind.ClipboardList, stateMachine.CreateCommand(Triggers.ProductCatalogSelected)),

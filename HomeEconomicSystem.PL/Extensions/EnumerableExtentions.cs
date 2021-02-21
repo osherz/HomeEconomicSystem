@@ -13,5 +13,14 @@ namespace HomeEconomicSystem.PL.Extensions
         {
             return new ObservableCollection<T>(collection);
         }
+
+        public static void ForEach<T>(this IEnumerable<T> enumeration, Action<T> action)
+        {
+            foreach (T item in enumeration)
+            {
+                action(item);
+            }
+        }
+
     }
 }

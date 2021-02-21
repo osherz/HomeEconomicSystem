@@ -18,12 +18,13 @@ namespace HomeEconomicSystem.PL.Model
         public Products()
         {
             _dataMenegement = new BL.BL().DataManagement;
-            ProductsList = _dataMenegement.GetProducts().ToObservableCollection();
+            ProductsList = new ObservableCollection<Product>();
         }
 
         void Filter(string name = "", params Category[] categories)
         {
-            ProductsList = _dataMenegement.GetProducts(name, categories).ToObservableCollection();
+            ProductsList.Clear();
+            _dataMenegement.GetProducts(name, categories).ForEach(p => ProductsList.Add(p));
         }
     }
 }

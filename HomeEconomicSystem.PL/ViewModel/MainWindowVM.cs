@@ -1,4 +1,5 @@
 ﻿using HomeEconomicSystem.PL.Extensions;
+using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
