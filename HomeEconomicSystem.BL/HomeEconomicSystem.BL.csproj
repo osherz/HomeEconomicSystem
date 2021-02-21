@@ -52,15 +52,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssosiatonRule.cs" />
+    <Compile Include="BL.cs" />
     <Compile Include="FailedBecauseNotEmptyException.cs" />
     <Compile Include="IAssosiationProductsAnalysis.cs" />
     <Compile Include="IAssosiatonRule.cs" />
+    <Compile Include="IBL.cs" />
     <Compile Include="IDataManagement.cs" />
     <Compile Include="IGraphManagement.cs" />
     <Compile Include="ITransactionAnalysis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="V1\GraphManagement.cs" />
-    <Compile Include="V1\AssosiatonRules.cs" />
+    <Compile Include="V1\AssosiationProductsAnalysis.cs" />
     <Compile Include="V1\DataManagement.cs" />
     <Compile Include="V1\TransactionAnalysis.cs" />
   </ItemGroup>
