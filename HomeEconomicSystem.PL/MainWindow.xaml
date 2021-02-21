@@ -100,7 +100,7 @@
 
                     </DockPanel>
                 </materialDesign:ColorZone>
-                <!--#endregion Top-->
+                <!--#endregion Bottom-->
 
                 <!--#region Main-Content-->
                 <Grid DataContext="{Binding PageDisplay}">
