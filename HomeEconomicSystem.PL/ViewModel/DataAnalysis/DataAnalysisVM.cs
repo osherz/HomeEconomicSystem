@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeEconomicSystem.PL.ViewModel
+namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    class DataAnalysisVM
+    public class DataAnalysisVM
     {
     }
 }

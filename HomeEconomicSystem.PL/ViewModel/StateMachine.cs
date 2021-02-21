@@ -9,10 +9,13 @@ using System.Windows.Input;
 namespace HomeEconomicSystem.PL.ViewModel
 {
 
-    public class StateMachine: Stateless.StateMachine<States, Triggers>
+    public class StateMachine: BaseStateMachine<States, Triggers>
     {
 
         IReadOnlyDictionary<States, Action> _stateActionDict;
+
+        protected override IReadOnlyDictionary<States, Action> StateActionDict => _stateActionDict;
+
         //TODO: to check if need to unable the option to permit to themself.
         public StateMachine(IReadOnlyDictionary<States, Action> stateActionDict) : base (States.Start)
         {
@@ -55,14 +58,14 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             Configure(States.Home)
                 .SubstateOf(States.Start)
-                .OnEntry(_stateActionDict[States.Home]);
+                .OnEntry(GetStateAction(States.Home));
         }
 
         private void ConfigureDataAnalysis()
         {
             Configure(States.DataAnalysis)
                 .SubstateOf(States.Start)
-                .OnEntry(_stateActionDict[States.DataAnalysis]);
+                .OnEntry(GetStateAction(States.DataAnalysis));
 
         }
 
@@ -70,14 +73,14 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             Configure(States.ProductCatalog)
                             .SubstateOf(States.Start)
-                            .OnEntry(_stateActionDict[States.ProductCatalog]);
+                            .OnEntry(GetStateAction(States.ProductCatalog));
         }
 
         private void ConfigureTransactionHistory()
         {
             Configure(States.TransactionHistory)
                             .SubstateOf(States.Start)
-                            .OnEntry(_stateActionDict[States.TransactionHistory]);
+                            .OnEntry(GetStateAction(States.TransactionHistory));
         }
 
     }
