@@ -6,7 +6,23 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.PL.ViewModel
 {
-    class ProductCatalogStates
+    public enum States
     {
+        MainState,
+        SavingChangesCatalog
+
+        ProductCatalog, 
+        SearchingProduct,
+        ProductSelected,
+        SearchProductComplete,
+        ProductNoSelected,
+        EditingProduct, 
+
+        CategoryCatalog,
+        SearchingCategory,
+        CategorySelected,
+        SearchCategoryComplete,
+        CategoryNoSelected,
+        EditingCategory
     }
 }

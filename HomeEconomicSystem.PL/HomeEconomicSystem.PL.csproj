@@ -223,7 +223,10 @@
     <Compile Include="ViewModel\PageDisplay\HomePageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay\IPageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay\ProductCatalogPageDisplay.cs" />
-    <Compile Include="ViewModel\ProductCatalogVM.cs" />
+    <Compile Include="ViewModel\ProductCatalog\ProductCatalogStateMachine.cs" />
+    <Compile Include="ViewModel\ProductCatalog\ProductCatalogVM.cs" />
+    <Compile Include="ViewModel\ProductCatalog\States.cs" />
+    <Compile Include="ViewModel\ProductCatalog\Triggers.cs" />
     <Compile Include="ViewModel\StateMachine.cs" />
     <Compile Include="ViewModel\MainMenuVM.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
