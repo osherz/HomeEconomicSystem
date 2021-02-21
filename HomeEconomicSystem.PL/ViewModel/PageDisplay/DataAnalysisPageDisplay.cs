@@ -8,24 +8,40 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
+using TriggersDA = HomeEconomicSystem.PL.ViewModel.DataAnalysis.Triggers;
+
 namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
-    class DataAnalysisPageDisplay : IPageDisplay
+    class DataAnalysisPageDisplay : NotifyPropertyChanged, IPageDisplay
     {
+
+        DataAnalysisStateMachine _stateMachine;
         public IReadOnlyList<MenuItem> MenuItems { get; }
         public bool HasItems => MenuItems is not null && MenuItems.Count > 0;
         public UserControl Content { get; }
+        
+        private string _state;
+        public string State
+        {
+            get { return _state; }
+            set { SetProperty(ref _state, value); }
+        }
 
-        public DataAnalysisPageDisplay(StateMachine stateMachine)
+
+        public DataAnalysisPageDisplay()
         {
             Content = new View.DataAnalysisView();
-            Content.DataContext = new DataAnalysisVM();
+            var VM = new DataAnalysisVM();
+            Content.DataContext = VM;
+            _stateMachine = VM.StateMachine;
+            _stateMachine.OnTransitionCompleted(t => State = t.Destination.ToString());
             MenuItems = new List<MenuItem>
             {
-                new MenuItem("שמורים", PackIconKind.StarCircle, stateMachine.CreateCommand(Triggers.DataAnalysisSelected)),
-                new MenuItem("AR", PackIconKind.ChartSankeyVariant, stateMachine.CreateCommand(Triggers.DataAnalysisSelected)),
-                 new MenuItem("טיוטה", PackIconKind.File, stateMachine.CreateCommand(Triggers.DataAnalysisSelected))
+                new MenuItem("שמורים", PackIconKind.StarCircle, _stateMachine.CreateCommand(TriggersDA.FavoriteSelected)),
+                new MenuItem("AR", PackIconKind.ChartSankeyVariant, _stateMachine.CreateCommand(TriggersDA.AssociationRulesSelected)),
+                 new MenuItem("טיוטה", PackIconKind.File, _stateMachine.CreateCommand(TriggersDA.DraftSelected))
             };
         }
+
     }
 }

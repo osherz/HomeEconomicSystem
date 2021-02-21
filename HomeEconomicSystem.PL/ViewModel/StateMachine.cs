@@ -52,14 +52,14 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             Configure(States.Home)
                 .SubstateOf(States.Start)
-                .OnEntry(GetStateAction(States.Home));
+                .OnEntry(GetStateEntryAction(States.Home));
         }
 
         private void ConfigureDataAnalysis()
         {
             Configure(States.DataAnalysis)
                 .SubstateOf(States.Start)
-                .OnEntry(GetStateAction(States.DataAnalysis));
+                .OnEntry(GetStateEntryAction(States.DataAnalysis));
 
         }
 
@@ -67,14 +67,14 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             Configure(States.ProductCatalog)
                             .SubstateOf(States.Start)
-                            .OnEntry(GetStateAction(States.ProductCatalog));
+                            .OnEntry(GetStateEntryAction(States.ProductCatalog));
         }
 
         private void ConfigureTransactionHistory()
         {
             Configure(States.TransactionHistory)
                             .SubstateOf(States.Start)
-                            .OnEntry(GetStateAction(States.TransactionHistory));
+                            .OnEntry(GetStateEntryAction(States.TransactionHistory));
         }
 
     }

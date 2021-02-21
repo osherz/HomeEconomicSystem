@@ -211,6 +211,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="Converters\BooleanToCollapsedVisibilityConverter.cs" />
     <Compile Include="Extensions\EnumerableExtentions.cs" />
     <Compile Include="Extensions\StateMachineExtensions.cs" />
     <Compile Include="Model\Categories.cs" />
@@ -218,6 +219,9 @@
     <Compile Include="ViewModel\BaseStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisVM.cs" />
+    <Compile Include="ViewModel\DataAnalysis\DraftVm.cs" />
+    <Compile Include="ViewModel\DataAnalysis\States.cs" />
+    <Compile Include="ViewModel\DataAnalysis\Triggers.cs" />
     <Compile Include="ViewModel\HomeVM.cs" />
     <Compile Include="ViewModel\PageDisplay\DataAnalysisPageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay\HomePageDisplay.cs" />
@@ -233,8 +237,17 @@
     <Compile Include="ViewModel\TransactionHistoryVM.cs" />
     <Compile Include="ViewModel\Triggers.cs" />
     <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
+    <Compile Include="View\AssociationRulesView.xaml.cs">
+      <DependentUpon>AssociationRulesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DataAnalysisView.xaml.cs">
       <DependentUpon>DataAnalysisView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DraftView.xaml.cs">
+      <DependentUpon>DraftView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FavoritesView.xaml.cs">
+      <DependentUpon>FavoritesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
@@ -263,7 +276,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\AssociationRulesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\DataAnalysisView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DraftView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FavoritesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

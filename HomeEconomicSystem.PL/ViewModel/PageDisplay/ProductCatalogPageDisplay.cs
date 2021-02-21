@@ -19,6 +19,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public bool HasItems => MenuItems is not null && MenuItems.Count > 0;
 
+        public string State => "NotImplementedException";
+
         public ProductCatalogPageDisplay(StateMachine stateMachine)
         {
             Content = new View.ProductCatalogView();

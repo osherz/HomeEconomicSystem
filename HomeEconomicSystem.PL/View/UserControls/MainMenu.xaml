@@ -19,7 +19,7 @@
 
     <ListBox x:Name="MenuItemsListBox"  
             Margin="0 0 0 0"
-            ItemsSource="{Binding MenuItems}" 
+            ItemsSource="{Binding MenuItems}"
              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
         <!-- We define HorizontalContentAlignment=Stretch and 
         VerticalContentAlignment=Stretch in ListBox
