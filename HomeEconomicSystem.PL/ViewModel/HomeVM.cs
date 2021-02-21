@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.PL.ViewModel
 {
-    public enum Triggers
+    class HomeVM
     {
-        HomeSelected, DataAnalysisSelected, 
-        ProductCatalogSelected, TransactionHistorySelected,
-        Edit, Search, Delete, Create
     }
 }

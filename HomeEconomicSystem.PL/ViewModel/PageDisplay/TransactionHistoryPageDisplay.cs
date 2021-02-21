@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace HomeEconomicSystem.PL.ViewModel
+namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
     class TransactionHistoryPageDisplay : IPageDisplay
     {
@@ -19,6 +19,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         public TransactionHistoryPageDisplay(StateMachine stateMachine)
         {
             Content = new View.TransactionHistoryView();
+            Content.DataContext = new TransactionHistoryVM();
             MenuItems = new List<MenuItem>();
         }
     }

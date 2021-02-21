@@ -20,7 +20,6 @@
         FlowDirection="RightToLeft">
     <materialDesign:DialogHost>
         <materialDesign:DrawerHost IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
-
             <!--#region Side-Menu -->
             <materialDesign:DrawerHost.LeftDrawerContent>
                 <DockPanel  MinWidth="220">

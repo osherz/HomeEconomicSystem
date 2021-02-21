@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace HomeEconomicSystem.PL.ViewModel
+namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
     class HomePageDisplay : IPageDisplay
     {
@@ -16,6 +16,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         public HomePageDisplay()
         {
             Content = new View.HomeView();
+            Content.DataContext = new HomeVM();
             MenuItems = new List<MenuItem>();
         }
     }
