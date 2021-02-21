@@ -11,15 +11,9 @@ namespace HomeEconomicSystem.PL.ViewModel
 
     public class StateMachine: BaseStateMachine<States, Triggers>
     {
-
-        IReadOnlyDictionary<States, Action> _stateActionDict;
-
-        protected override IReadOnlyDictionary<States, Action> StateActionDict => _stateActionDict;
-
         //TODO: to check if need to unable the option to permit to themself.
-        public StateMachine(IReadOnlyDictionary<States, Action> stateActionDict) : base (States.Start)
+        public StateMachine(IReadOnlyDictionary<States, Action> stateActionDict) : base (States.Start, stateActionDict)
         {
-            _stateActionDict = stateActionDict;
             ConfigureStart();
             ConfigureHome();
             ConfigureDataAnalysis();

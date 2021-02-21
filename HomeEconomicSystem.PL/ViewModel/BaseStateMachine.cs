@@ -8,20 +8,20 @@ namespace HomeEconomicSystem.PL.ViewModel
 {
     public abstract class BaseStateMachine<TState, TTrigger> : Stateless.StateMachine<TState, TTrigger>
     {
-        protected abstract IReadOnlyDictionary<States, Action> StateActionDict {get;}
+        IReadOnlyDictionary<TState, Action> _stateActionDict;
 
-        protected Action GetStateAction(States state)
+        protected Action GetStateAction(TState state)
         {
-            if(StateActionDict.ContainsKey(state))
+            if(_stateActionDict.ContainsKey(state))
             {
-                return StateActionDict[state];
+                return _stateActionDict[state];
             }
             return () => { };
         }
 
-        public BaseStateMachine(TState initialState) : base(initialState)
+        public BaseStateMachine(TState initialState, IReadOnlyDictionary<TState, Action> stateActionDict) : base(initialState)
         {
-
+            _stateActionDict = stateActionDict;
         }
     }
 }

@@ -38,11 +38,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         Edit,
         AssociationRulesSelected
     }
-    internal class DataAnalysisStateMachine : Stateless.StateMachine<States, Triggers>
+    internal class DataAnalysisStateMachine : BaseStateMachine<States, Triggers>
     {
-        IReadOnlyDictionary<States, Action> _stateActionDict;
-
-        public DataAnalysisStateMachine() : base(States.Favorites)
+        public DataAnalysisStateMachine(IReadOnlyDictionary<States, Action>  stateActionDict) : base(States.Favorites, stateActionDict)
         {
             
         }
