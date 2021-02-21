@@ -211,7 +211,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="Extensions\EnumerableExtentions.cs" />
     <Compile Include="Extensions\StateMachineExtensions.cs" />
+    <Compile Include="Model\Categories.cs" />
+    <Compile Include="Model\Products.cs" />
     <Compile Include="ViewModel\DataAnalysisPageDisplay.cs" />
     <Compile Include="ViewModel\HomePageDisplay.cs" />
     <Compile Include="ViewModel\IPageDisplay.cs" />
@@ -307,9 +310,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\HomeEconomicSystem.BE\HomeEconomicSystem.BE.csproj">
       <Project>{6f102a29-acf6-4070-9662-ee8dab89ae4e}</Project>

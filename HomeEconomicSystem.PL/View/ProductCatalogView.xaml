@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HomeEconomicSystem.PL.View"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Product Catalog" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-    </Grid>
+    <StackPanel>
+        <TextBox                         x:Name="DemoItemsSearchBox"                        Width="auto"                        Margin="16, 4"                        materialDesign:HintAssist.Hint="Search"                          materialDesign:HintAssist.IsFloating="True"                        materialDesign:TextFieldAssist.HasClearButton="True"                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"                        materialDesign:TextFieldAssist.DecorationVisibility="Collapsed"                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"/>
+    </StackPanel>
 </UserControl>
