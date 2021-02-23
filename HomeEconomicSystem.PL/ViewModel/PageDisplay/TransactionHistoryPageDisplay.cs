@@ -16,6 +16,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public UserControl Content { get; }
 
+        public string State => "NotImplementedException";
+
         public TransactionHistoryPageDisplay(StateMachine stateMachine)
         {
             Content = new View.TransactionHistoryView();

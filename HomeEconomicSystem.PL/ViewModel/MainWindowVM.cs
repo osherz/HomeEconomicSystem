@@ -29,7 +29,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         public MainWindowVM()
         {
             IPageDisplay homePageDisplay = new HomePageDisplay();
-            IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay(_stateMachine);
+            IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay();
             IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay(_stateMachine);
             IPageDisplay transactionHistoryDisplay = new TransactionHistoryPageDisplay(_stateMachine);
 
@@ -40,7 +40,7 @@ namespace HomeEconomicSystem.PL.ViewModel
                 {States.ProductCatalog, ()=>PageDisplay=productCatalogDisplay },
                 {States.TransactionHistory, ()=>PageDisplay=transactionHistoryDisplay }
             };
-            PageDisplay = productCatalogDisplay;
+            PageDisplay = dataAnalysisDisplay;
             _stateMachine = new StateMachine(_stateActionDict);
 
             MainMenuVM = new MainMenuVM(_stateMachine);

@@ -1,5 +1,4 @@
-﻿using HomeEconomicSystem.PL.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,23 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace HomeEconomicSystem.PL
+namespace HomeEconomicSystem.PL.View
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for DraftView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class DraftView : UserControl
     {
-        public MainWindow()
+        public DraftView()
         {
             InitializeComponent();
-
-            DataContext = new MainWindowVM();
-        }
-
-        private void EventTrigger_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            MenuToggleButton.IsChecked = false;
         }
     }
 }

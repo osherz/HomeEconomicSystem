@@ -1,4 +1,5 @@
 ﻿using HomeEconomicSystem.PL.Extensions;
+using HomeEconomicSystem.PL.ViewModel.ProductCatalog;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
         public UserControl Content { get; }
 
         public bool HasItems => MenuItems is not null && MenuItems.Count > 0;
+
+        public string State => "NotImplementedException";
 
         public ProductCatalogPageDisplay(StateMachine stateMachine)
         {

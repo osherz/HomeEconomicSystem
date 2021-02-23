@@ -13,6 +13,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
         public bool HasItems => MenuItems is not null && MenuItems.Count > 0;
         public UserControl Content { get; }
 
+        public string State => "NotImplementedException";
+
         public HomePageDisplay()
         {
             Content = new View.HomeView();
