@@ -9,7 +9,7 @@ namespace HomeEconomicSystem.BE
 {
 
 
-    public class Product
+    public class Product : IName
     {
         public int Id { get; set; }
         [MinLength(13), MaxLength(15)]

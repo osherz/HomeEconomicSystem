@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="HomeEconomicSystem.PL.View.UserControls.DateRangeUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200">
+    <StackPanel>
+        <DatePicker
+                Name="_startDatePicker" 
+                Margin="0 5" 
+                materialDesign:HintAssist.Hint="תאריך התחלה"
+                SelectedDate="{Binding Path=StartDate, 
+                             RelativeSource={RelativeSource FindAncestor, 
+                                             AncestorType=local:DateRangeUC, 
+                                             AncestorLevel=1}}"
+                Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+
+        <DatePicker 
+                Name="_endDatePicker" 
+                Margin="0 5"
+                materialDesign:HintAssist.Hint="תאריך סיום"
+                SelectedDate="{Binding Path=EndDate, 
+                             RelativeSource={RelativeSource FindAncestor, 
+                                             AncestorType=local:DateRangeUC, 
+                                             AncestorLevel=1}}"
+                Style="{StaticResource MaterialDesignOutlinedDatePicker}" />
+        <TextBlock 
+            Text="Error range" 
+            Foreground="Red" 
+            Visibility="{Binding Path=IsNotValidRange, Mode=OneWay,
+                             RelativeSource={RelativeSource FindAncestor, 
+                                             AncestorType=local:DateRangeUC, 
+                                             AncestorLevel=1},
+                            Converter={StaticResource BooleanToVisibilityConverter}}" />
+    </StackPanel>
+</UserControl>

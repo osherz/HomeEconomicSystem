@@ -8,8 +8,19 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
     public class DataAnalysisStateMachine : BaseStateMachine<States, Triggers>
     {
+        private IEnumerable<States> _graphCreationOrder;
+
         public DataAnalysisStateMachine(IReadOnlyDictionary<States, Action> stateActionDict, IReadOnlyDictionary<States, Action> stateExitActionDict = null) : base(States.Favorites, stateActionDict, stateExitActionDict)
         {
+            _graphCreationOrder = new[]
+            {
+                States.GraphSubjectChoosing,
+                States.GraphTypeChoosing,
+                States.GraphSubSubjectChoosing,
+                States.GraphMeasureChoosing,
+                States.GraphRangeChoosing
+            };
+
             Configure(States.MainState)
                 .OnEntry(GetStateEntryAction(States.MainState))
                 .OnExit(GetStateExitAction(States.MainState))
@@ -28,52 +39,10 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 .SubstateOf(States.MainState)
                 .OnEntry(GetStateEntryAction(States.Draft))
                 .OnExit(GetStateExitAction(States.Draft))
-                .Permit(Triggers.CreateGraph, States.GraphTypeChoosing)
+                .Permit(Triggers.CreateGraph, _graphCreationOrder.First())
                 .Permit(Triggers.AddToFavorites, States.AddingToFavorites);
 
-            Configure(States.GraphTypeChoosing)
-                .OnEntry(GetStateEntryAction(States.GraphTypeChoosing))
-                .OnExit(GetStateExitAction(States.GraphTypeChoosing))
-                .Permit(Triggers.Next, States.GraphSubjectChoosing)
-                .Permit(Triggers.Cancel, States.Draft);
-
-            Configure(States.GraphSubjectChoosing)
-                .OnEntry(GetStateEntryAction(States.GraphSubjectChoosing))
-                .OnExit(GetStateExitAction(States.GraphSubjectChoosing))
-                .Permit(Triggers.Next, States.GraphSubSubjectChoosing)
-                .Permit(Triggers.Back, States.GraphTypeChoosing)
-                .Permit(Triggers.Cancel, States.Draft);
-
-            Configure(States.GraphSubSubjectChoosing)
-                .OnEntry(GetStateEntryAction(States.GraphSubSubjectChoosing))
-                .OnExit(GetStateExitAction(States.GraphSubSubjectChoosing))
-                .Permit(Triggers.Next, States.GraphMeasureChoosing)
-                .Permit(Triggers.Back, States.GraphSubjectChoosing)
-                .Permit(Triggers.Cancel, States.Draft);
-
-            Configure(States.GraphMeasureChoosing)
-                .OnEntry(GetStateEntryAction(States.GraphMeasureChoosing))
-                .OnExit(GetStateExitAction(States.GraphMeasureChoosing))
-                .Permit(Triggers.Next, States.GraphRangeChoosing)
-                .Permit(Triggers.Back, States.GraphSubSubjectChoosing)
-                .Permit(Triggers.Cancel, States.Draft);
-
-            Configure(States.GraphRangeChoosing)
-                .OnEntry(GetStateEntryAction(States.GraphRangeChoosing))
-                .OnExit(GetStateExitAction(States.GraphRangeChoosing))
-                .Permit(Triggers.Finish, States.SavingNewGraph)
-                .Permit(Triggers.Back, States.GraphMeasureChoosing)
-                .Permit(Triggers.Cancel, States.Draft);
-
-            Configure(States.SavingNewGraph)
-                .OnEntry(GetStateEntryAction(States.SavingNewGraph))
-                .OnExit(GetStateExitAction(States.SavingNewGraph))
-                .Permit(Triggers.Finish, States.NewGraphSaved);
-
-            Configure(States.NewGraphSaved)
-                .SubstateOf(States.Draft)
-                .OnEntry(GetStateEntryAction(States.NewGraphSaved))
-                .OnExit(GetStateExitAction(States.NewGraphSaved));
+            ConfigureGraphCreationStates();
 
             Configure(States.AddingToFavorites)
                 .OnEntry(GetStateEntryAction(States.AddingToFavorites))
@@ -84,6 +53,44 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 .SubstateOf(States.Draft)
                 .OnEntry(GetStateEntryAction(States.AddedToFavorites))
                 .OnExit(GetStateExitAction(States.AddedToFavorites));
+        }
+
+        private void ConfigureGraphCreationStates()
+        {
+            var graphCreationOrder = _graphCreationOrder.ToArray();
+            StateConfiguration config = null;
+            for (int creationStateIndex = 0; creationStateIndex < _graphCreationOrder.Count(); creationStateIndex++)
+            {
+                States currentState = graphCreationOrder[creationStateIndex];
+                // Config next of previous state.
+                if (config != null)
+                {   
+                    config.Permit(Triggers.Next, currentState);
+                }
+
+                config = Configure(currentState)
+                    .OnEntry(GetStateEntryAction(currentState))
+                    .OnExit(GetStateExitAction(currentState))
+                    .Permit(Triggers.Cancel, States.Draft);
+
+                // Config back of current state.
+                if (creationStateIndex > 0)
+                {
+                    States prev = graphCreationOrder[creationStateIndex - 1];
+                    config.Permit(Triggers.Back, prev);
+                }
+            }
+            config.Permit(Triggers.Finish, States.SavingNewGraph);
+
+            Configure(States.SavingNewGraph)
+                .OnEntry(GetStateEntryAction(States.SavingNewGraph))
+                .OnExit(GetStateExitAction(States.SavingNewGraph))
+                .Permit(Triggers.Finish, States.NewGraphSaved);
+
+            Configure(States.NewGraphSaved)
+                .SubstateOf(States.Draft)
+                .OnEntry(GetStateEntryAction(States.NewGraphSaved))
+                .OnExit(GetStateExitAction(States.NewGraphSaved));
         }
 
         private void ConfigureFavorites()

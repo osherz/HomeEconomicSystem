@@ -22,5 +22,12 @@ namespace HomeEconomicSystem.PL.Extensions
             }
         }
 
+        public static IReadOnlyCollection<KeyValuePair<T, string>> ToKeyValuePair<T>(this IEnumerable<T> collection)
+        {
+            return collection
+                .Select(s => new KeyValuePair<T, string>(s, s.ToString()))
+                .ToList();
+        }
+
     }
 }

@@ -1,7 +1,10 @@
-﻿using HomeEconomicSystem.PL.Command;
+﻿using HomeEconomicSystem.BE;
+using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.Extensions;
+using HomeEconomicSystem.PL.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -12,41 +15,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
     public class DraftVM : NotifyPropertyChanged
     {
-
-        private bool _typeChoosing;
-        public bool TypeChoosing
-        {
-            get { return _typeChoosing; }
-            set { SetProperty(ref _typeChoosing, value); }
-        }
-
-        private bool _subjectChoosing;
-        public bool SubjectChoosing
-        {
-            get { return _subjectChoosing; }
-            set { SetProperty(ref _subjectChoosing, value); }
-        }
-
-        private bool _subSubjectChoosing;
-        public bool SubSubjectChoosing
-        {
-            get { return _subSubjectChoosing; }
-            set { SetProperty(ref _subSubjectChoosing, value); }
-        }
-
-        private bool _measureChoosing;
-        public bool MeasureChoosing
-        {
-            get { return _measureChoosing; }
-            set { SetProperty(ref _measureChoosing, value); }
-        }
-
-        private bool _rangeChoosing;
-        public bool RangeChoosing
-        {
-            get { return _rangeChoosing; }
-            set { SetProperty(ref _rangeChoosing, value); }
-        }
+        public GraphCreationVM GraphCreationVM { get; }
+        GraphsModel _graphsModel;
+        DataAnalysisStateMachine _stateMachine;
 
         private bool _creatingGraph;
         public bool CreatingGraph
@@ -54,6 +25,15 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             get => _creatingGraph;
             set => SetProperty(ref _creatingGraph, value);
         }
+
+        private ObservableCollection<BasicGraph> _graphsCollection;
+
+        public ObservableCollection<BasicGraph> GraphsCollection
+        {
+            get { return _graphsCollection; }
+            set { SetProperty(ref _graphsCollection, value); }
+        }
+
 
         States _state;
         public States State
@@ -64,55 +44,72 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         #region Commands
         public ICommand CreateGraph { get; private set; }
-        public ICommand Next { get; private set; }
-        public ICommand Finish { get; private set; }
-        public ICommand Prev { get; private set; }
-        public ICommand Cancel { get; private set; }
         #endregion Commands
 
         public DraftVM()
         {
             PropertyChanged += DraftVM_PropertyChanged;
+            GraphCreationVM = new GraphCreationVM();
+            _graphsModel = new GraphsModel();
+            LoadGraphs();
         }
 
         private void DraftVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            CreatingGraph = TypeChoosing || RangeChoosing || SubjectChoosing || SubSubjectChoosing || MeasureChoosing;
+            CreatingGraph = GraphCreationVM.TypeChoosing ||
+                GraphCreationVM.RangeChoosing ||
+                GraphCreationVM.SubjectChoosing ||
+                GraphCreationVM.SubSubjectChoosing ||
+                GraphCreationVM.MeasureChoosing;
         }
 
         public void SetStateMachine(DataAnalysisStateMachine stateMachine)
         {
+            _stateMachine = stateMachine;
             stateMachine.OnTransitionCompleted((e) => State = e.Destination);
-            if (Next != null || Prev != null) throw new InvalidOperationException("Already set a state machine");
             CreateGraph = stateMachine.CreateCommand(Triggers.CreateGraph);
-            Next = stateMachine.CreateCommand(Triggers.Next);
-            Prev = stateMachine.CreateCommand(Triggers.Back);
-            Finish = stateMachine.CreateCommand(Triggers.Finish);
-            Cancel = stateMachine.CreateCommand(Triggers.Cancel);
+            GraphCreationVM.SetStateMachine(stateMachine);
         }
 
-        public IReadOnlyDictionary<States, Action> GetStatesAction()
+        public IReadOnlyDictionary<States, Action> GetStatesEntryAction()
         {
             return new Dictionary<States, Action>
             {
-                { States.GraphMeasureChoosing, ()=>MeasureChoosing = true },
-                { States.GraphRangeChoosing, ()=>RangeChoosing = true },
-                { States.GraphSubjectChoosing, ()=>SubjectChoosing = true },
-                { States.GraphSubSubjectChoosing, ()=>SubSubjectChoosing = true },
-                { States.GraphTypeChoosing, ()=>{ TypeChoosing = true; }},
-            };
+                {States.SavingNewGraph, ()=>SaveNewGraph() }
+            }.Concat(GraphCreationVM.GetStatesEntryAction()).ToDictionary(item=>item.Key, item=>item.Value);
+        }
+
+        private void SaveNewGraph()
+        {
+            BasicGraph basicGraph = null;
+            switch (GraphCreationVM.SelectedSubject.Key)
+            {
+                case Subjects.Category:
+                    basicGraph = GraphCreationVM.GetGraph<CategoryGraph>();
+                    _graphsModel.AddGraph(GraphCreationVM.GetGraph<CategoryGraph>());
+                    _stateMachine.Fire(Triggers.Finish);
+                    break;
+                case Subjects.Product:
+                    break;
+                case Subjects.Store:
+                    break;
+                default:
+                    break;
+            }
+            GraphsCollection.Add(basicGraph);
+        }
+
+        private void LoadGraphs()
+        {
+            GraphsCollection = _graphsModel.GetCategoryGraphs()
+                .Concat(_graphsModel.GetStoreGraphs().Select(g => g as BasicGraph))
+                .Concat(_graphsModel.GetTransactionGraphs().Select(g => g as BasicGraph))
+                .Concat(_graphsModel.GetProductGraphs().Select(g => g as BasicGraph)).ToObservableCollection();
         }
 
         public IReadOnlyDictionary<States, Action> GetStatesExitAction()
         {
-            return new Dictionary<States, Action>
-            {
-                { States.GraphMeasureChoosing, ()=>MeasureChoosing = false },
-                { States.GraphRangeChoosing, ()=>RangeChoosing = false },
-                { States.GraphSubjectChoosing, ()=>SubjectChoosing = false },
-                { States.GraphSubSubjectChoosing, ()=>SubSubjectChoosing = false },
-                { States.GraphTypeChoosing, ()=>TypeChoosing = false },
-            };
+            return GraphCreationVM.GetStatesExitAction();
         }
     }
 }

@@ -50,6 +50,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=2.0.0.2422, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.2.0.0\lib\net452\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -211,15 +217,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="Converters\BasicGraphToGraphDataFormatter.cs" />
     <Compile Include="Converters\BooleanToCollapsedVisibilityConverter.cs" />
+    <Compile Include="Extensions\EntitiesExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtentions.cs" />
     <Compile Include="Extensions\StateMachineExtensions.cs" />
-    <Compile Include="Model\Categories.cs" />
+    <Compile Include="Model\CategoriesModel.cs" />
+    <Compile Include="Model\GraphsModel.cs" />
     <Compile Include="Model\Products.cs" />
     <Compile Include="ViewModel\BaseStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisVM.cs" />
     <Compile Include="ViewModel\DataAnalysis\DraftVm.cs" />
+    <Compile Include="ViewModel\DataAnalysis\GraphCreationVM.cs" />
     <Compile Include="ViewModel\DataAnalysis\States.cs" />
     <Compile Include="ViewModel\DataAnalysis\Triggers.cs" />
     <Compile Include="ViewModel\HomeVM.cs" />
@@ -231,6 +241,7 @@
     <Compile Include="ViewModel\ProductCatalog\ProductCatalogVM.cs" />
     <Compile Include="ViewModel\ProductCatalog\States.cs" />
     <Compile Include="ViewModel\ProductCatalog\Triggers.cs" />
+    <Compile Include="ViewModel\SelectedableItem.cs" />
     <Compile Include="ViewModel\StateMachine.cs" />
     <Compile Include="ViewModel\MainMenuVM.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
@@ -263,6 +274,19 @@
     </Compile>
     <Compile Include="View\TransactionHistoryView.xaml.cs">
       <DependentUpon>TransactionHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserControls\DateRangeUC.xaml.cs">
+      <DependentUpon>DateRangeUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserControls\GraphCreationDialog.xaml.cs">
+      <DependentUpon>GraphCreationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserControls\GraphData.cs" />
+    <Compile Include="View\UserControls\GraphPanelUC.xaml.cs">
+      <DependentUpon>GraphPanelUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserControls\GraphUC.xaml.cs">
+      <DependentUpon>GraphUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
@@ -311,6 +335,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\TransactionHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\DateRangeUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\GraphCreationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\GraphPanelUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\GraphUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
