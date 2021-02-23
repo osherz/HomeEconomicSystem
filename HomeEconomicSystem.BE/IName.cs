@@ -8,6 +8,7 @@ namespace HomeEconomicSystem.BE
 {
     public interface IName
     {
+        int Id { get; }
         string Name { get; }
     }
 }
