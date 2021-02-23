@@ -59,6 +59,7 @@
     <Compile Include="Category.cs" />
     <Compile Include="CategoryGraph.cs" />
     <Compile Include="GraphType.cs" />
+    <Compile Include="IName.cs" />
     <Compile Include="Product.cs" />
     <Compile Include="ProductGraph.cs" />
     <Compile Include="ProductTransaction.cs" />

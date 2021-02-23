@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HomeEconomicSystem.Dal;
+using System.Data.Entity;
 
 namespace HomeEconomicSystem.BL.V1
 {
@@ -58,7 +59,7 @@ namespace HomeEconomicSystem.BL.V1
 
         public IEnumerable<Category> GetCategories(string categoryName = "")
         {
-            return _db.Categories.Where(c => c.Name.Contains(categoryName));
+            return _db.Categories.AsNoTracking().Where(c => c.Name.Contains(categoryName));
         }
 
         public IEnumerable<Product> GetProducts(string productName = "", params Category[] categories)

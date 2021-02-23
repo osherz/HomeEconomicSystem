@@ -10,14 +10,15 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.PL.Model
 {
-    public class Categories
+    public class CategoriesModel
     {
         IDataManagement _dataMenegement;
         public ObservableCollection<Category> CategoriesList { get; private set; }
-        public Categories()
+        public CategoriesModel()
         {
             _dataMenegement = new BL.BL().DataManagement;
             CategoriesList = new ObservableCollection<Category>();
+            Filter();
         }
 
         void Filter(string name = "")

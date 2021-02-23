@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.BE
 {
-    public class Store
+    public class Store : IName
     {
         public int Id { get; set; }
         [MaxLength(100)]

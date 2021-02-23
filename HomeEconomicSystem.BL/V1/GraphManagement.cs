@@ -18,21 +18,25 @@ namespace HomeEconomicSystem.BL.V1
         public void AddGraph(CategoryGraph categoryGraph)
         {
             _db.CategoryGraphs.Add(categoryGraph);
+            _db.SaveChanges();
         }
 
         public void AddGraph(ProductGraph productGraph)
         {
             _db.ProductGraphs.Add(productGraph);
+            _db.SaveChanges();
         }
 
         public void AddGraph(StoreGraph storeGraph)
         {
             _db.StoreGraphs.Add(storeGraph);
+            _db.SaveChanges();
         }
 
         public void AddGraph(TransactionsGraph transactionsGraph)
         {
             _db.TransactionsGraphs.Add(transactionsGraph);
+            _db.SaveChanges();
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(CategoryGraph categoryGraph)

@@ -7,13 +7,17 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 
 namespace HomeEconomicSystem.PL.Model
 {
     public class Products
     {
         IDataManagement _dataMenegement ;
-
+        // TODO: Find a way to use a read-only ObservableCollection
         public ObservableCollection<Product> ProductsList { get; private set; }
         public Products()
         {

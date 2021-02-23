@@ -27,7 +27,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 { States.Draft, ()=> Content = new DraftView(){ DataContext = draftVM } },
                 { States.Favorites, () => Content = new FavoritesView() },
                 { States.AssociationRules ,() => Content = new AssociationRulesView() },
-            }.Concat(draftVM.GetStatesAction()).ToDictionary(item=>item.Key, item=>item.Value);
+            }.Concat(draftVM.GetStatesEntryAction()).ToDictionary(item=>item.Key, item=>item.Value);
             
             var statesExitAction = draftVM.GetStatesExitAction();
             
