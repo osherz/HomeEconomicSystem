@@ -8,24 +8,31 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:converters="clr-namespace:HomeEconomicSystem.PL.Converters" xmlns:usercontrols="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
              TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        TextElement.FontWeight="Regular"
-        TextElement.FontSize="13"   
-        TextOptions.TextFormattingMode="Ideal" 
-        TextOptions.TextRenderingMode="Auto"       
-        Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"   
+             TextOptions.TextFormattingMode="Ideal" 
+             TextOptions.TextRenderingMode="Auto"       
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{DynamicResource MaterialDesignFont}"
              d:DataContext="{d:DesignInstance dataanalysis:DraftVM, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <materialDesign:DialogHost IsOpen="{Binding CreatingGraph}">
-            <materialDesign:DialogHost.DialogContent>
-                <usercontrols:GraphCreationDialog Margin="5" DataContext="{Binding GraphCreationVM}" Width="200" Height="300" />
-            </materialDesign:DialogHost.DialogContent>
-            
-            <Button Command="{Binding CreateGraph}" Style="{StaticResource MaterialDesignRaisedButton}">
-                Create Graph
-            </Button>
-        </materialDesign:DialogHost>
-    </Grid>
+
+    <materialDesign:DialogHost IsOpen="{Binding CreatingGraph}">
+        <materialDesign:DialogHost.DialogContent>
+            <usercontrols:GraphCreationDialog Margin="5" DataContext="{Binding GraphCreationVM}" Width="200" Height="300" />
+        </materialDesign:DialogHost.DialogContent>
+        <DockPanel>
+            <!-- Botton Tools Buttons -->
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="10">
+                <Button
+                Style="{StaticResource MaterialDesignFloatingActionButton}"
+                 Command="{Binding CreateGraph}">
+                    <materialDesign:PackIcon Kind="Plus" />
+                </Button>
+            </StackPanel>
+            <usercontrols:GraphPanelUC GraphsCollection="{Binding GraphsCollection}" />
+
+        </DockPanel>
+    </materialDesign:DialogHost>
 </UserControl>

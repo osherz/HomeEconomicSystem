@@ -4,6 +4,7 @@ using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -25,6 +26,15 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             set => SetProperty(ref _creatingGraph, value);
         }
 
+        private ObservableCollection<BasicGraph> _graphsCollection;
+
+        public ObservableCollection<BasicGraph> GraphsCollection
+        {
+            get { return _graphsCollection; }
+            set { SetProperty(ref _graphsCollection, value); }
+        }
+
+
         States _state;
         public States State
         {
@@ -41,6 +51,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             PropertyChanged += DraftVM_PropertyChanged;
             GraphCreationVM = new GraphCreationVM();
             _graphsModel = new GraphsModel();
+            LoadGraphs();
         }
 
         private void DraftVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -70,9 +81,11 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private void SaveNewGraph()
         {
+            BasicGraph basicGraph = null;
             switch (GraphCreationVM.SelectedSubject.Key)
             {
                 case Subjects.Category:
+                    basicGraph = GraphCreationVM.GetGraph<CategoryGraph>();
                     _graphsModel.AddGraph(GraphCreationVM.GetGraph<CategoryGraph>());
                     _stateMachine.Fire(Triggers.Finish);
                     break;
@@ -83,6 +96,15 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 default:
                     break;
             }
+            GraphsCollection.Add(basicGraph);
+        }
+
+        private void LoadGraphs()
+        {
+            GraphsCollection = _graphsModel.GetCategoryGraphs()
+                .Concat(_graphsModel.GetStoreGraphs().Select(g => g as BasicGraph))
+                .Concat(_graphsModel.GetTransactionGraphs().Select(g => g as BasicGraph))
+                .Concat(_graphsModel.GetProductGraphs().Select(g => g as BasicGraph)).ToObservableCollection();
         }
 
         public IReadOnlyDictionary<States, Action> GetStatesExitAction()

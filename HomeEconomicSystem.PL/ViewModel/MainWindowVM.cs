@@ -40,7 +40,6 @@ namespace HomeEconomicSystem.PL.ViewModel
                 {States.ProductCatalog, ()=>PageDisplay=productCatalogDisplay },
                 {States.TransactionHistory, ()=>PageDisplay=transactionHistoryDisplay }
             };
-            PageDisplay = dataAnalysisDisplay;
             _stateMachine = new StateMachine(_stateActionDict);
 
             MainMenuVM = new MainMenuVM(_stateMachine);
