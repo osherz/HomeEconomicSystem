@@ -9,7 +9,7 @@ namespace HomeEconomicSystem.PL.ViewModel
     public enum States
     {
         MainState,
-        SavingChangesCatalog
+        SavingChangesCatalog,
 
         ProductCatalog, 
         SearchingProduct,
