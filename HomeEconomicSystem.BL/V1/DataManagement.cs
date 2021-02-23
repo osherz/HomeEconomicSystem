@@ -67,7 +67,7 @@ namespace HomeEconomicSystem.BL.V1
             return from product in _db.Products
                    where product.Name.Contains(productName)
                    let categoriesIds = categories.Select(c => c.Id)
-                   where categoriesIds.Contains(product.Category.Id)
+                   where categories.Count() <= 0 || categoriesIds.Contains(product.Category.Id)
                    select product;
         }
 

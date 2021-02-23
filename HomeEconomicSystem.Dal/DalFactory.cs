@@ -8,8 +8,8 @@ namespace HomeEconomicSystem.Dal
 {
     public class DalFactory
     {
-        private IQRCodeFetcher _qRCodeFetcher;
-        private IDb _db;
+        private static IQRCodeFetcher _qRCodeFetcher;
+        private static IDb _db;
 
         public IQRCodeFetcher GetQRCodeFetcher() 
         {

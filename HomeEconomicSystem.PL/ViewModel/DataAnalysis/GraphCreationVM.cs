@@ -15,6 +15,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
     public class GraphCreationVM : NotifyPropertyChanged
     {
         private CategoriesModel _categoriesModel;
+        private ProductsModel _productsModel;
+        private StoresModel _storesModel;
         private BasicGraph _graph;
         public string GraphTitle
         {
@@ -132,6 +134,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public GraphCreationVM()
         {
             _categoriesModel = new CategoriesModel();
+            _productsModel = new ProductsModel();
+            _storesModel = new StoresModel();
+
             _graph = new TransactionsGraph(); // Just to get the properties of BasicGraph
             SubjectsOptions = Enum.GetValues(typeof(Subjects))
                 .Cast<Subjects>()
@@ -151,6 +156,21 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public TGraph GetGraph<TGraph>()
             where TGraph: BasicGraph
         {
+            var selectedSubSubjects = SubSubjects.Where(item => item.IsSelected).Select(item=>item.Item);
+            switch (SelectedSubject.Key)
+            {
+                case Subjects.Category:
+                    (_graph as CategoryGraph).Categories = selectedSubSubjects.Cast<Category>().ToList();
+                    break;
+                case Subjects.Product:
+                    (_graph as ProductGraph).Products = selectedSubSubjects.Cast<Product>().ToList();
+                    break;
+                case Subjects.Store:
+                    (_graph as StoreGraph).Stores = selectedSubSubjects.Cast<Store>().ToList();
+                    break;
+                default:
+                    break;
+            }
             return (TGraph)_graph;
         }
 
@@ -197,21 +217,29 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private void LoadSubSubject()
         {
+            IEnumerable<IName> subSubjectsNames;
+            BasicGraph newGraph;
+
             switch (SelectedSubject.Key)
             {
                 case Subjects.Category:
-                    SubSubjects = _categoriesModel.CategoriesList.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
-                    CategoryGraph categoryGraph = new CategoryGraph();
-                    if(_graph!=null) _graph.Copy(categoryGraph);
-                    _graph = categoryGraph;
+                    subSubjectsNames = _categoriesModel.CategoriesList;
+                    newGraph = new CategoryGraph();
                     break;
                 case Subjects.Product:
+                    subSubjectsNames = _productsModel.ProductsList;
+                    newGraph = new ProductGraph();
                     break;
                 case Subjects.Store:
+                    subSubjectsNames = _storesModel.StoresList;
+                    newGraph = new StoreGraph();
                     break;
                 default:
-                    break;
+                    throw new NotSupportedException();
             }
+            SubSubjects = subSubjectsNames.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
+            if (_graph != null) _graph.Copy(newGraph);
+            _graph = newGraph;
         }
     }
 }

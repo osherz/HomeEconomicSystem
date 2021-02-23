@@ -19,9 +19,9 @@ namespace HomeEconomicSystem.PL.View.UserControls
     /// <summary>
     /// Interaction logic for MainMenu.xaml
     /// </summary>
-    public partial class MainMenu : UserControl
+    public partial class MenuUC : UserControl
     {
-        public MainMenu()
+        public MenuUC()
         {
             InitializeComponent();
         }

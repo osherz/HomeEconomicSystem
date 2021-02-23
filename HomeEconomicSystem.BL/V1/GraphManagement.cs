@@ -42,28 +42,37 @@ namespace HomeEconomicSystem.BL.V1
         public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(CategoryGraph categoryGraph)
         {
             Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();
-            analyzeGraph.Add(1, new[] {(0,0),(1,1) } );
+            foreach (var item in categoryGraph.Categories)
+            {
+                analyzeGraph.Add(item.Id, new[] { (0, 5), (1, 1) });
+            }
             return analyzeGraph;
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(ProductGraph productGraph)
         {
             Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();
-            analyzeGraph.Add(1, new[] { (0, 0), (1, 1) });
+            foreach (var item in productGraph.Products)
+            {
+                analyzeGraph.Add(item.Id, new[] { (0, 5), (1, 1) });
+            }
             return analyzeGraph;
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(StoreGraph storeGraph)
         {
             Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();
-            analyzeGraph.Add(1, new[] { (0, 0), (1, 1) });
+            foreach (var item in storeGraph.Stores)
+            {
+                analyzeGraph.Add(item.Id, new[] { (0, 5), (1, 1) });
+            }
             return analyzeGraph;
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(TransactionsGraph transactionsGraph)
         {
             Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();
-            analyzeGraph.Add(1, new[] { (0, 0), (1, 1) });
+            analyzeGraph.Add(1, new[] { (0, 5), (1, 1) });
             return analyzeGraph;
         }
 

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:chart="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              d:DataContext="{d:DesignInstance local:GraphUC}"
-             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"   
              TextOptions.TextFormattingMode="Ideal" 
@@ -14,7 +14,9 @@
              FontFamily="{DynamicResource MaterialDesignFont}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid DataContext="{Binding ., RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}" FlowDirection="LeftToRight">
+    <Grid DataContext="{Binding Graph, 
+                        RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}" 
+          FlowDirection="LeftToRight">
         <Grid.Resources>
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -22,24 +24,34 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" DataContext="{Binding Graph}"
+        <DockPanel Grid.Row="0">
+            <materialDesign:PopupBox DockPanel.Dock="Right"
+                Padding="2 0 2 0">
+                <StackPanel>
+                    <local:MenuUC FlowDirection="RightToLeft"
+                        DataContext="{Binding MenuItems, 
+                                        RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}" />
+                </StackPanel>
+            </materialDesign:PopupBox>
+            <TextBlock
                     Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                     HorizontalAlignment="Center"
                    FontWeight="ExtraBold"
-                    Text="{Binding Title, TargetNullValue=Title}" />
-        <TextBlock  Grid.Row="1"  DataContext="{Binding Graph}"
+                    Text="{Binding Title}" />
+        </DockPanel>
+        <TextBlock  Grid.Row="1"
                     Text="{Binding Description}" 
                     Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                     HorizontalAlignment="Center"/>
-        <chart:CartesianChart 
+        <chart:CartesianChart  
             Series="{Binding SeriesCollection}" 
-            LegendLocation="Right"
+            LegendLocation="Bottom"
             Grid.Row="2">
             <chart:CartesianChart.AxisY>
-                <chart:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"></chart:Axis>
+                <chart:Axis Title="{Binding TitleY}" LabelFormatter="{Binding YFormatter}"></chart:Axis>
             </chart:CartesianChart.AxisY>
             <chart:CartesianChart.AxisX>
-                <chart:Axis Title="Month" Labels="{Binding Labels}"></chart:Axis>
+                <chart:Axis Title="{Binding TitleX}" Labels="{Binding Labels}"></chart:Axis>
             </chart:CartesianChart.AxisX>
         </chart:CartesianChart>
     </Grid>

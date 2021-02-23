@@ -1,4 +1,5 @@
 ﻿using HomeEconomicSystem.BE;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -22,7 +23,7 @@ namespace HomeEconomicSystem.PL.View.UserControls
     /// </summary>
     public partial class GraphPanelUC : UserControl
     {
-
+        public IReadOnlyList<ViewModel.MenuItem> MenuItems { get; set; }
 
         public ObservableCollection<BasicGraph> GraphsCollection
         {
@@ -38,6 +39,12 @@ namespace HomeEconomicSystem.PL.View.UserControls
         public GraphPanelUC()
         {
             InitializeComponent();
+
+            MenuItems = new List<ViewModel.MenuItem>(new[] 
+            {
+                new ViewModel.MenuItem("ערוך", PackIconKind.Edit,null),
+                new ViewModel.MenuItem("מחק", PackIconKind.Delete,null)
+            });
         }
     }
 }
