@@ -257,6 +257,9 @@
     <Compile Include="View\AssociationRulesView.xaml.cs">
       <DependentUpon>AssociationRulesView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\CategoryCatalogView.xaml.cs">
+      <DependentUpon>CategoryCatalogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DataAnalysisView.xaml.cs">
       <DependentUpon>DataAnalysisView.xaml</DependentUpon>
     </Compile>
@@ -310,6 +313,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\CategoryCatalogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\DataAnalysisView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -327,8 +334,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ProductCatalogView.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\TransactionHistoryView.xaml">
       <SubType>Designer</SubType>
