@@ -43,19 +43,29 @@ namespace HomeEconomicSystem.PL.Converters
             {
                 throw new NotImplementedException();
             }
+            else if(graph is null)
+            {
+                return null;
+            }
             else
             {
                 throw new NotSupportedException();
             }
 
             var allXs = GetXs(dataAnalyzed);
-            return new GraphData
+            var graphData = new GraphData
             {
                 BasicGraph = graph,
                 SeriesCollection = CreateSeriesCollection(dataAnalyzed, names, allXs, graph.GraphType),
                 Labels = allXs.Select(num => num.ToString()).ToArray(),
-                YFormatter = y => y.ToString()
+                YFormatter = y => y.ToString(),
             };
+            graphData.ItemsDataForTable = from series in graphData.SeriesCollection
+                                          let title = series.Title
+                                          let values = series.Values.Cast<int>().Select(num=>graphData.YFormatter(num))
+                                          let points = graphData.Labels.Zip(values, (x, y) => new { X = x, Y = y }).ToList()
+                                          select new KeyValuePair<string, IEnumerable>(title, points);
+            return graphData;
         }
 
         /// <summary>
@@ -102,16 +112,13 @@ namespace HomeEconomicSystem.PL.Converters
         {
             switch (graphType)
             {
-                case GraphType.Linear:
-                    return new LineSeries();
                 case GraphType.Bar:
                     return new ColumnSeries();
                 case GraphType.Pie:
                     return new PieSeries();
-                case GraphType.Table:
-                    throw new NotSupportedException();
+                case GraphType.Linear:
                 default:
-                    throw new NotSupportedException();
+                    return new LineSeries();
             }
         }
 

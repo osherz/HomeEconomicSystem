@@ -1,6 +1,7 @@
 ﻿using HomeEconomicSystem.BE;
 using LiveCharts;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,13 +24,22 @@ namespace HomeEconomicSystem.PL.View.UserControls
         public static readonly DependencyProperty BasicGraphProperty =
             DependencyProperty.Register("BasicGraph", typeof(BasicGraph), typeof(GraphData), new PropertyMetadata(null));
 
+        public int Id => BasicGraph.Id;
         public string Title => BasicGraph.Title;
         public string Description => BasicGraph.Description;
+        public bool IsTable => BasicGraph.GraphType == GraphType.Table;
+        public bool IsChart => !IsTable;
 
         public TimeType TitleX => BasicGraph.AggregationTimeType;
-        public AmountOrCost TitleY => BasicGraph.AmountOrCost; 
-        public SeriesCollection SeriesCollection{ get; set; }
+        public AmountOrCost TitleY => BasicGraph.AmountOrCost;
+        public SeriesCollection SeriesCollection { get; set; }
         public Func<double, string> YFormatter { get; set; }
         public string[] Labels { get; set; }
+
+        /// <summary>
+        /// The IEnumerable should be of {X="?", Y="?"} 
+        /// </summary>
+        public IEnumerable<KeyValuePair<string, IEnumerable>> ItemsDataForTable  { get;set;}
+
     }
 }

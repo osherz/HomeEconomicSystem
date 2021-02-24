@@ -219,6 +219,7 @@
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Converters\BasicGraphToGraphDataConverter.cs" />
     <Compile Include="Converters\BooleanToCollapsedVisibilityConverter.cs" />
+    <Compile Include="Converters\KeyValuePairConverter.cs" />
     <Compile Include="Extensions\EntitiesExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtentions.cs" />
     <Compile Include="Extensions\StateMachineExtensions.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Model\GraphsModel.cs" />
     <Compile Include="Model\Products.cs" />
     <Compile Include="ViewModel\BaseStateMachine.cs" />
+    <Compile Include="ViewModel\DataAnalysis\GraphCreationStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisVM.cs" />
     <Compile Include="ViewModel\DataAnalysis\DraftVm.cs" />
@@ -291,8 +293,8 @@
     <Compile Include="View\UserControls\GraphUC.xaml.cs">
       <DependentUpon>GraphUC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\UserControls\Menu.xaml.cs">
-      <DependentUpon>Menu.xaml</DependentUpon>
+    <Compile Include="View\UserControls\MenuUC.xaml.cs">
+      <DependentUpon>MenuUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\MenuItemUC.xaml.cs">
       <DependentUpon>MenuItemUC.xaml</DependentUpon>
@@ -357,7 +359,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\UserControls\Menu.xaml">
+    <Page Include="View\UserControls\MenuUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

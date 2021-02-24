@@ -8,6 +8,7 @@
         AddToFavorites,
         Next,
         Back,
+        Delete,
         ClearAll,
         AllCleared,
         SaveChanges,

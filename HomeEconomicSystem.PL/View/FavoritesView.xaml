@@ -14,7 +14,7 @@
              TextOptions.TextRenderingMode="Auto"       
              Background="{DynamicResource MaterialDesignPaper}"
              FontFamily="{DynamicResource MaterialDesignFont}"
-             d:DataContext="{d:DesignInstance dataanalysis:DraftVM, IsDesignTimeCreatable=False}"
+             d:DataContext="{d:DesignInstance dataanalysis:FavoritesVM, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -26,12 +26,14 @@
             <!-- Botton Tools Buttons -->
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Margin="10">
                 <Button
-                Style="{StaticResource MaterialDesignFloatingActionButton}"
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                  Command="{Binding CreateGraph}">
                     <materialDesign:PackIcon Kind="Plus" />
                 </Button>
             </StackPanel>
-            <usercontrols:GraphPanelUC GraphsCollection="{Binding GraphsCollection}" />
+            <usercontrols:GraphPanelUC 
+                MenuItems="{Binding MenuItems}"
+                GraphsCollection="{Binding GraphsCollection}" />
 
         </DockPanel>
     </materialDesign:DialogHost>

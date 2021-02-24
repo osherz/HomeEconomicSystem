@@ -28,9 +28,7 @@
                             Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                             IsChecked="{Binding ElementName=MenuToggleButton, Path=IsChecked, Mode=TwoWay}" />
                     <StackPanel>
-                    <UserControls:MenuUC  x:Name="mainMenu" DataContext="{Binding MainMenuVM.MenuItems}" MouseUp="EventTrigger_MouseUp">
-                       
-                    </UserControls:MenuUC>
+                        <UserControls:MenuUC  x:Name="mainMenu" DataContext="{Binding MainMenuVM.MenuItems}" MouseUp="EventTrigger_MouseUp" />
                     </StackPanel>
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>

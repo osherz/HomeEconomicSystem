@@ -2,6 +2,7 @@
 using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,6 +19,10 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public GraphCreationVM GraphCreationVM { get; }
         GraphsModel _graphsModel;
         DataAnalysisStateMachine _stateMachine;
+
+        BasicGraph _graphToDelete;
+
+        public IReadOnlyList<ViewModel.MenuItem> MenuItems { get; set; }
 
         private bool _creatingGraph;
         public bool CreatingGraph
@@ -48,35 +53,52 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         public FavoritesVM()
         {
-            PropertyChanged += FavoritesVM_PropertyChanged;
             GraphCreationVM = new GraphCreationVM();
             _graphsModel = new GraphsModel();
             LoadGraphs();
         }
 
-        private void FavoritesVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            CreatingGraph = GraphCreationVM.TypeChoosing ||
-                GraphCreationVM.RangeChoosing ||
-                GraphCreationVM.SubjectChoosing ||
-                GraphCreationVM.SubSubjectChoosing ||
-                GraphCreationVM.MeasureChoosing;
-        }
 
         public void SetStateMachine(DataAnalysisStateMachine stateMachine)
         {
             _stateMachine = stateMachine;
             stateMachine.OnTransitionCompleted((e) => State = e.Destination);
             CreateGraph = stateMachine.CreateCommand(Triggers.CreateGraph);
-            GraphCreationVM.SetStateMachine(stateMachine);
+            GraphCreationVM.Done += (sender, e) => stateMachine.Fire(Triggers.Finish);
+            GraphCreationVM.Canceled += (sender, e) => stateMachine.Fire(Triggers.Cancel);
+
+            MenuItems = new List<ViewModel.MenuItem>(new[]
+            {
+                //new ViewModel.MenuItem("ערוך", PackIconKind.Edit, _stateMachine.CreateCommand(Triggers.Edit)),
+                new ViewModel.MenuItem("מחק", 
+                                        PackIconKind.Delete, 
+                                        _stateMachine.CreateCommand(Triggers.Delete,
+                                            obj => _graphToDelete = obj as BasicGraph))
+            });
         }
 
         public IReadOnlyDictionary<States, Action> GetStatesEntryAction()
         {
             return new Dictionary<States, Action>
             {
-                {States.SavingNewGraph, ()=>SaveNewGraph() }
-            }.Concat(GraphCreationVM.GetStatesEntryAction()).ToDictionary(item => item.Key, item => item.Value);
+                { States.GraphCreatingForFavorite, ()=> {GraphCreationVM.GoToFirst(); CreatingGraph= true; } },
+                {States.SavingNewGraphFavorite, ()=>SaveNewGraph() },
+                {States.NewGraphFavoriteSaved, ()=> CreatingGraph= false },
+                {States.FavoriteCreatingCanceled, ()=> CreatingGraph= false },
+                {States.DeleteFavorite, () => DeleteSelectedGraph()}
+            };
+        }
+
+        private void DeleteSelectedGraph()
+        {
+            _graphsModel.DeleteGraph(_graphToDelete);
+            _graphsCollection.Remove(_graphToDelete);
+            _stateMachine.Fire(Triggers.Finish);
+        }
+
+        public IReadOnlyDictionary<States, Action> GetStatesExitAction()
+        {
+            return new Dictionary<States, Action>();
         }
 
         private void SaveNewGraph()
@@ -114,9 +136,5 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 .Concat(_graphsModel.GetProductGraphs().Select(g => g as BasicGraph)).ToObservableCollection();
         }
 
-        public IReadOnlyDictionary<States, Action> GetStatesExitAction()
-        {
-            return GraphCreationVM.GetStatesExitAction();
-        }
     }
 }

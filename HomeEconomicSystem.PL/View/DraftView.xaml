@@ -17,7 +17,9 @@
              d:DataContext="{d:DesignInstance dataanalysis:DraftVM, IsDesignTimeCreatable=False}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
+    <UserControl.Resources>
+        <converters:BasicGraphToGraphDataConverter x:Key="BasicGraphToGraphDataConverter" />
+    </UserControl.Resources>
     <materialDesign:DialogHost IsOpen="{Binding CreatingGraph}">
         <materialDesign:DialogHost.DialogContent>
             <usercontrols:GraphCreationDialog Margin="5" DataContext="{Binding GraphCreationVM}" Width="200" Height="300" />
@@ -31,7 +33,10 @@
                     <materialDesign:PackIcon Kind="Plus" />
                 </Button>
             </StackPanel>
-            <usercontrols:GraphPanelUC GraphsCollection="{Binding GraphsCollection}" />
+            <usercontrols:GraphUC Visibility="{Binding Graph, Converter={StaticResource NullableToVisibilityConverter}}"
+                                  Margin="20 20 20 0"
+            Graph="{Binding Graph, NotifyOnSourceUpdated=True,
+                        Converter={StaticResource BasicGraphToGraphDataConverter}}" />
 
         </DockPanel>
     </materialDesign:DialogHost>

@@ -22,7 +22,7 @@ namespace HomeEconomicSystem.PL.View
     {
         public FavoritesView()
         {
-            InitializeComponent();
+           InitializeComponent();
         }
     }
 }

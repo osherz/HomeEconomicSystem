@@ -39,6 +39,31 @@ namespace HomeEconomicSystem.BL.V1
             _db.SaveChanges();
         }
 
+        public void DeleteGraph(BasicGraph graph)
+        {
+            if(graph is CategoryGraph)
+            {
+                _db.CategoryGraphs.Remove(graph as CategoryGraph);
+            }
+            else if (graph is ProductGraph)
+            {
+                _db.ProductGraphs.Remove(graph as ProductGraph);
+            }
+            else if (graph is StoreGraph)
+            {
+                _db.StoreGraphs.Remove(graph as StoreGraph);
+            }
+            else if (graph is TransactionsGraph)
+            {
+                _db.TransactionsGraphs.Remove(graph as TransactionsGraph);
+            }
+            else
+            {
+                throw new SystemException();
+            }
+            _db.SaveChanges();
+        }
+
         public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(CategoryGraph categoryGraph)
         {
             Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();

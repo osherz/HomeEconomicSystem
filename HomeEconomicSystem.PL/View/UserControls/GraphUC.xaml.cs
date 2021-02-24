@@ -49,12 +49,6 @@ namespace HomeEconomicSystem.PL.View.UserControls
         public GraphUC()
         {
             InitializeComponent();
-
-            MenuItems = new List<ViewModel.MenuItem>(new[]
-  {
-                new ViewModel.MenuItem("ערוך", PackIconKind.Edit,null),
-                new ViewModel.MenuItem("מחק", PackIconKind.Delete,null)
-            });
         }
     }
 }

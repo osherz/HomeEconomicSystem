@@ -10,9 +10,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
     public class DataAnalysisVM : NotifyPropertyChanged
     {
-        DraftView _draftView { get; set; }
-        FavoritesView _favoritesView { get; set; }
-
+        DraftView _draftView;
+        FavoritesView _favoritesView;
         public DataAnalysisStateMachine StateMachine { get; }
 
         private UserControl _content;
@@ -49,14 +48,15 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                     }
                 },
                 { States.AssociationRules ,() => Content = new AssociationRulesView() },
-            }.Concat(draftVM.GetStatesEntryAction()).ToDictionary(item => item.Key, item => item.Value);
+            }.Concat(draftVM.GetStatesEntryAction())
+            .Concat(favoritesVM.GetStatesEntryAction()).ToDictionary(item => item.Key, item => item.Value);
 
             var statesExitAction = draftVM.GetStatesExitAction();
 
             StateMachine = new(statesEntryAction, statesExitAction);
 
             draftVM.SetStateMachine(StateMachine);
-            StateMachine.Fire(Triggers.FavoriteSelected);
+            favoritesVM.SetStateMachine(StateMachine);
         }
     }
 }

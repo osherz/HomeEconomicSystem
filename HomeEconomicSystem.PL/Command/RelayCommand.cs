@@ -17,7 +17,7 @@ namespace HomeEconomicSystem.PL.Command
         #region Declarations
 
         readonly Func<bool> _canExecute;
-        readonly Action _execute;
+        readonly Action<object> _execute;
 
         #endregion
 
@@ -27,8 +27,7 @@ namespace HomeEconomicSystem.PL.Command
         /// Initializes a new instance of the <see cref="RelayCommand&lt;T&gt;"/> class and the command can always be executed.
         /// </summary>
         /// <param name="execute">The execution logic.</param>
-        public RelayCommand(Action execute)
-          : this(execute, null)
+        public RelayCommand(Action<object> execute) : this(execute, null)
         {
         }
 
@@ -37,12 +36,9 @@ namespace HomeEconomicSystem.PL.Command
         /// </summary>
         /// <param name="execute">The execution logic.</param>
         /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action execute, Func<bool> canExecute)
+        public RelayCommand(Action<object> execute, Func<bool> canExecute)
         {
-
-            if (execute == null)
-                throw new ArgumentNullException("execute");
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute;
         }
 
@@ -67,12 +63,12 @@ namespace HomeEconomicSystem.PL.Command
         //[DebuggerStepThrough]
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute();
+            return _canExecute == null || _canExecute();
         }
 
         public void Execute(object parameter)
         {
-            _execute();
+            _execute(parameter);
         }
 
         #endregion
