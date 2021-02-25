@@ -59,6 +59,11 @@ namespace HomeEconomicSystem.PL.Model
             return _graphManagement.AnalyzeGraph(transactionsGraph);
         }
 
+        public void DeleteGraph(BasicGraph graph)
+        {
+            _graphManagement.DeleteGraph(graph);
+        }
+
         public IEnumerable<BasicGraph> GetCategoryGraphs()
         {
             return _graphManagement.GetCategoryGraphs();

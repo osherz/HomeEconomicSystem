@@ -10,8 +10,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
     public class DataAnalysisVM : NotifyPropertyChanged
     {
+        DraftView _draftView;
+        FavoritesView _favoritesView;
         public DataAnalysisStateMachine StateMachine { get; }
-        DraftView _draftView { get; set; }
 
         private UserControl _content;
         public UserControl Content
@@ -23,6 +24,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public DataAnalysisVM()
         {
             DraftVM draftVM = new DraftVM();
+            FavoritesVM favoritesVM = new FavoritesVM();
 
             var statesEntryAction = new Dictionary<States, Action>{
                 {
@@ -35,15 +37,26 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                         Content = _draftView;
                     }
                 },
-                { States.Favorites, () => Content = new FavoritesView() },
+                { 
+                    States.Favorites, () =>
+                    {
+                        if(_favoritesView is null)
+                        {
+                            _favoritesView = new FavoritesView() {DataContext = favoritesVM};
+                        }
+                        Content = _favoritesView;
+                    }
+                },
                 { States.AssociationRules ,() => Content = new AssociationRulesView() },
-            }.Concat(draftVM.GetStatesEntryAction()).ToDictionary(item => item.Key, item => item.Value);
+            }.Concat(draftVM.GetStatesEntryAction())
+            .Concat(favoritesVM.GetStatesEntryAction()).ToDictionary(item => item.Key, item => item.Value);
 
             var statesExitAction = draftVM.GetStatesExitAction();
 
             StateMachine = new(statesEntryAction, statesExitAction);
 
             draftVM.SetStateMachine(StateMachine);
+            favoritesVM.SetStateMachine(StateMachine);
         }
     }
 }

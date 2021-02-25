@@ -29,6 +29,28 @@ namespace HomeEconomicSystem.PL.ViewModel
             return () => { };
         }
 
+        /// <summary>
+        /// Basic configuration, including OnEntry and OnExit.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public StateConfiguration BasicConfigure(TState state)
+        {
+            var conf = Configure(state)
+                .OnEntry(GetStateEntryAction(state))
+                .OnExit(GetStateExitAction(state));
+            return conf;
+        }
+
+        public StateConfiguration BasicConfigure(TState state, TState subState)
+        {
+            var conf = Configure(state)
+                .SubstateOf(subState)
+                .OnEntry(GetStateEntryAction(state))
+                .OnExit(GetStateExitAction(state));
+            return conf;
+        }
+
         public BaseStateMachine(TState initialState, IReadOnlyDictionary<TState, Action> stateEntryActionDict, IReadOnlyDictionary<TState, Action> stateExitActionDict = null) : base(initialState)
         {
             _stateEntryActionDict = stateEntryActionDict;

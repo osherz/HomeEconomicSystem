@@ -48,107 +48,107 @@
     </Grid>
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10" ScrollViewer.CanContentScroll="True">
-        <StackPanel.Resources>
-            <Style x:Key="OutlineTextBox"  TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
-                <Setter Property="Margin" Value="5 5" />
-            </Style>
-            <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
-                <Setter Property="Margin" Value="5 5" />
-            </Style>
-            <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
-                <Setter Property="Margin" Value="5 5" />
-            </Style>
-            <Style TargetType="local:DateRangeUC">
-                <Setter Property="Margin" Value="5 5" />
-            </Style>
-        </StackPanel.Resources>
-        
-        <!-- TypeChoosing -->
-        <StackPanel Visibility="{Binding TypeChoosing, Mode=OneWay , 
+            <StackPanel.Resources>
+                <Style x:Key="OutlineTextBox"  TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+                    <Setter Property="Margin" Value="5 5" />
+                </Style>
+                <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <Setter Property="Margin" Value="5 5" />
+                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    <Setter Property="Margin" Value="5 5" />
+                </Style>
+                <Style TargetType="local:DateRangeUC">
+                    <Setter Property="Margin" Value="5 5" />
+                </Style>
+            </StackPanel.Resources>
+
+            <!-- TypeChoosing -->
+            <StackPanel Visibility="{Binding TypeChoosing, Mode=OneWay , 
                                         Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ComboBox
+                <ComboBox
                 materialDesign:HintAssist.Hint="סוג גרף" 
                     Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                 ItemsSource="{Binding GraphTypeOptions}"
                 SelectedItem="{Binding SelectedGraphType}"
                 DisplayMemberPath="Value">
-            </ComboBox>
-        </StackPanel>
+                </ComboBox>
+            </StackPanel>
 
-        <!-- MeasureChoosing -->
-        <StackPanel Visibility="{Binding MeasureChoosing, Mode=OneWay , 
+            <!-- MeasureChoosing -->
+            <StackPanel Visibility="{Binding MeasureChoosing, Mode=OneWay , 
                                         Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ComboBox 
+                <ComboBox 
                 materialDesign:HintAssist.Hint="סוג מדידה" 
                 Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                 ItemsSource="{Binding AmountOrCostOptions}"
                 SelectedItem="{Binding SelectedAmountOrCost}"
                 DisplayMemberPath="Value">
-            </ComboBox>
+                </ComboBox>
 
-            <ComboBox 
+                <ComboBox 
                 materialDesign:HintAssist.Hint="חתך זמן" 
                 Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                 ItemsSource="{Binding TimeTypeOptions}"
                 SelectedItem="{Binding SelectedAggregationTimeType}"
                            DisplayMemberPath="Value">
-            </ComboBox>
-        </StackPanel>
+                </ComboBox>
+            </StackPanel>
 
-        <!-- RangeChoosing -->
-        <local:DateRangeUC Visibility="{Binding RangeChoosing, Mode=OneWay , 
+            <!-- RangeChoosing -->
+            <local:DateRangeUC Visibility="{Binding RangeChoosing, Mode=OneWay , 
                                         Converter={StaticResource BooleanToVisibilityConverter}}" 
                            StartDate="{Binding StartDate, Mode=OneWayToSource}" EndDate="{Binding EndDate, Mode=OneWayToSource}" />
 
-        <!-- SubjectChoosing -->
-        <StackPanel Visibility="{Binding SubjectChoosing, Mode=OneWay , 
+            <!-- SubjectChoosing -->
+            <StackPanel Visibility="{Binding SubjectChoosing, Mode=OneWay , 
                                         Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ComboBox 
+                <ComboBox 
                             materialDesign:HintAssist.Hint="איזה סוגים למדוד" 
                            ItemsSource="{Binding SubjectsOptions}"
                            SelectedItem="{Binding SelectedSubject}"
                            DisplayMemberPath="Value">
-            </ComboBox>
-            <TextBox 
+                </ComboBox>
+                <TextBox 
                 materialDesign:HintAssist.Hint="כותרת הגרף" 
                 Text="{Binding GraphTitle}"
                 />
-            <TextBox
+                <TextBox
                 TextWrapping="Wrap"
                 MaxLength="50"
                 Text="{Binding GraphDescription}"
                 materialDesign:HintAssist.Hint="תיאור" 
                 Style="{StaticResource OutlineTextBox}"
                 Height="70" />
-        </StackPanel>
+            </StackPanel>
 
-        <!-- SubSubjectChoosing -->
-        <StackPanel x:Name="SubSubjectChoosing" 
+            <!-- SubSubjectChoosing -->
+            <StackPanel x:Name="SubSubjectChoosing" 
                     Visibility="{Binding SubSubjectChoosing, 
                                     Mode=OneWay , 
                                     Converter={StaticResource BooleanToVisibilityConverter}}"
                      ScrollViewer.CanContentScroll="True">
-            <ListBox x:Name="SubSubjectChoosingViewer"
+                <ListBox x:Name="SubSubjectChoosingViewer"
                     materialDesign:HintAssist.Hint="{Binding SelectedSubject.Key}" 
                     ItemsSource="{Binding SubSubjects}"
                     SelectionMode="Multiple"
                     ScrollViewer.CanContentScroll="True"
                     MaxHeight="150"
                     HorizontalContentAlignment="Stretch">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Item.Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource MaterialDesignListBoxItem}">
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Item.Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
     </ScrollViewer>
 </DockPanel>

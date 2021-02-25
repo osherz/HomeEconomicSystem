@@ -4,17 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:chart="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             d:DataContext="{d:DesignInstance local:GraphUC}"
-             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"   
              TextOptions.TextFormattingMode="Ideal" 
              TextOptions.TextRenderingMode="Auto"       
-             Background="{DynamicResource MaterialDesignPaper}"
+             Background="{DynamicResource MaterialDesignDarkBackground}"
              FontFamily="{DynamicResource MaterialDesignFont}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid DataContext="{Binding ., RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}" FlowDirection="LeftToRight">
+    <Grid DataContext="{Binding Graph, 
+                        RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}" 
+          FlowDirection="LeftToRight">
         <Grid.Resources>
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -22,25 +25,90 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" DataContext="{Binding Graph}"
-                    Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                    HorizontalAlignment="Center"
-                   FontWeight="ExtraBold"
-                    Text="{Binding Title, TargetNullValue=Title}" />
-        <TextBlock  Grid.Row="1"  DataContext="{Binding Graph}"
-                    Text="{Binding Description}" 
-                    Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
-                    HorizontalAlignment="Center"/>
-        <chart:CartesianChart 
+
+        <DockPanel Grid.Row="0">
+            <materialDesign:PopupBox DockPanel.Dock="Right"
+                Padding="2 0 2 0">
+                <StackPanel>
+                    <local:MenuUC FlowDirection="RightToLeft"
+                                  Tag="{Binding Graph.BasicGraph, 
+                        RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}"
+                        DataContext="{Binding MenuItems, 
+                                      RelativeSource={RelativeSource AncestorLevel=1,                                   AncestorType=local:GraphUC}}" />
+                </StackPanel>
+            </materialDesign:PopupBox>
+            <StackPanel>
+                <TextBlock
+                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                        HorizontalAlignment="Center"
+                       FontWeight="ExtraBold"
+                        Text="{Binding Title}" 
+                    Margin="0 0 0 2"/>
+
+                <TextBlock  Text="{Binding Description}" 
+                        Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                        HorizontalAlignment="Center"/>
+            </StackPanel>
+        </DockPanel>
+
+        <chart:CartesianChart Visibility="{Binding IsChart, Converter={StaticResource BooleanToVisibilityConverter}}"
             Series="{Binding SeriesCollection}" 
-            LegendLocation="Right"
+            LegendLocation="Bottom"
             Grid.Row="2">
             <chart:CartesianChart.AxisY>
-                <chart:Axis Title="Sales" LabelFormatter="{Binding YFormatter}"></chart:Axis>
+                <chart:Axis Title="{Binding TitleY}" LabelFormatter="{Binding YFormatter}"></chart:Axis>
             </chart:CartesianChart.AxisY>
             <chart:CartesianChart.AxisX>
-                <chart:Axis Title="Month" Labels="{Binding Labels}"></chart:Axis>
+                <chart:Axis Title="{Binding TitleX}" Labels="{Binding Labels}"></chart:Axis>
             </chart:CartesianChart.AxisX>
         </chart:CartesianChart>
+
+        <!-- Table -->
+        <ScrollViewer Grid.Row="2" 
+                      HorizontalScrollBarVisibility="Auto" 
+                      VerticalScrollBarVisibility="Auto"
+                       Visibility="{Binding IsTable, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel ScrollViewer.CanContentScroll="True">
+                <ItemsControl ItemsSource="{Binding ItemsDataForTable}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Expander
+                                HorizontalAlignment="Stretch"
+                                Header="{Binding Key}">
+                                <StackPanel
+                                    Orientation="Vertical"
+                                    TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                                    <DataGrid
+                                          ItemsSource="{Binding Value}"
+                                          CanUserAddRows="False"
+                                            AutoGenerateColumns="False"
+                                          SelectionUnit="Cell"
+                                          SelectionMode="Extended">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding X}">
+                                                <DataGridTextColumn.Header>
+                                                    <TextBlock DataContext="{Binding Graph, 
+                                                                            RelativeSource={RelativeSource AncestorType=local:GraphUC, 
+                                                                                                            AncestorLevel=1}}" 
+                                                               Text="{Binding TitleX}" />
+                                                </DataGridTextColumn.Header>
+                                            </DataGridTextColumn>
+                                            <DataGridTextColumn Binding="{Binding Y}">
+                                                <DataGridTextColumn.Header>
+                                                    <TextBlock DataContext="{Binding Graph, 
+                                                                            RelativeSource={RelativeSource AncestorType=local:GraphUC, 
+                                                                                                            AncestorLevel=1}}" 
+                                                               Text="{Binding TitleY}" />
+                                                </DataGridTextColumn.Header>
+                                            </DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </StackPanel>
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

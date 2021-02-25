@@ -4,13 +4,11 @@
     {
         MainState,
         Draft,
-        GraphTypeChoosing,
-        GraphSubjectChoosing,
-        GraphSubSubjectChoosing,
-        GraphMeasureChoosing,
-        GraphRangeChoosing,
-        SavingNewGraph,
-        NewGraphSaved,
+        GraphCreatingForDraft,
+        GraphCreatingForFavorite,
+        SavingNewGraphDraft,
+        SavingNewGraphFavorite,
+        NewGraphDraftSaved,
         SavingChanges,
         AddingToFavorites,
         AddedToFavorites,
@@ -19,6 +17,11 @@
         FavoritesEditing,
         AssociationRules,
         Favorites,
-        ChangesSaved
+        DeleteFavorite,
+        ChangesSaved,
+        FavoriteCreatingCanceled,
+        DraftCreatingCanceled,
+        NewGraphFavoriteSaved,
+        FavoriteDeleted
     }
 }

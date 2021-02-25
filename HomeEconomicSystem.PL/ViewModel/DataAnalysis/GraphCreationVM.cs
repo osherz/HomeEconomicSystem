@@ -10,12 +10,26 @@ using System.Windows.Input;
 
 namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    public enum Subjects { Category, Product, Store};
+    public enum Subjects { Category, Product, Store };
 
     public class GraphCreationVM : NotifyPropertyChanged
     {
+        public event EventHandler Done;
+        public event EventHandler Canceled;
+
+
+        GraphCreationStateMachine _stateMachine;
         private CategoriesModel _categoriesModel;
+        private ProductsModel _productsModel;
+        private StoresModel _storesModel;
+
         private BasicGraph _graph;
+        public BasicGraph Graph
+        {
+            get => _graph;
+            set => SetProperty(ref _graph, value);
+        }
+
         public string GraphTitle
         {
             get => _graph.Title;
@@ -129,10 +143,18 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public ICommand Prev { get; private set; }
         public ICommand Cancel { get; private set; }
 
-        public GraphCreationVM()
+        public GraphCreationVM() : this(new TransactionsGraph() {StartDate = DateTime.Now, EndDate=DateTime.Now }) // Just to get the properties of BasicGraph
+        {
+
+        }
+
+        public GraphCreationVM(BasicGraph graph)
         {
             _categoriesModel = new CategoriesModel();
-            _graph = new TransactionsGraph(); // Just to get the properties of BasicGraph
+            _productsModel = new ProductsModel();
+            _storesModel = new StoresModel();
+
+            _graph = graph;
             SubjectsOptions = Enum.GetValues(typeof(Subjects))
                 .Cast<Subjects>()
                 .ToKeyValuePair();
@@ -146,72 +168,106 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 .Cast<TimeType>()
                 .ToKeyValuePair();
             PropertyChanged += GraphCreationVM_PropertyChanged;
+
+            CreateStateMachine();
         }
 
         public TGraph GetGraph<TGraph>()
-            where TGraph: BasicGraph
+            where TGraph : BasicGraph
         {
+            var selectedSubSubjects = SubSubjects.Where(item => item.IsSelected).Select(item => item.Item);
+            switch (SelectedSubject.Key)
+            {
+                case Subjects.Category:
+                    (_graph as CategoryGraph).Categories = selectedSubSubjects.Cast<Category>().ToList();
+                    break;
+                case Subjects.Product:
+                    (_graph as ProductGraph).Products = selectedSubSubjects.Cast<Product>().ToList();
+                    break;
+                case Subjects.Store:
+                    (_graph as StoreGraph).Stores = selectedSubSubjects.Cast<Store>().ToList();
+                    break;
+                default:
+                    break;
+            }
             return (TGraph)_graph;
         }
 
         private void GraphCreationVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(SelectedSubject))
+            if (e.PropertyName == nameof(SelectedSubject))
             {
                 LoadSubSubject();
             }
         }
 
-        public void SetStateMachine(DataAnalysisStateMachine stateMachine)
+        private void CreateStateMachine()
         {
+            _stateMachine = new(GetStatesEntryAction(), GetStatesExitAction());
+
             if (Next != null || Prev != null) throw new InvalidOperationException("Already set a state machine");
-            Next = stateMachine.CreateCommand(Triggers.Next);
-            Prev = stateMachine.CreateCommand(Triggers.Back);
-            Finish = stateMachine.CreateCommand(Triggers.Finish);
-            Cancel = stateMachine.CreateCommand(Triggers.Cancel);
+            Next = _stateMachine.CreateCommand(GraphCreationTriggers.Next);
+            Prev = _stateMachine.CreateCommand(GraphCreationTriggers.Back);
+            Finish = _stateMachine.CreateCommand(GraphCreationTriggers.Finish);
+            Cancel = _stateMachine.CreateCommand(GraphCreationTriggers.Cancel);
         }
 
-        public IReadOnlyDictionary<States, Action> GetStatesEntryAction()
+        private IReadOnlyDictionary<GraphCreationStates, Action> GetStatesEntryAction()
         {
-            return new Dictionary<States, Action>
+            return new Dictionary<GraphCreationStates, Action>
             {
-                { States.GraphMeasureChoosing, ()=>MeasureChoosing = true },
-                { States.GraphRangeChoosing, ()=>RangeChoosing = true },
-                { States.GraphSubjectChoosing, ()=>SubjectChoosing = true },
-                { States.GraphSubSubjectChoosing, ()=>SubSubjectChoosing = true },
-                { States.GraphTypeChoosing, ()=>{ TypeChoosing = true; }},
+                { GraphCreationStates.GraphMeasureChoosing, ()=>MeasureChoosing = true },
+                { GraphCreationStates.GraphRangeChoosing, ()=>RangeChoosing = true },
+                { GraphCreationStates.GraphSubjectChoosing, ()=>SubjectChoosing = true },
+                { GraphCreationStates.GraphSubSubjectChoosing, ()=>SubSubjectChoosing = true },
+                { GraphCreationStates.GraphTypeChoosing, ()=>{ TypeChoosing = true; }},
+                {GraphCreationStates.DoneCreation, () => Done?.Invoke(this, EventArgs.Empty) },
+                {GraphCreationStates.Canceled, () => Canceled?.Invoke(this, EventArgs.Empty) }
             };
         }
 
-        public IReadOnlyDictionary<States, Action> GetStatesExitAction()
+        public void GoToFirst()
         {
-            return new Dictionary<States, Action>
+            _stateMachine.Fire(GraphCreationTriggers.GoToFirst);
+        }
+
+        public IReadOnlyDictionary<GraphCreationStates, Action> GetStatesExitAction()
+        {
+            return new Dictionary<GraphCreationStates, Action>
             {
-                { States.GraphMeasureChoosing, ()=>MeasureChoosing = false },
-                { States.GraphRangeChoosing, ()=>RangeChoosing = false },
-                { States.GraphSubjectChoosing, ()=> SubjectChoosing = false },
-                { States.GraphSubSubjectChoosing, ()=>SubSubjectChoosing = false },
-                { States.GraphTypeChoosing, ()=>TypeChoosing = false },
+                { GraphCreationStates.GraphMeasureChoosing, ()=>MeasureChoosing = false },
+                { GraphCreationStates.GraphRangeChoosing, ()=>RangeChoosing = false },
+                { GraphCreationStates.GraphSubjectChoosing, ()=> SubjectChoosing = false },
+                { GraphCreationStates.GraphSubSubjectChoosing, ()=>SubSubjectChoosing = false },
+                { GraphCreationStates.GraphTypeChoosing, ()=>TypeChoosing = false },
             };
         }
 
         private void LoadSubSubject()
         {
+            IEnumerable<IName> subSubjectsNames;
+            BasicGraph newGraph;
+
             switch (SelectedSubject.Key)
             {
                 case Subjects.Category:
-                    SubSubjects = _categoriesModel.CategoriesList.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
-                    CategoryGraph categoryGraph = new CategoryGraph();
-                    if(_graph!=null) _graph.Copy(categoryGraph);
-                    _graph = categoryGraph;
+                    subSubjectsNames = _categoriesModel.CategoriesList;
+                    newGraph = new CategoryGraph();
                     break;
                 case Subjects.Product:
+                    subSubjectsNames = _productsModel.ProductsList;
+                    newGraph = new ProductGraph();
                     break;
                 case Subjects.Store:
+                    subSubjectsNames = _storesModel.StoresList;
+                    newGraph = new StoreGraph();
                     break;
                 default:
-                    break;
+                    throw new NotSupportedException();
             }
+            SubSubjects = subSubjectsNames.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
+            if (_graph != null) _graph.Copy(newGraph);
+            _graph = newGraph;
         }
     }
 }

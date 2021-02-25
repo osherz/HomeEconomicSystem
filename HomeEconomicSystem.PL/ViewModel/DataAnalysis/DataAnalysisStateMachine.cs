@@ -8,23 +8,10 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
     public class DataAnalysisStateMachine : BaseStateMachine<States, Triggers>
     {
-        private IEnumerable<States> _graphCreationOrder;
-
         public DataAnalysisStateMachine(IReadOnlyDictionary<States, Action> stateActionDict, IReadOnlyDictionary<States, Action> stateExitActionDict = null) : base(States.Favorites, stateActionDict, stateExitActionDict)
         {
-            _graphCreationOrder = new[]
-            {
-                States.GraphSubjectChoosing,
-                States.GraphTypeChoosing,
-                States.GraphSubSubjectChoosing,
-                States.GraphMeasureChoosing,
-                States.GraphRangeChoosing
-            };
-
-            Configure(States.MainState)
-                .OnEntry(GetStateEntryAction(States.MainState))
-                .OnExit(GetStateExitAction(States.MainState))
-                .Permit(Triggers.DraftSelected, States.Draft)
+            BasicConfigure(States.MainState)
+                //.Permit(Triggers.DraftSelected)
                 .Permit(Triggers.FavoriteSelected, States.Favorites)
                 .Permit(Triggers.AssociationRulesSelected, States.AssociationRules);
 
@@ -35,106 +22,69 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private void ConfigureDraft()
         {
-            Configure(States.Draft)
-                .SubstateOf(States.MainState)
-                .OnEntry(GetStateEntryAction(States.Draft))
-                .OnExit(GetStateExitAction(States.Draft))
-                .Permit(Triggers.CreateGraph, _graphCreationOrder.First())
+            BasicConfigure(States.Draft, States.MainState)
+                .Permit(Triggers.CreateGraph, States.GraphCreatingForDraft)
                 .Permit(Triggers.AddToFavorites, States.AddingToFavorites);
 
-            ConfigureGraphCreationStates();
+            BasicConfigure(States.GraphCreatingForDraft)
+                .Permit(Triggers.Cancel, States.DraftCreatingCanceled)
+               .Permit(Triggers.Finish, States.SavingNewGraphDraft);
 
-            Configure(States.AddingToFavorites)
-                .OnEntry(GetStateEntryAction(States.AddingToFavorites))
-                .Permit(Triggers.Finish, States.AddedToFavorites)
-                .OnExit(GetStateExitAction(States.AddedToFavorites));
+            BasicConfigure(States.DraftCreatingCanceled, States.Draft);
 
-            Configure(States.AddedToFavorites)
-                .SubstateOf(States.Draft)
-                .OnEntry(GetStateEntryAction(States.AddedToFavorites))
-                .OnExit(GetStateExitAction(States.AddedToFavorites));
-        }
+            BasicConfigure(States.SavingNewGraphDraft)
+                .Permit(Triggers.Finish, States.NewGraphDraftSaved);
 
-        private void ConfigureGraphCreationStates()
-        {
-            var graphCreationOrder = _graphCreationOrder.ToArray();
-            StateConfiguration config = null;
-            for (int creationStateIndex = 0; creationStateIndex < _graphCreationOrder.Count(); creationStateIndex++)
-            {
-                States currentState = graphCreationOrder[creationStateIndex];
-                // Config next of previous state.
-                if (config != null)
-                {   
-                    config.Permit(Triggers.Next, currentState);
-                }
+            BasicConfigure(States.NewGraphDraftSaved, States.Draft);
 
-                config = Configure(currentState)
-                    .OnEntry(GetStateEntryAction(currentState))
-                    .OnExit(GetStateExitAction(currentState))
-                    .Permit(Triggers.Cancel, States.Draft);
+            BasicConfigure(States.AddingToFavorites)
+                .Permit(Triggers.Finish, States.AddedToFavorites);
 
-                // Config back of current state.
-                if (creationStateIndex > 0)
-                {
-                    States prev = graphCreationOrder[creationStateIndex - 1];
-                    config.Permit(Triggers.Back, prev);
-                }
-            }
-            config.Permit(Triggers.Finish, States.SavingNewGraph);
-
-            Configure(States.SavingNewGraph)
-                .OnEntry(GetStateEntryAction(States.SavingNewGraph))
-                .OnExit(GetStateExitAction(States.SavingNewGraph))
-                .Permit(Triggers.Finish, States.NewGraphSaved);
-
-            Configure(States.NewGraphSaved)
-                .SubstateOf(States.Draft)
-                .OnEntry(GetStateEntryAction(States.NewGraphSaved))
-                .OnExit(GetStateExitAction(States.NewGraphSaved));
+            BasicConfigure(States.AddedToFavorites,States.Draft);
         }
 
         private void ConfigureFavorites()
         {
-            Configure(States.Favorites)
-                .SubstateOf(States.MainState)
-                .OnEntry(GetStateEntryAction(States.Favorites))
-                .OnExit(GetStateExitAction(States.Favorites))
-                .Permit(Triggers.Edit, States.FavoritesEditing);
+            BasicConfigure(States.Favorites,States.MainState)
+                //.Permit(Triggers.Edit, States.FavoritesEditing)
+                .Permit(Triggers.Delete, States.DeleteFavorite)
+                .Permit(Triggers.CreateGraph, States.GraphCreatingForFavorite);
 
-            Configure(States.FavoritesEditing)
-                .OnEntry(GetStateEntryAction(States.FavoritesEditing))
-                .OnExit(GetStateExitAction(States.FavoritesEditing))
+            BasicConfigure(States.DeleteFavorite)
+                .Permit(Triggers.Finish, States.FavoriteDeleted);
+
+            BasicConfigure(States.FavoriteDeleted, States.Favorites);
+                
+            BasicConfigure(States.GraphCreatingForFavorite)
+                .Permit(Triggers.Cancel, States.FavoriteCreatingCanceled)
+               .Permit(Triggers.Finish, States.SavingNewGraphFavorite);
+
+            BasicConfigure(States.FavoriteCreatingCanceled, States.Favorites);
+
+            BasicConfigure(States.SavingNewGraphFavorite)
+                .Permit(Triggers.Finish, States.NewGraphFavoriteSaved);
+
+            BasicConfigure(States.NewGraphFavoriteSaved, States.Favorites);
+
+            BasicConfigure(States.FavoritesEditing)
                 .Permit(Triggers.ClearAll, States.ClearingAll)
                 .Permit(Triggers.Cancel, States.Favorites)
                 .Permit(Triggers.SaveChanges, States.SavingChanges);
 
-            Configure(States.ClearingAll)
-                .OnEntry(GetStateEntryAction(States.ClearingAll))
-                .OnExit(GetStateExitAction(States.ClearingAll))
+            BasicConfigure(States.ClearingAll)
                 .Permit(Triggers.AllCleared, States.Cleared);
 
-            Configure(States.SavingChanges)
-                .OnEntry(GetStateEntryAction(States.SavingChanges))
-                .OnExit(GetStateExitAction(States.SavingChanges))
+            BasicConfigure(States.SavingChanges)
                 .Permit(Triggers.Finish, States.ChangesSaved);
 
-            Configure(States.Cleared)
-                .SubstateOf(States.Favorites)
-                .OnEntry(GetStateEntryAction(States.Cleared))
-                .OnExit(GetStateExitAction(States.Cleared));
+            BasicConfigure(States.Cleared, States.Favorites);
 
-            Configure(States.ChangesSaved)
-                .SubstateOf(States.Favorites)
-                .OnEntry(GetStateEntryAction(States.ChangesSaved))
-                .OnExit(GetStateExitAction(States.ChangesSaved));
+            BasicConfigure(States.ChangesSaved, States.Favorites);
         }
 
         private void ConfigureAssociationRules()
         {
-            Configure(States.AssociationRules)
-                .SubstateOf(States.MainState)
-                .OnEntry(GetStateEntryAction(States.AssociationRules))
-                .OnExit(GetStateExitAction(States.AssociationRules));
+            BasicConfigure(States.AssociationRules,States.MainState);
         }
     }
 }

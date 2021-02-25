@@ -19,11 +19,15 @@ namespace HomeEconomicSystem.PL.Extensions
         /// <param name="stateMachine"></param>
         /// <param name="trigger"></param>
         /// <returns></returns>
-        public static ICommand CreateCommand<TState, TTrigger>(this Stateless.StateMachine<TState, TTrigger> stateMachine, TTrigger trigger)
+        public static ICommand CreateCommand<TState, TTrigger>(this Stateless.StateMachine<TState, TTrigger> stateMachine, TTrigger trigger, Action<object> actionBeofreFire = null)
         {
             return new RelayCommand
               (
-                () => stateMachine.Fire(trigger),
+                (obj) => 
+                {
+                    actionBeofreFire?.Invoke(obj);
+                    stateMachine.Fire(trigger);
+                },
                 () => stateMachine.CanFire(trigger)
               );
         }

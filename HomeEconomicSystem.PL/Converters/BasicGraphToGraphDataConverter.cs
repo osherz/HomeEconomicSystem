@@ -14,7 +14,7 @@ using System.Windows.Data;
 
 namespace HomeEconomicSystem.PL.Converters
 {
-    public class BasicGraphToGraphDataFormatter : IValueConverter
+    public class BasicGraphToGraphDataConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -43,20 +43,29 @@ namespace HomeEconomicSystem.PL.Converters
             {
                 throw new NotImplementedException();
             }
+            else if(graph is null)
+            {
+                return null;
+            }
             else
             {
                 throw new NotSupportedException();
             }
 
             var allXs = GetXs(dataAnalyzed);
-            return new GraphData
+            var graphData = new GraphData
             {
-                Title = graph.Title,
-                Description = graph.Description,
-                SeriesCollection = CreateSeriesCollection(dataAnalyzed, names, allXs),
+                BasicGraph = graph,
+                SeriesCollection = CreateSeriesCollection(dataAnalyzed, names, allXs, graph.GraphType),
                 Labels = allXs.Select(num => num.ToString()).ToArray(),
-                YFormatter = y => y.ToString()
+                YFormatter = y => y.ToString(),
             };
+            graphData.ItemsDataForTable = from series in graphData.SeriesCollection
+                                          let title = series.Title
+                                          let values = series.Values.Cast<int>().Select(num=>graphData.YFormatter(num))
+                                          let points = graphData.Labels.Zip(values, (x, y) => new { X = x, Y = y }).ToList()
+                                          select new KeyValuePair<string, IEnumerable>(title, points);
+            return graphData;
         }
 
         /// <summary>
@@ -70,32 +79,47 @@ namespace HomeEconomicSystem.PL.Converters
             return data.Values
                 .SelectMany(points => points)
                 .Select(p => p.Item1)
+                .Distinct()
                 .OrderBy(a=>a);
         }
 
-        private SeriesCollection CreateSeriesCollection(IReadOnlyDictionary<int, IEnumerable<(int, int)>> data, IEnumerable<IName> seriesNames, IEnumerable<int> xs)
+        private SeriesCollection CreateSeriesCollection(IReadOnlyDictionary<int, IEnumerable<(int, int)>> data, IEnumerable<IName> seriesNames, IEnumerable<int> xs, GraphType graphType)
         {
             int maxXs = xs.Last();
             SeriesCollection seriesCollection = new SeriesCollection();
             foreach(var name in seriesNames)
             {
-                seriesCollection.Add(CreateLineSeries(name, data[name.Id], maxXs));
+                seriesCollection.Add(CreateSeries(name, data[name.Id], maxXs, graphType));
             }
             return seriesCollection;
         }
 
-        private LineSeries CreateLineSeries(IName item, IEnumerable<(int, int)> points, int maxXs)
+        private Series CreateSeries(IName item, IEnumerable<(int, int)> points, int maxXs, GraphType graphType)
         {
-            var xsItems = new int[maxXs];
+            var xsItems = new int[maxXs+1];
             foreach (var point in points)
             {
                 xsItems[point.Item1] = point.Item2;
             }
-            return new LineSeries
+
+            Series series = CreateSeries(graphType);
+            series.Title = item.Name;
+            series.Values = new ChartValues<int>(xsItems);
+            return series;
+        }
+
+        private Series CreateSeries(GraphType graphType)
+        {
+            switch (graphType)
             {
-                Title = item.Name,
-                Values = new ChartValues<int>(xsItems)
-            };
+                case GraphType.Bar:
+                    return new ColumnSeries();
+                case GraphType.Pie:
+                    return new PieSeries();
+                case GraphType.Linear:
+                default:
+                    return new LineSeries();
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

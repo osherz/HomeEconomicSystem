@@ -16,13 +16,13 @@ using System.Windows.Shapes;
 namespace HomeEconomicSystem.PL.View
 {
     /// <summary>
-    /// Interaction logic for FavoritesView.xaml
+    /// Interaction logic for CategoryCatalogView.xaml
     /// </summary>
-    public partial class FavoritesView : UserControl
+    public partial class CategoryCatalogView : UserControl
     {
-        public FavoritesView()
+        public CategoryCatalogView()
         {
-           InitializeComponent();
+            InitializeComponent();
         }
     }
 }

@@ -39,6 +39,14 @@ namespace HomeEconomicSystem.BL
         /// <param name="transactionsGraph"></param>
         /// <exception cref="SystemException">Raise an exception if action failed.</exception>
         void AddGraph(TransactionsGraph transactionsGraph);
+
+        /// <summary>
+        /// Delete existing graph from DB.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <exception cref="KeyNotFoundException">Raise an exception if graph id is not found.</exception>
+        /// <exception cref="SystemException">Raise an exception if action failed.</exception>
+        void DeleteGraph(BasicGraph graph);
         #endregion Add function
 
         #region Anlyze function

@@ -19,6 +19,6 @@
     <TextBlock Text="{Binding Text}" VerticalAlignment="Center"
                             HorizontalAlignment="Center" />
     <StackPanel.InputBindings>
-        <MouseBinding Command="{Binding Command}" Gesture="LeftClick" />
+        <MouseBinding Command="{Binding Command}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:MenuItemUC}}" Gesture="LeftClick" />
     </StackPanel.InputBindings>
 </StackPanel>

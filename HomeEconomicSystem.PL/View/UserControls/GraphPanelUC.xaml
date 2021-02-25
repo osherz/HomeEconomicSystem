@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+             xmlns:converters="clr-namespace:HomeEconomicSystem.PL.Converters" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"   
              TextOptions.TextFormattingMode="Ideal" 
@@ -12,6 +13,9 @@
              FontFamily="{DynamicResource MaterialDesignFont}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BasicGraphToGraphDataConverter x:Key="BasicGraphToGraphDataConverter" />
+    </UserControl.Resources>
     <ScrollViewer 
                 HorizontalAlignment="Stretch" 
                 VerticalScrollBarVisibility="Auto">
@@ -23,11 +27,20 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
+                    <materialDesign:Card 
+                        Margin="20" 
+                        Height="300" 
+                        Width="500" 
+                        UniformCornerRadius="20"
+                        materialDesign:ShadowAssist.ShadowEdges="All"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth4">
                     <local:GraphUC 
-                                Graph="{Binding}" 
-                                Margin="20"
-                                Height="300" 
-                                Width="500" />
+                                MenuItems="{Binding MenuItems, RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphPanelUC}}"
+                                Graph="{Binding ., 
+                                        Converter={StaticResource BasicGraphToGraphDataConverter}}" 
+                                Padding="5"
+                                />
+                    </materialDesign:Card>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

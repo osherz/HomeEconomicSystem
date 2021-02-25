@@ -15,8 +15,12 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
     public class DraftVM : NotifyPropertyChanged
     {
-        public GraphCreationVM GraphCreationVM { get; }
-        GraphsModel _graphsModel;
+        public GraphCreationVM _graphCreationVM;
+        public GraphCreationVM GraphCreationVM
+        {
+            get => _graphCreationVM;
+            set => SetProperty(ref _graphCreationVM, value);
+        }
         DataAnalysisStateMachine _stateMachine;
 
         private bool _creatingGraph;
@@ -26,12 +30,11 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             set => SetProperty(ref _creatingGraph, value);
         }
 
-        private ObservableCollection<BasicGraph> _graphsCollection;
-
-        public ObservableCollection<BasicGraph> GraphsCollection
+        private BasicGraph _basicGraph;
+        public BasicGraph Graph
         {
-            get { return _graphsCollection; }
-            set { SetProperty(ref _graphsCollection, value); }
+            get => _basicGraph;
+            set => SetProperty(ref _basicGraph, value);
         }
 
 
@@ -48,19 +51,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         public DraftVM()
         {
-            PropertyChanged += DraftVM_PropertyChanged;
             GraphCreationVM = new GraphCreationVM();
-            _graphsModel = new GraphsModel();
-            LoadGraphs();
-        }
-
-        private void DraftVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            CreatingGraph = GraphCreationVM.TypeChoosing ||
-                GraphCreationVM.RangeChoosing ||
-                GraphCreationVM.SubjectChoosing ||
-                GraphCreationVM.SubSubjectChoosing ||
-                GraphCreationVM.MeasureChoosing;
         }
 
         public void SetStateMachine(DataAnalysisStateMachine stateMachine)
@@ -68,48 +59,60 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             _stateMachine = stateMachine;
             stateMachine.OnTransitionCompleted((e) => State = e.Destination);
             CreateGraph = stateMachine.CreateCommand(Triggers.CreateGraph);
-            GraphCreationVM.SetStateMachine(stateMachine);
+
         }
 
         public IReadOnlyDictionary<States, Action> GetStatesEntryAction()
         {
             return new Dictionary<States, Action>
             {
-                {States.SavingNewGraph, ()=>SaveNewGraph() }
-            }.Concat(GraphCreationVM.GetStatesEntryAction()).ToDictionary(item=>item.Key, item=>item.Value);
+                {
+                    States.GraphCreatingForDraft, ()=>
+                    {
+                        if(GraphCreationVM is not null)
+                        {
+                            GraphCreationVM.Done -= GraphCreationVM_Done;
+                            GraphCreationVM.Canceled -= GraphCreationVM_Canceled;
+                        }
+                        GraphCreationVM = new GraphCreationVM(Graph??new TransactionsGraph());
+                        GraphCreationVM.GoToFirst();
+                        CreatingGraph= true;
+                        GraphCreationVM.Done += GraphCreationVM_Done;
+                        GraphCreationVM.Canceled += GraphCreationVM_Canceled;
+                    }
+                },
+                {States.SavingNewGraphDraft, ()=>SaveNewGraph() },
+                {States.NewGraphDraftSaved, ()=> CreatingGraph= false },
+                {States.DraftCreatingCanceled, ()=> CreatingGraph= false }
+            };
         }
 
-        private void SaveNewGraph()
+        private void GraphCreationVM_Canceled(object sender, EventArgs e)
         {
-            BasicGraph basicGraph = null;
-            switch (GraphCreationVM.SelectedSubject.Key)
-            {
-                case Subjects.Category:
-                    basicGraph = GraphCreationVM.GetGraph<CategoryGraph>();
-                    _graphsModel.AddGraph(GraphCreationVM.GetGraph<CategoryGraph>());
-                    _stateMachine.Fire(Triggers.Finish);
-                    break;
-                case Subjects.Product:
-                    break;
-                case Subjects.Store:
-                    break;
-                default:
-                    break;
-            }
-            GraphsCollection.Add(basicGraph);
+            _stateMachine.Fire(Triggers.Cancel);
         }
 
-        private void LoadGraphs()
+        private void GraphCreationVM_Done(object sender, EventArgs e)
         {
-            GraphsCollection = _graphsModel.GetCategoryGraphs()
-                .Concat(_graphsModel.GetStoreGraphs().Select(g => g as BasicGraph))
-                .Concat(_graphsModel.GetTransactionGraphs().Select(g => g as BasicGraph))
-                .Concat(_graphsModel.GetProductGraphs().Select(g => g as BasicGraph)).ToObservableCollection();
+            _stateMachine.Fire(Triggers.Finish);
         }
 
         public IReadOnlyDictionary<States, Action> GetStatesExitAction()
         {
-            return GraphCreationVM.GetStatesExitAction();
+            return new Dictionary<States, Action>();
+        }
+
+        private void SaveNewGraph()
+        {
+            BasicGraph basicGraph = GraphCreationVM.SelectedSubject.Key switch
+            {
+                Subjects.Category => GraphCreationVM.GetGraph<CategoryGraph>(),
+                Subjects.Product => GraphCreationVM.GetGraph<ProductGraph>(),
+                Subjects.Store => GraphCreationVM.GetGraph<StoreGraph>(),
+                _ => throw new NotSupportedException(),
+            };
+            Graph = basicGraph;
+            _stateMachine.Fire(Triggers.Finish);
         }
     }
 }
