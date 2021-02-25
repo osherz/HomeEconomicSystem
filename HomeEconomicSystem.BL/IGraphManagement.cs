@@ -57,7 +57,7 @@ namespace HomeEconomicSystem.BL
         /// <param name="categoryGraph"></param>
         /// <returns></returns>
         ///<exception cref="SystemException">Raise an exception if action failed.</exception>
-        IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(CategoryGraph categoryGraph);
+        IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(CategoryGraph categoryGraph);
 
         /// <summary>
         /// Anlyze the required type of graph into dictionary where the key is the 
@@ -66,7 +66,7 @@ namespace HomeEconomicSystem.BL
         /// <param name="productGraph"></param>
         /// <returns></returns>
         ///<exception cref="SystemException">Raise an exception if action failed.</exception>
-        IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(ProductGraph productGraph);
+        IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(ProductGraph productGraph);
 
         /// <summary>
         /// Anlyze the required type of graph into dictionary where the key is the 
@@ -75,7 +75,7 @@ namespace HomeEconomicSystem.BL
         /// <param name="storeGraph"></param>
         /// <returns></returns>
         ///<exception cref="SystemException">Raise an exception if action failed.</exception>
-        IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(StoreGraph storeGraph);
+        IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(StoreGraph storeGraph);
 
         /// <summary>
         /// Anlyze the required type of graph into dictionary where the key is the 
@@ -84,7 +84,7 @@ namespace HomeEconomicSystem.BL
         /// <param name="transactionsGraph"></param>
         /// <returns></returns>
         ///<exception cref="SystemException">Raise an exception if action failed.</exception>
-        IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(TransactionsGraph transactionsGraph);
+        IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(TransactionsGraph transactionsGraph);
 
         #endregion Analyze function
 

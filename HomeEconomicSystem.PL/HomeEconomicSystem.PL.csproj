@@ -234,6 +234,8 @@
     <Compile Include="ViewModel\DataAnalysis\FavoritesVM.cs" />
     <Compile Include="ViewModel\DataAnalysis\GraphCreationVM.cs" />
     <Compile Include="Model\ProductsModel.cs" />
+    <Compile Include="Command\PieDropDownCommand.cs" />
+    <Compile Include="ViewModel\DataAnalysis\PieDropDownViewModel.cs" />
     <Compile Include="ViewModel\DataAnalysis\States.cs" />
     <Compile Include="Model\StoresModel.cs" />
     <Compile Include="ViewModel\DataAnalysis\Triggers.cs" />
@@ -283,6 +285,7 @@
     <Compile Include="View\UserControls\DateRangeUC.xaml.cs">
       <DependentUpon>DateRangeUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UserControls\DropDownPoints.cs" />
     <Compile Include="View\UserControls\GraphCreationDialog.xaml.cs">
       <DependentUpon>GraphCreationDialog.xaml</DependentUpon>
     </Compile>

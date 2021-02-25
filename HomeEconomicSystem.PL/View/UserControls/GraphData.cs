@@ -1,4 +1,5 @@
 ﻿using HomeEconomicSystem.BE;
+using HomeEconomicSystem.PL.ViewModel.DataAnalysis;
 using LiveCharts;
 using System;
 using System.Collections;
@@ -28,11 +29,26 @@ namespace HomeEconomicSystem.PL.View.UserControls
         public string Title => BasicGraph.Title;
         public string Description => BasicGraph.Description;
         public bool IsTable => BasicGraph.GraphType == GraphType.Table;
-        public bool IsChart => !IsTable;
+        public bool IsLine => BasicGraph.GraphType == GraphType.Linear;
+        public bool IsColumn => BasicGraph.GraphType == GraphType.Bar;
+        public bool IsPie => BasicGraph.GraphType == GraphType.Pie;
 
         public TimeType TitleX => BasicGraph.AggregationTimeType;
         public AmountOrCost TitleY => BasicGraph.AmountOrCost;
-        public SeriesCollection SeriesCollection { get; set; }
+        public SeriesCollection LineSeriesCollection { get; set; }
+        public SeriesCollection ColumnSeriesCollection { get; set; }
+
+        private SeriesCollection _pieSeriesCollection;
+        public SeriesCollection PieSeriesCollection
+        {
+            get => _pieSeriesCollection;
+            set
+            {
+                _pieSeriesCollection = value;
+                PieDropDownViewModel = new PieDropDownViewModel(PieSeriesCollection, TitleX.ToString(), TitleY.ToString());
+            }
+        }
+        public PieDropDownViewModel PieDropDownViewModel { get; private set; }
         public Func<double, string> YFormatter { get; set; }
         public string[] Labels { get; set; }
 
