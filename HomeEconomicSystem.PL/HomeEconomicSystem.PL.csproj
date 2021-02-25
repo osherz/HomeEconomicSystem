@@ -220,6 +220,7 @@
     <Compile Include="Converters\BasicGraphToGraphDataConverter.cs" />
     <Compile Include="Converters\BooleanToCollapsedVisibilityConverter.cs" />
     <Compile Include="Converters\KeyValuePairConverter.cs" />
+    <Compile Include="Converters\BasicGraphToSubjectString.cs" />
     <Compile Include="Extensions\EntitiesExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtentions.cs" />
     <Compile Include="Extensions\StateMachineExtensions.cs" />

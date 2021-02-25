@@ -17,6 +17,7 @@ namespace HomeEconomicSystem.PL.Converters
     public class BasicGraphToGraphDataConverter : IValueConverter
     {
         const double PUSH_OUT = 4;
+        const string TRANSACTION_NAME = "עסקאות";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -43,7 +44,8 @@ namespace HomeEconomicSystem.PL.Converters
             }
             else if (graph is TransactionsGraph)
             {
-                throw new NotImplementedException();
+                dataAnalyzed = graphManagement.AnalyzeGraph(graph as TransactionsGraph);
+                names = new[] { new TransactionName(dataAnalyzed.Keys.First(), TRANSACTION_NAME) };
             }
             else if (graph is null)
             {
@@ -155,6 +157,18 @@ namespace HomeEconomicSystem.PL.Converters
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        class TransactionName : IName
+        {
+            public int Id {get;}
+            public string Name { get; }
+
+            public TransactionName(int id, string name)
+            {
+                Id = id;
+                Name = name;
+            }
         }
     }
 }

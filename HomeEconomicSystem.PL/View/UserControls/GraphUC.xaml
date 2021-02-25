@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:converter="clr-namespace:HomeEconomicSystem.PL.Converters"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"   
              TextOptions.TextFormattingMode="Ideal" 
@@ -16,7 +17,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        
+        <converter:BasicGraphToSubjectString x:Key="basicGraphToSubjectString" />
     </UserControl.Resources>
     <Grid DataContext="{Binding Graph, 
                         RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}" 
@@ -32,7 +33,7 @@
         <Grid Grid.Row="0" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
-                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             
@@ -71,6 +72,16 @@
                 <TextBlock  Text="{Binding Description}" 
                         Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                         HorizontalAlignment="Center"/>
+
+                <TextBlock HorizontalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} בין {1:dd/MM/yyyy} ל-{2:dd/MM/yyyy}">
+                            <Binding Path="BasicGraph" Converter="{StaticResource basicGraphToSubjectString}" />
+                            <Binding Path="BasicGraph.StartDate" />
+                            <Binding Path="BasicGraph.EndDate" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </StackPanel>
             <!--#endregion Title & Description-->
         </Grid>

@@ -13,8 +13,6 @@ namespace HomeEconomicSystem.PL.View.UserControls
 {
     public class GraphData : DependencyObject
     {
-
-
         public BasicGraph BasicGraph
         {
             get { return (BasicGraph)GetValue(BasicGraphProperty); }
@@ -32,6 +30,7 @@ namespace HomeEconomicSystem.PL.View.UserControls
         public bool IsLine => BasicGraph.GraphType == GraphType.Linear;
         public bool IsColumn => BasicGraph.GraphType == GraphType.Bar;
         public bool IsPie => BasicGraph.GraphType == GraphType.Pie;
+        public Subjects Subject { get; set; }
 
         public TimeType TitleX => BasicGraph.AggregationTimeType;
         public AmountOrCost TitleY => BasicGraph.AmountOrCost;

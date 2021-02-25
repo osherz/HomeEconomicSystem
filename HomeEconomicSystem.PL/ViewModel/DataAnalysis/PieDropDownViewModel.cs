@@ -19,7 +19,18 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         {
             Navigation = new List<SeriesCollection>();
 
-            Series = pieSeriesCollection;
+            if(pieSeriesCollection.Count() == 1)
+            {
+                var pieSeries = pieSeriesCollection.First() as PieSeries;
+                var dropDownPoint = pieSeries.Values.Cast<DropDownPoint>().First();
+                MoveToChildSeriesCollectionOf(titleX, dropDownPoint, pieSeries);
+                HasContent = false;
+            }
+            else
+            {
+                HasContent = true;
+                Series = pieSeriesCollection;
+            }
 
             SliceClickCommand = new PieDropDownCommand(dropDownPoint =>
             {
@@ -37,16 +48,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 }).AsSeriesCollection());
 
                 var seriesExample = Navigation.First().First() as PieSeries;
-                Series = dropDownPoint.Content
-                    .Select(value => new PieSeries
-                    {
-                        Values = new ChartValues<double> { value.Value },
-                        Title = titleX + " " + value.Key,
-                        LabelPoint = seriesExample.LabelPoint,
-                        DataLabels = seriesExample.DataLabels,
-                        PushOut= seriesExample.PushOut,
-                    })
-                    .AsSeriesCollection();
+                MoveToChildSeriesCollectionOf(titleX, dropDownPoint, seriesExample);
             });
 
             GoBackCommand = new RelayCommand(obj =>
@@ -63,7 +65,20 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             });
 
             Formatter = x => titleY + " " + x.ToString();
-            HasContent = true;
+        }
+
+        private void MoveToChildSeriesCollectionOf(string titleX, DropDownPoint dropDownPoint, PieSeries seriesExample)
+        {
+            Series = dropDownPoint.Content
+                .Select(value => new PieSeries
+                {
+                    Values = new ChartValues<double> { value.Value },
+                    Title = titleX + " " + value.Key,
+                    LabelPoint = seriesExample.LabelPoint,
+                    DataLabels = seriesExample.DataLabels,
+                    PushOut = seriesExample.PushOut,
+                })
+                .AsSeriesCollection();
         }
 
         public List<SeriesCollection> Navigation { get; }
