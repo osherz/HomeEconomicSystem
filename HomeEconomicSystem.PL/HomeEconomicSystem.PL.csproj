@@ -224,7 +224,7 @@
     <Compile Include="Extensions\StateMachineExtensions.cs" />
     <Compile Include="Model\CategoriesModel.cs" />
     <Compile Include="Model\GraphsModel.cs" />
-    <Compile Include="Model\Products.cs" />
+    <Compile Include="Model\ProductsModel.cs" />
     <Compile Include="ViewModel\BaseStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisVM.cs" />
