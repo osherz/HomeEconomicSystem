@@ -17,8 +17,8 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
         Create, 
         Select,
         DeSelect,
-        CatalogSelected,
         SaveChanges,
-        ProductCatalogSelected
+        ProductCatalogSelected,
+        CategoryCatalogSelected
     }
 }

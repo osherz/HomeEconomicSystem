@@ -26,5 +26,11 @@ namespace HomeEconomicSystem.PL.Model
             CategoriesList.Clear();
             _dataMenegement.GetCategories(name).ForEach(c => CategoriesList.Add(c));
         }
+
+        public void AddCategory(Category category)
+        {
+            _dataMenegement.AddCategory(category);
+        }
+
     }
 }

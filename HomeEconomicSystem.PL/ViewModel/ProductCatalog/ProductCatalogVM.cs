@@ -8,9 +8,9 @@ using System.Windows.Controls;
 
 namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
 {
-    class ProductCatalogVM : NotifyPropertyChanged
+    public class ProductCatalogVM : NotifyPropertyChanged
     {
-        public ProductCatalogStateMachine ProductCatalogStateMachine { get; private set; }
+        public ProductCatalogStateMachine productCatalogStateMachine { get;}
 
         private UserControl _content;
         public UserControl Content
@@ -19,14 +19,40 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
             set => SetProperty(ref _content, value);
         }
 
+        ProductView productView { get; set; }
+        CategoryView CategoryView { get; set; }
+
+        private string _searchText;
+
+        public string SearchText
+        {
+            get { return _searchText; }
+            set { _searchText = value; }
+        }
+
+
+
         public ProductCatalogVM()
         {
-            var statesEntryAction = new Dictionary<States, Action>{
-                { States.ProductCatalog, ()=> Content = new ProductCatalogView() },
-                { States.CategoryCatalog, () => Content = new CategoryCatalogView() }
-            };
+            ProductVM productVM = new ProductVM();
 
-            ProductCatalogStateMachine = new ProductCatalogStateMachine(statesEntryAction);
+            var statesEntryAction = new Dictionary<States, Action>{
+                {
+                    States.ProductCatalog, ()=>
+                    {
+                        if(productView is null)
+                        {
+                            productView = new ProductView();
+                            productView.DataContext = productVM;
+                        }
+                        Content = productView;
+                    }
+                },
+                {States.CategoryCatalog, () => Content = new CategoryView() }
+            };
+            //TODO: Concat to productView state machine dictionary.
+
+            productCatalogStateMachine = new ProductCatalogStateMachine(statesEntryAction);
         }
 
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
 {
-    internal class ProductCatalogStateMachine : BaseStateMachine<States, Triggers>
+    public class ProductCatalogStateMachine : BaseStateMachine<States, Triggers>
     {
         public ProductCatalogStateMachine(IReadOnlyDictionary<States, Action> stateActionDict) : base(States.ProductCatalog, stateActionDict)
         {
