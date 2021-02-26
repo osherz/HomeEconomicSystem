@@ -20,8 +20,10 @@
                         materialDesign:TextFieldAssist.HasOutlinedTextField="True"
                         materialDesign:TextFieldAssist.DecorationVisibility="Collapsed"
                         materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                        Text="{Binding SearchText}"/>
+                        Text="{Binding SearchText, Mode=OneWayToSource}"
+                        />
         <Grid>
+            <TextBox Text="{Binding SearchText}"/> 
             <ContentControl Content="{Binding Content}"/>
         </Grid>
     </StackPanel>

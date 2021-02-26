@@ -30,7 +30,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             IPageDisplay homePageDisplay = new HomePageDisplay();
             IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay();
-            IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay(_stateMachine);
+            IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay();
             IPageDisplay transactionHistoryDisplay = new TransactionHistoryPageDisplay(_stateMachine);
 
             _stateActionDict = new Dictionary<States, Action>

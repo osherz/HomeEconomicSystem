@@ -10,9 +10,10 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
 {
     public class ProductCatalogVM : NotifyPropertyChanged
     {
-        public ProductCatalogStateMachine productCatalogStateMachine { get;}
+        public ProductCatalogStateMachine ProductCatalogStateMachine { get;}
 
         private UserControl _content;
+
         public UserControl Content
         {
             get => _content;
@@ -27,7 +28,7 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
         public string SearchText
         {
             get { return _searchText; }
-            set { _searchText = value; }
+            set => SetProperty(ref _searchText, value);
         }
 
 
@@ -52,7 +53,9 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
             };
             //TODO: Concat to productView state machine dictionary.
 
-            productCatalogStateMachine = new ProductCatalogStateMachine(statesEntryAction);
+            ProductCatalogStateMachine = new ProductCatalogStateMachine(statesEntryAction);
+
+           
         }
 
 

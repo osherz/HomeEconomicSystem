@@ -14,12 +14,12 @@ using System.Runtime.CompilerServices;
 
 namespace HomeEconomicSystem.PL.Model
 {
-    public class Products
+    public class ProductsModel
     {
         IDataManagement _dataMenegement ;
         // TODO: Find a way to use a read-only ObservableCollection
         public ObservableCollection<Product> ProductsList { get; private set; }
-        public Products()
+        public ProductsModel()
         {
             _dataMenegement = new BL.BL().DataManagement;
             ProductsList = new ObservableCollection<Product>();
