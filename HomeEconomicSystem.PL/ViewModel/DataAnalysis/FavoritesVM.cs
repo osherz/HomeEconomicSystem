@@ -121,9 +121,13 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                     _graphsModel.AddGraph(GraphCreationVM.GetGraph<StoreGraph>());
                     _stateMachine.Fire(Triggers.Finish);
                     break;
+                case Subjects.Transaction:
+                    basicGraph = GraphCreationVM.GetGraph<TransactionsGraph>();
+                    _graphsModel.AddGraph(GraphCreationVM.GetGraph<TransactionsGraph>());
+                    _stateMachine.Fire(Triggers.Finish);
+                    break;
                 default:
                     throw new NotSupportedException();
-                    break;
             }
             GraphsCollection.Add(basicGraph);
         }

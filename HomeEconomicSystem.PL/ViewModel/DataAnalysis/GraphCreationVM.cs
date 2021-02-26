@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    public enum Subjects { Category, Product, Store };
+    public enum Subjects { Category, Product, Store, Transaction };
 
     public class GraphCreationVM : NotifyPropertyChanged
     {
@@ -175,20 +175,23 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public TGraph GetGraph<TGraph>()
             where TGraph : BasicGraph
         {
-            var selectedSubSubjects = SubSubjects.Where(item => item.IsSelected).Select(item => item.Item);
-            switch (SelectedSubject.Key)
+            if (SelectedSubject.Key != Subjects.Transaction)
             {
-                case Subjects.Category:
-                    (_graph as CategoryGraph).Categories = selectedSubSubjects.Cast<Category>().ToList();
-                    break;
-                case Subjects.Product:
-                    (_graph as ProductGraph).Products = selectedSubSubjects.Cast<Product>().ToList();
-                    break;
-                case Subjects.Store:
-                    (_graph as StoreGraph).Stores = selectedSubSubjects.Cast<Store>().ToList();
-                    break;
-                default:
-                    break;
+                var selectedSubSubjects = SubSubjects.Where(item => item.IsSelected).Select(item => item.Item);
+                switch (SelectedSubject.Key)
+                {
+                    case Subjects.Category:
+                        (_graph as CategoryGraph).Categories = selectedSubSubjects.Cast<Category>().ToList();
+                        break;
+                    case Subjects.Product:
+                        (_graph as ProductGraph).Products = selectedSubSubjects.Cast<Product>().ToList();
+                        break;
+                    case Subjects.Store:
+                        (_graph as StoreGraph).Stores = selectedSubSubjects.Cast<Store>().ToList();
+                        break;
+                    default:
+                        break;
+                }
             }
             return (TGraph)_graph;
         }
@@ -203,7 +206,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private void CreateStateMachine()
         {
-            _stateMachine = new(GetStatesEntryAction(), GetStatesExitAction());
+            _stateMachine = new(this, GetStatesEntryAction(), GetStatesExitAction());
 
             if (Next != null || Prev != null) throw new InvalidOperationException("Already set a state machine");
             Next = _stateMachine.CreateCommand(GraphCreationTriggers.Next);
@@ -245,27 +248,32 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private void LoadSubSubject()
         {
-            IEnumerable<IName> subSubjectsNames;
             BasicGraph newGraph;
-
-            switch (SelectedSubject.Key)
+            Subjects selectedSubject = SelectedSubject.Key;
+            if (selectedSubject != Subjects.Transaction)
             {
-                case Subjects.Category:
-                    subSubjectsNames = _categoriesModel.CategoriesList;
-                    newGraph = new CategoryGraph();
-                    break;
-                case Subjects.Product:
-                    subSubjectsNames = _productsModel.ProductsList;
-                    newGraph = new ProductGraph();
-                    break;
-                case Subjects.Store:
-                    subSubjectsNames = _storesModel.StoresList;
-                    newGraph = new StoreGraph();
-                    break;
-                default:
-                    throw new NotSupportedException();
+                IEnumerable<IName> subSubjectsNames;
+                switch (selectedSubject)
+                {
+                    case Subjects.Category:
+                        subSubjectsNames = _categoriesModel.CategoriesList;
+                        newGraph = new CategoryGraph();
+                        break;
+                    case Subjects.Product:
+                        subSubjectsNames = _productsModel.ProductsList;
+                        newGraph = new ProductGraph();
+                        break;
+                    case Subjects.Store:
+                        subSubjectsNames = _storesModel.StoresList;
+                        newGraph = new StoreGraph();
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+                SubSubjects = subSubjectsNames.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
             }
-            SubSubjects = subSubjectsNames.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
+            else newGraph = new TransactionsGraph();
+
             if (_graph != null) _graph.Copy(newGraph);
             _graph = newGraph;
         }

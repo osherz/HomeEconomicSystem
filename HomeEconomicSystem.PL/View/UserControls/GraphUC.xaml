@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:converter="clr-namespace:HomeEconomicSystem.PL.Converters"
              TextElement.FontWeight="Regular"
              TextElement.FontSize="13"   
              TextOptions.TextFormattingMode="Ideal" 
@@ -15,6 +16,9 @@
              FontFamily="{DynamicResource MaterialDesignFont}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converter:BasicGraphToSubjectString x:Key="basicGraphToSubjectString" />
+    </UserControl.Resources>
     <Grid DataContext="{Binding Graph, 
                         RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}" 
           FlowDirection="LeftToRight">
@@ -26,18 +30,38 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.Row="0">
-            <materialDesign:PopupBox DockPanel.Dock="Right"
-                Padding="2 0 2 0">
+        <Grid Grid.Row="0" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <materialDesign:PopupBox 
+                Grid.Column="2"
+                Padding="2 0 2 0" 
+                HorizontalAlignment="Right">
                 <StackPanel>
                     <local:MenuUC FlowDirection="RightToLeft"
                                   Tag="{Binding Graph.BasicGraph, 
                         RelativeSource={RelativeSource AncestorLevel=1, AncestorType=local:GraphUC}}"
                         DataContext="{Binding MenuItems, 
-                                      RelativeSource={RelativeSource AncestorLevel=1,                                   AncestorType=local:GraphUC}}" />
+                                      RelativeSource={RelativeSource AncestorLevel=1,
+                                                        AncestorType=local:GraphUC}}" />
                 </StackPanel>
             </materialDesign:PopupBox>
-            <StackPanel>
+
+            <Button Visibility="{Binding IsPie, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    DockPanel.Dock="Left"
+                    Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                    Command="{Binding PieDropDownViewModel.GoBackCommand}"
+                     Grid.Column="0"
+                    HorizontalAlignment="Left">
+                <materialDesign:PackIcon Kind="ArrowBack" />
+            </Button>
+
+            <!--#region Title & Description-->
+            <StackPanel Grid.Column="1">
                 <TextBlock
                         Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                         HorizontalAlignment="Center"
@@ -48,11 +72,40 @@
                 <TextBlock  Text="{Binding Description}" 
                         Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                         HorizontalAlignment="Center"/>
-            </StackPanel>
-        </DockPanel>
 
-        <chart:CartesianChart Visibility="{Binding IsChart, Converter={StaticResource BooleanToVisibilityConverter}}"
-            Series="{Binding SeriesCollection}" 
+                <TextBlock HorizontalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} בין {1:dd/MM/yyyy} ל-{2:dd/MM/yyyy}">
+                            <Binding Path="BasicGraph" Converter="{StaticResource basicGraphToSubjectString}" />
+                            <Binding Path="BasicGraph.StartDate" />
+                            <Binding Path="BasicGraph.EndDate" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+            <!--#endregion Title & Description-->
+        </Grid>
+
+        <!--#region Pie-->
+        <Grid Visibility="{Binding IsPie, Converter={StaticResource BooleanToVisibilityConverter}}"
+              Grid.Row="2">
+            <chart:PieChart FlowDirection="RightToLeft"
+                            DataContext="{Binding PieDropDownViewModel}"
+                            DataClickCommand="{Binding SliceClickCommand}"
+                            LegendLocation="Bottom"
+                            Hoverable="{Binding HasContent}"
+                            DataTooltip="{x:Null}"
+                            Series="{Binding Series}">
+                <chart:PieChart.AxisY>
+                    <chart:Axis LabelFormatter="{Binding Formatter}"/>
+                </chart:PieChart.AxisY>
+            </chart:PieChart>
+        </Grid>
+        <!--#endregion Pie-->
+
+        <!--#region Line-->
+        <chart:CartesianChart Visibility="{Binding IsLine, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Series="{Binding LineSeriesCollection}" 
             LegendLocation="Bottom"
             Grid.Row="2">
             <chart:CartesianChart.AxisY>
@@ -62,8 +115,23 @@
                 <chart:Axis Title="{Binding TitleX}" Labels="{Binding Labels}"></chart:Axis>
             </chart:CartesianChart.AxisX>
         </chart:CartesianChart>
+        <!--#endregion Line-->
 
-        <!-- Table -->
+        <!--#region Column-->
+        <chart:CartesianChart Visibility="{Binding IsColumn, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Series="{Binding ColumnSeriesCollection}" 
+            LegendLocation="Bottom"
+            Grid.Row="2">
+            <chart:CartesianChart.AxisY>
+                <chart:Axis Title="{Binding TitleY}" LabelFormatter="{Binding YFormatter}"></chart:Axis>
+            </chart:CartesianChart.AxisY>
+            <chart:CartesianChart.AxisX>
+                <chart:Axis Title="{Binding TitleX}" Labels="{Binding Labels}"></chart:Axis>
+            </chart:CartesianChart.AxisX>
+        </chart:CartesianChart>
+        <!--#endregion Column-->
+
+        <!--#region Table-->
         <ScrollViewer Grid.Row="2" 
                       HorizontalScrollBarVisibility="Auto" 
                       VerticalScrollBarVisibility="Auto"
@@ -110,5 +178,6 @@
                 </ItemsControl>
             </StackPanel>
         </ScrollViewer>
+        <!--#region Table-->
     </Grid>
 </UserControl>

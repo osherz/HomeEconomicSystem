@@ -64,40 +64,51 @@ namespace HomeEconomicSystem.BL.V1
             _db.SaveChanges();
         }
 
-        public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(CategoryGraph categoryGraph)
+        private IEnumerable<(double, double)> GetPoints()
         {
-            Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();
+            var pointRand = new Random((int)DateTime.Now.Ticks);
+            var points = new (double, double)[4];
+            for (int i = 0; i < points.Length; i++)
+            {
+                points[i]=(i, pointRand.Next(0, 10));
+            }
+            return points;
+        }
+
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(CategoryGraph categoryGraph)
+        {
+            Dictionary<int, IEnumerable<(double, double)>> analyzeGraph = new Dictionary<int, IEnumerable<(double, double)>>();
             foreach (var item in categoryGraph.Categories)
             {
-                analyzeGraph.Add(item.Id, new[] { (0, 5), (1, 1) });
+                analyzeGraph.Add(item.Id, GetPoints());
             }
             return analyzeGraph;
         }
 
-        public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(ProductGraph productGraph)
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(ProductGraph productGraph)
         {
-            Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();
+            Dictionary<int, IEnumerable<(double, double)>> analyzeGraph = new Dictionary<int, IEnumerable<(double, double)>>();
             foreach (var item in productGraph.Products)
             {
-                analyzeGraph.Add(item.Id, new[] { (0, 5), (1, 1) });
+                analyzeGraph.Add(item.Id, GetPoints());
             }
             return analyzeGraph;
         }
 
-        public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(StoreGraph storeGraph)
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(StoreGraph storeGraph)
         {
-            Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();
+            Dictionary<int, IEnumerable<(double, double)>> analyzeGraph = new Dictionary<int, IEnumerable<(double, double)>>();
             foreach (var item in storeGraph.Stores)
             {
-                analyzeGraph.Add(item.Id, new[] { (0, 5), (1, 1) });
+                analyzeGraph.Add(item.Id, GetPoints());
             }
             return analyzeGraph;
         }
 
-        public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(TransactionsGraph transactionsGraph)
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(TransactionsGraph transactionsGraph)
         {
-            Dictionary<int, IEnumerable<(int, int)>> analyzeGraph = new Dictionary<int, IEnumerable<(int, int)>>();
-            analyzeGraph.Add(1, new[] { (0, 5), (1, 1) });
+            Dictionary<int, IEnumerable<(double, double)>> analyzeGraph = new Dictionary<int, IEnumerable<(double, double)>>();
+            analyzeGraph.Add(1, GetPoints());
             return analyzeGraph;
         }
 

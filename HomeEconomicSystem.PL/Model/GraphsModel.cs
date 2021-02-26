@@ -39,22 +39,22 @@ namespace HomeEconomicSystem.PL.Model
             _graphManagement.AddGraph(transactionsGraph);
         }
 
-        public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(CategoryGraph categoryGraph)
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(CategoryGraph categoryGraph)
         {
             return _graphManagement.AnalyzeGraph(categoryGraph);
         }
 
-        public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(ProductGraph productGraph)
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(ProductGraph productGraph)
         {
             return _graphManagement.AnalyzeGraph(productGraph);
         }
 
-        public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(StoreGraph storeGraph)
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(StoreGraph storeGraph)
         {
             return _graphManagement.AnalyzeGraph(storeGraph);
         }
 
-        public IReadOnlyDictionary<int, IEnumerable<(int, int)>> AnalyzeGraph(TransactionsGraph transactionsGraph)
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(TransactionsGraph transactionsGraph)
         {
             return _graphManagement.AnalyzeGraph(transactionsGraph);
         }
