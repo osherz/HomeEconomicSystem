@@ -14,15 +14,15 @@ using System.Windows.Input;
 
 namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    public class FavoritesVM : NotifyPropertyChanged
+    public class FavoritesVM : NotifyPropertyChanged, IInnerVM<States, Triggers>
     {
         public GraphCreationVM GraphCreationVM { get; }
         GraphsModel _graphsModel;
-        DataAnalysisStateMachine _stateMachine;
+        Stateless.StateMachine<States, Triggers> _stateMachine;
 
         BasicGraph _graphToDelete;
 
-        public IReadOnlyList<ViewModel.MenuItem> MenuItems { get; set; }
+        public IReadOnlyList<MenuItem> MenuItems { get; set; }
 
         private bool _creatingGraph;
         public bool CreatingGraph
@@ -33,18 +33,12 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private ObservableCollection<BasicGraph> _graphsCollection;
 
+        public event EventHandler<string> InnerStateChanged;
+
         public ObservableCollection<BasicGraph> GraphsCollection
         {
             get { return _graphsCollection; }
             set { SetProperty(ref _graphsCollection, value); }
-        }
-
-
-        States _state;
-        public States State
-        {
-            get => _state;
-            set => SetProperty(ref _state, value);
         }
 
         #region Commands
@@ -59,10 +53,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         }
 
 
-        public void SetStateMachine(DataAnalysisStateMachine stateMachine)
+        public void SetStateMachine(Stateless.StateMachine<States,Triggers> stateMachine)
         {
             _stateMachine = stateMachine;
-            stateMachine.OnTransitionCompleted((e) => State = e.Destination);
             CreateGraph = stateMachine.CreateCommand(Triggers.CreateGraph);
             GraphCreationVM.Done += (sender, e) => stateMachine.Fire(Triggers.Finish);
             GraphCreationVM.Canceled += (sender, e) => stateMachine.Fire(Triggers.Cancel);
@@ -138,6 +131,11 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 .Concat(_graphsModel.GetStoreGraphs().Select(g => g as BasicGraph))
                 .Concat(_graphsModel.GetTransactionGraphs().Select(g => g as BasicGraph))
                 .Concat(_graphsModel.GetProductGraphs().Select(g => g as BasicGraph)).ToObservableCollection();
+        }
+
+        private void OnStateChanged(string state)
+        {
+            InnerStateChanged?.Invoke(this, state);
         }
 
     }

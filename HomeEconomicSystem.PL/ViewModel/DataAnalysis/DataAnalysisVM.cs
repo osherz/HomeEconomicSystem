@@ -8,55 +8,32 @@ using System.Windows.Controls;
 
 namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    public class DataAnalysisVM : NotifyPropertyChanged
+    public class DataAnalysisVM : VMBasic<States, Triggers>
     {
-        DraftView _draftView;
-        FavoritesView _favoritesView;
-        public DataAnalysisStateMachine StateMachine { get; }
+        public DataAnalysisVM()
+        { }
 
-        private UserControl _content;
-        public UserControl Content
+        protected override BaseStateMachine<States, Triggers> CreateStateMachine(Dictionary<States, Action> statesEntryAction, Dictionary<States, Action> statesExitAction)
         {
-            get => _content;
-            set => SetProperty(ref _content, value);
+            return new DataAnalysisStateMachine(statesEntryAction, statesExitAction);
         }
 
-        public DataAnalysisVM()
+        protected override Dictionary<States, Func<UserControl>> CreateViewsCreation()
         {
-            DraftVM draftVM = new DraftVM();
-            FavoritesVM favoritesVM = new FavoritesVM();
+            return new Dictionary<States, Func<UserControl>>
+            {
+                 {States.Favorites, () =>  new FavoritesView() },
+                 {States.Draft, () => new DraftView() }
+            };
+        }
 
-            var statesEntryAction = new Dictionary<States, Action>{
-                {
-                    States.Draft, ()=>
-                    {
-                        if(_draftView is null)
-                        {
-                            _draftView = new DraftView() {DataContext = draftVM};
-                        }
-                        Content = _draftView;
-                    }
-                },
-                { 
-                    States.Favorites, () =>
-                    {
-                        if(_favoritesView is null)
-                        {
-                            _favoritesView = new FavoritesView() {DataContext = favoritesVM};
-                        }
-                        Content = _favoritesView;
-                    }
-                },
-                { States.AssociationRules ,() => Content = new AssociationRulesView() },
-            }.Concat(draftVM.GetStatesEntryAction())
-            .Concat(favoritesVM.GetStatesEntryAction()).ToDictionary(item => item.Key, item => item.Value);
-
-            var statesExitAction = draftVM.GetStatesExitAction();
-
-            StateMachine = new(statesEntryAction, statesExitAction);
-
-            draftVM.SetStateMachine(StateMachine);
-            favoritesVM.SetStateMachine(StateMachine);
+        protected override Dictionary<States, IInnerVM<States, Triggers>> CreateInnerVM()
+        {
+            return new Dictionary<States, IInnerVM<States, Triggers>>
+            {
+                {States.Favorites, new FavoritesVM() },
+                 {States.Draft, new DraftVM() }
+            };
         }
     }
 }

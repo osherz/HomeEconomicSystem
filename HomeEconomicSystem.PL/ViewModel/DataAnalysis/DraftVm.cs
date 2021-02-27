@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    public class DraftVM : NotifyPropertyChanged
+    public class DraftVM : NotifyPropertyChanged, IInnerVM<States, Triggers>
     {
         public GraphCreationVM _graphCreationVM;
         public GraphCreationVM GraphCreationVM
@@ -21,7 +21,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             get => _graphCreationVM;
             set => SetProperty(ref _graphCreationVM, value);
         }
-        DataAnalysisStateMachine _stateMachine;
+        Stateless.StateMachine<States, Triggers> _stateMachine;
 
         private bool _creatingGraph;
         public bool CreatingGraph
@@ -39,6 +39,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
 
         States _state;
+
+        public event EventHandler<string> InnerStateChanged;
+
         public States State
         {
             get => _state;
@@ -54,7 +57,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             GraphCreationVM = new GraphCreationVM();
         }
 
-        public void SetStateMachine(DataAnalysisStateMachine stateMachine)
+        public void SetStateMachine(Stateless.StateMachine<States, Triggers> stateMachine)
         {
             _stateMachine = stateMachine;
             stateMachine.OnTransitionCompleted((e) => State = e.Destination);

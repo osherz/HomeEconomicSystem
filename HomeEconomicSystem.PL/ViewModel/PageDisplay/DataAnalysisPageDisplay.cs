@@ -15,7 +15,7 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
     class DataAnalysisPageDisplay : NotifyPropertyChanged, IPageDisplay
     {
 
-        DataAnalysisStateMachine _stateMachine;
+        BaseStateMachine<DataAnalysis.States, TriggersDA> _stateMachine;
         public IReadOnlyList<MenuItem> MenuItems { get; }
         public bool HasItems => MenuItems is not null && MenuItems.Count > 0;
         public UserControl Content { get; }
@@ -32,9 +32,10 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
         {
             Content = new View.DataAnalysisView();
             var VM = new DataAnalysisVM();
+            VM.InnerStateChanged += VM_InnerStateChanged;
             Content.DataContext = VM;
             _stateMachine = VM.StateMachine;
-            _stateMachine.OnTransitionCompleted(t => State = t.Destination.ToString());
+            _stateMachine.OnTransitionCompleted(e => VM_InnerStateChanged(this, e.Destination.ToString()));
             MenuItems = new List<MenuItem>
             {
                 new MenuItem("שמורים", PackIconKind.StarCircle, _stateMachine.CreateCommand(TriggersDA.FavoriteSelected)),
@@ -43,5 +44,9 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
             };
         }
 
+        private void VM_InnerStateChanged(object sender, string state)
+        {
+            State = state;
+        }
     }
 }
