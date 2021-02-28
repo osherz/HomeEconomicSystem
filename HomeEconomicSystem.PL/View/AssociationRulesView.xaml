@@ -3,10 +3,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View"
+             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View" 
+             xmlns:AR="clr-namespace:Graphviz4Net.WPF;assembly=Graphviz4Net.WPF"
+             xmlns:entity="clr-namespace:HomeEconomicSystem.BE;assembly=HomeEconomicSystem.BE" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:controls="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Association Rules View" />
-    </Grid>
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type entity:Product}">
+                <materialDesign:Card>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding ImageFileName}" Width="32" Height="32" Margin="5" VerticalAlignment="Top"/>
+                        <StackPanel Orientation="Vertical" Margin="2">
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+        </DataTemplate>
+
+    </UserControl.Resources>
+    <controls:ZoomControl Background="Transparent">
+    <AR:GraphLayout Graph="{Binding Graph, RelativeSource={RelativeSource AncestorType=local:AssociationRulesView}}"/>
+    </controls:ZoomControl>
 </UserControl>

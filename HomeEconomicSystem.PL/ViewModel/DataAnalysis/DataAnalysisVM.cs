@@ -23,7 +23,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             return new Dictionary<States, Func<UserControl>>
             {
                  {States.Favorites, () =>  new FavoritesView() },
-                 {States.Draft, () => new DraftView() }
+                 {States.Draft, () => new DraftView() },
+                {States.AssociationRules, () => new AssociationRulesView() }
             };
         }
 
@@ -32,7 +33,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             return new Dictionary<States, IInnerVM<States, Triggers>>
             {
                 {States.Favorites, new FavoritesVM() },
-                 {States.Draft, new DraftVM() }
+                 {States.Draft, new DraftVM() },
+                {States.AssociationRules, new AssociationRulesVM() }
             };
         }
     }
