@@ -19,6 +19,6 @@ namespace HomeEconomicSystem.BL
         /// </summary>
         /// <returns></returns>
         /// <exception cref="SystemException">Raise an exception if action failed.</exception>
-        IEnumerable<IAssosiatonRule> GetAssosiatonRules();
+        IEnumerable<IAssociationRule> GetAssosiatonRules();
     }
 }

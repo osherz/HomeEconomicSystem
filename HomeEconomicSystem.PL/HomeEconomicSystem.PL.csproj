@@ -254,10 +254,12 @@
     <Compile Include="Extensions\EntitiesExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtentions.cs" />
     <Compile Include="Extensions\StateMachineExtensions.cs" />
+    <Compile Include="Model\AssociationsModel.cs" />
     <Compile Include="Model\CategoriesModel.cs" />
     <Compile Include="Model\GraphsModel.cs" />
     <Compile Include="Model\ProductsModel.cs" />
     <Compile Include="ViewModel\BaseStateMachine.cs" />
+    <Compile Include="ViewModel\DataAnalysis\Arrow.cs" />
     <Compile Include="ViewModel\DataAnalysis\AssociationRulesVM.cs" />
     <Compile Include="ViewModel\DataAnalysis\GraphCreationStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\DataAnalysisStateMachine.cs" />
@@ -268,6 +270,7 @@
     <Compile Include="Model\ProductsModel.cs" />
     <Compile Include="Command\PieDropDownCommand.cs" />
     <Compile Include="ViewModel\DataAnalysis\PieDropDownViewModel.cs" />
+    <Compile Include="ViewModel\DataAnalysis\RuleVM.cs" />
     <Compile Include="ViewModel\DataAnalysis\States.cs" />
     <Compile Include="Model\StoresModel.cs" />
     <Compile Include="ViewModel\DataAnalysis\Triggers.cs" />

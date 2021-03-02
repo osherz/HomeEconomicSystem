@@ -41,8 +41,8 @@ namespace HomeEconomicSystem.PL.ViewModel
                     view.DataContext = vm.Value;
                     Content = view;
                 });
-                statesEntryAction = statesEntryAction.Concat(vm.Value.GetStatesEntryAction()).ToDictionary(item => item.Key, item => item.Value);
-                statesExitAction = statesExitAction.Concat(vm.Value.GetStatesExitAction()).ToDictionary(item => item.Key, item => item.Value);
+                statesEntryAction = UnionToDictionary(statesEntryAction, vm.Value.GetStatesEntryAction());
+                statesExitAction = UnionToDictionary(statesExitAction, vm.Value.GetStatesExitAction());
             }
 
             StateMachine = CreateStateMachine(statesEntryAction, statesExitAction);
@@ -53,6 +53,18 @@ namespace HomeEconomicSystem.PL.ViewModel
             {
                 vm.Value.SetStateMachine(StateMachine);
             }
+        }
+
+        private Dictionary<TState, Action> UnionToDictionary(params IReadOnlyDictionary<TState, Action>[] dicts)
+        {
+            return dicts
+                .SelectMany(item=>item)
+                .GroupBy(item => item.Key, item => item.Value)
+                .ToDictionary(
+                    group => group.Key, 
+                    group => new Action(() => group
+                                                .ToList()
+                                                .ForEach(f => f())));
         }
 
         protected virtual void OnStateChanged(string state)

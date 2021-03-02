@@ -55,7 +55,7 @@
     <Compile Include="BL.cs" />
     <Compile Include="FailedBecauseNotEmptyException.cs" />
     <Compile Include="IAssosiationProductsAnalysis.cs" />
-    <Compile Include="IAssosiatonRule.cs" />
+    <Compile Include="IAssociationRule.cs" />
     <Compile Include="IBL.cs" />
     <Compile Include="IDataManagement.cs" />
     <Compile Include="IGraphManagement.cs" />

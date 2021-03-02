@@ -5,23 +5,82 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HomeEconomicSystem.PL.View" 
              xmlns:AR="clr-namespace:Graphviz4Net.WPF;assembly=Graphviz4Net.WPF"
-             xmlns:entity="clr-namespace:HomeEconomicSystem.BE;assembly=HomeEconomicSystem.BE" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:controls="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions"
+             xmlns:entity="clr-namespace:HomeEconomicSystem.BE;assembly=HomeEconomicSystem.BE" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:controls="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions"
+             xmlns:VM="clr-namespace:HomeEconomicSystem.PL.ViewModel.DataAnalysis"
+            xmlns:Graphviz4NetVM="clr-namespace:Graphviz4Net.WPF.ViewModels;assembly=Graphviz4Net.WPF" 
+             d:DataContext="{d:DesignInstance VM:AssociationRulesVM}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type entity:Product}">
-                <materialDesign:Card>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding ImageFileName}" Width="32" Height="32" Margin="5" VerticalAlignment="Top"/>
-                        <StackPanel Orientation="Vertical" Margin="2">
-                            <TextBlock Text="{Binding Name}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </materialDesign:Card>
+        <DataTemplate DataType="{x:Type entity:Product[]}">
+            <materialDesign:Card>
+                <ItemsControl ItemsSource="{Binding .}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card Margin="10">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding ImageFileName}" Width="32" Height="32" Margin="5" VerticalAlignment="Top"/>
+                                    <StackPanel Orientation="Vertical" Margin="2">
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </materialDesign:Card>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type VM:Arrow}">
+                <Path Data="M 0,0 L 20,0 L 10,10 L 0,0" Stroke="White" StrokeThickness="1">
+                </Path>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type Graphviz4NetVM:EdgeLabelViewModel}">
+            <StackPanel>
+                <TextBlock Text="{Binding Path=Label}" FontFamily="Comic Sans MS"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type Graphviz4NetVM:EdgeViewModel}">
+            <Path Data="{Binding Data}" Stroke="White" StrokeThickness="1" ToolTip="asasa"/>
         </DataTemplate>
 
     </UserControl.Resources>
-    <controls:ZoomControl Background="Transparent">
-    <AR:GraphLayout Graph="{Binding Graph, RelativeSource={RelativeSource AncestorType=local:AssociationRulesView}}"/>
-    </controls:ZoomControl>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Bottom"  Orientation="Horizontal" Margin="10">
+            <ToggleButton Command="{Binding SwitchVisualization}"
+                          Width="50" Height="50"
+                          IsChecked="{Binding IsGraph}"
+                          Style="{StaticResource MaterialDesignActionToggleButton}"
+                          Content="{materialDesign:PackIcon Kind=Graph,Size=30}"
+                          materialDesign:ToggleButtonAssist.OnContent="{materialDesign:PackIcon Kind=Table,Size=30}">
+            </ToggleButton>
+        </StackPanel>
+
+        <Grid>
+        <StackPanel Visibility="{Binding IsTable, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"> 
+            <DataGrid ItemsSource="{Binding Rules}" 
+                      IsReadOnly="True"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      SelectionUnit="Cell"
+                      SelectionMode="Extended"
+                      AutoGenerateColumns="True" 
+                      FlowDirection="LeftToRight">
+            </DataGrid>
+        </StackPanel>
+
+        <controls:ZoomControl 
+            Visibility="{Binding IsGraph, Converter={StaticResource BooleanToVisibilityConverter}}" 
+            Background="Transparent" 
+            Zoom="1" 
+            Margin="0 10 0 0">
+            <AR:GraphLayout  
+                UseContentPresenterForAllElements="True"
+                Graph="{Binding Graph}"/>
+        </controls:ZoomControl>
+        </Grid>
+    </DockPanel>
 </UserControl>

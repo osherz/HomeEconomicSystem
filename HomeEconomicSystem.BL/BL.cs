@@ -9,17 +9,17 @@ namespace HomeEconomicSystem.BL
 {
     public class BL : IBL
     {
-        public ITransactionAnalysis TransactionAnalysis { get; private set; }
-        public IGraphManagement GraphManagement { get; private set; }
-        public IDataManagement DataManagement { get; private set; }
-        public IAssosiatonRule AssosiatonRule { get; private set; }
+        public ITransactionAnalysis TransactionAnalysis { get; }
+        public IGraphManagement GraphManagement { get;  }
+        public IDataManagement DataManagement { get; }
+        public IAssosiationProductsAnalysis AssosiationProductsAnalysis { get; }
 
         public BL()
         {
             TransactionAnalysis = new TransactionAnalysis();
             GraphManagement = new GraphManagement();
             DataManagement = new DataManagement();
-            AssosiatonRule = new AssosiatonRule();
+            AssosiationProductsAnalysis = new AssosiationProductsAnalysis();
         }
     }
 }

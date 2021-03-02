@@ -146,7 +146,7 @@
                                 <StackPanel
                                     Orientation="Vertical"
                                     TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
-                                    <DataGrid
+                                    <DataGrid IsReadOnly="True"
                                           ItemsSource="{Binding Value}"
                                           CanUserAddRows="False"
                                             AutoGenerateColumns="False"

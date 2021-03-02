@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HomeEconomicSystem.BL
 {
-    public interface IAssosiatonRule
+    public interface IAssociationRule
     {
         IEnumerable<Product> GoesWith { get; set; }
         float Probability { get; set; }

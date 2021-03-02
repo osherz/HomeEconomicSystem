@@ -16,6 +16,8 @@
         Cleared,
         FavoritesEditing,
         AssociationRules,
+        AssociationRulesGraph,
+        AssociationRulesTable,
         Favorites,
         DeleteFavorite,
         ChangesSaved,

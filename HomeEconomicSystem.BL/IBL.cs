@@ -2,7 +2,7 @@
 {
     public interface IBL
     {
-        IAssosiatonRule AssosiatonRule { get; }
+        IAssosiationProductsAnalysis AssosiationProductsAnalysis { get; }
         IDataManagement DataManagement { get; }
         IGraphManagement GraphManagement { get; }
         ITransactionAnalysis TransactionAnalysis { get; }

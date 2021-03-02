@@ -12,8 +12,10 @@
         ClearAll,
         AllCleared,
         SaveChanges,
+        Load,
         Edit,
         Cancel,
+        Switch,
         AssociationRulesSelected,
         Finish
     }

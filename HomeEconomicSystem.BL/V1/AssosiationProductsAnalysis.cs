@@ -16,7 +16,7 @@ namespace HomeEconomicSystem.BL.V1
             File.Create("a.pdf").Close();
         }
 
-        public IEnumerable<IAssosiatonRule> GetAssosiatonRules()
+        public IEnumerable<IAssociationRule> GetAssosiatonRules()
         {
             var Products = new[]
             {
@@ -32,12 +32,12 @@ namespace HomeEconomicSystem.BL.V1
                 }
             };
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 3; i++)
             {
                 yield return new AssosiatonRule
                 {
-                    Product = new[] { Products[0] },
-                    GoesWith = new[] { Products[1] },
+                    Product = new[] { Products[0], Products[0] },
+                    GoesWith = new[] { Products[1], Products[0], Products[0] },
                     Probability = i / 10.0f
                 };
             }

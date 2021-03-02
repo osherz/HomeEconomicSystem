@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.BL
 {
-    internal class AssosiatonRule : IAssosiatonRule
+    internal class AssosiatonRule : IAssociationRule
     {
         public IEnumerable<Product> Product { get; set; }
         public IEnumerable<Product> GoesWith { get; set; }

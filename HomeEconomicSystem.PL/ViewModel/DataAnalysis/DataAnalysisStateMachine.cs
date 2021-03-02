@@ -40,12 +40,12 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             BasicConfigure(States.AddingToFavorites)
                 .Permit(Triggers.Finish, States.AddedToFavorites);
 
-            BasicConfigure(States.AddedToFavorites,States.Draft);
+            BasicConfigure(States.AddedToFavorites, States.Draft);
         }
 
         private void ConfigureFavorites()
         {
-            BasicConfigure(States.Favorites,States.MainState)
+            BasicConfigure(States.Favorites, States.MainState)
                 //.Permit(Triggers.Edit, States.FavoritesEditing)
                 .Permit(Triggers.Delete, States.DeleteFavorite)
                 .Permit(Triggers.CreateGraph, States.GraphCreatingForFavorite);
@@ -54,7 +54,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                 .Permit(Triggers.Finish, States.FavoriteDeleted);
 
             BasicConfigure(States.FavoriteDeleted, States.Favorites);
-                
+
             BasicConfigure(States.GraphCreatingForFavorite)
                 .Permit(Triggers.Cancel, States.FavoriteCreatingCanceled)
                .Permit(Triggers.Finish, States.SavingNewGraphFavorite);
@@ -84,7 +84,15 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private void ConfigureAssociationRules()
         {
-            BasicConfigure(States.AssociationRules,States.MainState);
+            BasicConfigure(States.AssociationRules, States.MainState)
+                .Permit(Triggers.Load, States.AssociationRulesGraph)
+                .PermitReentry(Triggers.AssociationRulesSelected);
+
+            BasicConfigure(States.AssociationRulesGraph, States.AssociationRules)
+                .Permit(Triggers.Switch, States.AssociationRulesTable);
+
+            BasicConfigure(States.AssociationRulesTable, States.AssociationRules)
+                .Permit(Triggers.Switch, States.AssociationRulesGraph);
         }
     }
 }
