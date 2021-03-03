@@ -10,6 +10,9 @@ namespace HomeEconomicSystem.PL.ViewModel
 {
     public abstract class NotifyPropertyChanged : INotifyPropertyChanged
     {
+        // TODO: Move to utils and make it to be able to work as sepereate class and not as parent of another class.
+        // TODO: Make a EditableVM that manage all peocess of EditableControl.
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
