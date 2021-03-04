@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -62,9 +63,9 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
             ProductCatalogStateMachine = new ProductCatalogStateMachine(statesEntryAction);
         }
 
-        private void SetProperty<T>(ref T property, T value)
+        private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
         {
-            _notifyPropertyChanged.SetProperty(ref property, value);
+            _notifyPropertyChanged.SetProperty(ref property, value, propertyName);
         }
 
         private void OnPropertyChanged(PropertyChangedEventArgs property)

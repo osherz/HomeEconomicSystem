@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -77,9 +78,9 @@ namespace HomeEconomicSystem.PL.ViewModel
             InnerStateChanged?.Invoke(this, state);
         }
 
-        protected void SetProperty<T>(ref T property, T value)
+        protected void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
         {
-            _notifyPropertyChanged.SetProperty(ref property, value);
+            _notifyPropertyChanged.SetProperty(ref property, value, propertyName);
         }
 
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs property)

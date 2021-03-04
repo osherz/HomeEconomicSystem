@@ -75,6 +75,12 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HomeEconomicSystem.Utils\HomeEconomicSystem.Utils.csproj">
+      <Project>{5b0402f3-1eca-462b-bfdd-86bd3b10825c}</Project>
+      <Name>HomeEconomicSystem.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

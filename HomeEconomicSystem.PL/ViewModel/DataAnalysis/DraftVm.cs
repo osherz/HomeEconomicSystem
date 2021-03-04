@@ -126,9 +126,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             _stateMachine.Fire(Triggers.Finish);
         }
 
-        private void SetProperty<T>(ref T property, T value)
+        private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
         {
-            _notifyPropertyChanged.SetProperty(ref property, value);
+            _notifyPropertyChanged.SetProperty(ref property, value, propertyName);
         }
 
         private void OnPropertyChanged(PropertyChangedEventArgs property)

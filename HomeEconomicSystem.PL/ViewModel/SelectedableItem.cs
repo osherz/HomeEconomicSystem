@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,9 +31,9 @@ namespace HomeEconomicSystem.PL.ViewModel
             IsSelected = false;
         }
 
-        private void SetProperty<T>(ref T property, T value)
+        private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
         {
-            _notifyPropertyChanged.SetProperty(ref property, value);
+            _notifyPropertyChanged.SetProperty(ref property, value, propertyName);
         }
 
         private void OnPropertyChanged(PropertyChangedEventArgs property)

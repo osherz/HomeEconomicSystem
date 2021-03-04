@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.View.UserControls;
@@ -104,9 +105,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public RelayCommand GoBackCommand { get; set; }
         public Func<double, string> Formatter { get; set; }
 
-        private void SetProperty<T>(ref T property, T value)
+        private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
         {
-            _notifyPropertyChanged.SetProperty(ref property, value);
+            _notifyPropertyChanged.SetProperty(ref property, value, propertyName);
         }
 
         private void OnPropertyChanged(PropertyChangedEventArgs property)

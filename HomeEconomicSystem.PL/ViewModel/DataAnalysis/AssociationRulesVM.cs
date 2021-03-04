@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -112,9 +113,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             SwitchVisualization = stateMachine.CreateCommand(Triggers.Switch);
         }
 
-        private void SetProperty<T>(ref T property, T value)
+        private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
         {
-            _notifyPropertyChanged.SetProperty(ref property, value);
+            _notifyPropertyChanged.SetProperty(ref property, value, propertyName);
         }
 
         private void OnPropertyChanged(PropertyChangedEventArgs property)
