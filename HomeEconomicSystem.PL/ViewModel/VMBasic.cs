@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HomeEconomicSystem.Utils;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,8 +9,10 @@ using System.Windows.Controls;
 
 namespace HomeEconomicSystem.PL.ViewModel
 {
-    public abstract class VMBasic<TState, TTrigger> : NotifyPropertyChanged, IVM
+    public abstract class VMBasic<TState, TTrigger> : INotifyPropertyChanged, IVM
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private NotifyProperyChanged _notifyPropertyChanged;
         public BaseStateMachine<TState, TTrigger> StateMachine { get; }
 
         private UserControl _content;
@@ -25,6 +29,7 @@ namespace HomeEconomicSystem.PL.ViewModel
 
         public VMBasic()
         {
+            _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
             _innerVMs = CreateInnerVM();
             _innerViewsCreation = CreateViewsCreation();
 
@@ -70,6 +75,16 @@ namespace HomeEconomicSystem.PL.ViewModel
         protected virtual void OnStateChanged(string state)
         {
             InnerStateChanged?.Invoke(this, state);
+        }
+
+        protected void SetProperty<T>(ref T property, T value)
+        {
+            _notifyPropertyChanged.SetProperty(ref property, value);
+        }
+
+        protected virtual void OnPropertyChanged(PropertyChangedEventArgs property)
+        {
+            PropertyChanged?.Invoke(this, property);
         }
 
         /// <summary>

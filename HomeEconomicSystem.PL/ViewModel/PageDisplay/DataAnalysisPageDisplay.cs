@@ -1,8 +1,10 @@
 ﻿using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.ViewModel.DataAnalysis;
+using HomeEconomicSystem.Utils;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +14,10 @@ using TriggersDA = HomeEconomicSystem.PL.ViewModel.DataAnalysis.Triggers;
 
 namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
-    class DataAnalysisPageDisplay : NotifyPropertyChanged, IPageDisplay
+    class DataAnalysisPageDisplay : INotifyPropertyChanged, IPageDisplay
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private NotifyProperyChanged _notifyPropertyChanged;
 
         BaseStateMachine<DataAnalysis.States, TriggersDA> _stateMachine;
         public IReadOnlyList<MenuItem> MenuItems { get; }
@@ -30,6 +34,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public DataAnalysisPageDisplay()
         {
+            _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
+
             Content = new View.DataAnalysisView();
             var VM = new DataAnalysisVM();
             VM.InnerStateChanged += VM_InnerStateChanged;
@@ -47,6 +53,16 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
         private void VM_InnerStateChanged(object sender, string state)
         {
             State = state;
+        }
+
+        private void SetProperty<T>(ref T property, T value)
+        {
+            _notifyPropertyChanged.SetProperty(ref property, value);
+        }
+
+        private void OnPropertyChanged(PropertyChangedEventArgs property)
+        {
+            PropertyChanged?.Invoke(this, property);
         }
     }
 }

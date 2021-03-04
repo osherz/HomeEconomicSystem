@@ -5,18 +5,23 @@ using System.Linq;
 using System.Windows.Media;
 using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.View.UserControls;
+using HomeEconomicSystem.Utils;
 using LiveCharts;
 using LiveCharts.Helpers;
 using LiveCharts.Wpf;
 
 namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    public class PieDropDownViewModel : NotifyPropertyChanged
+    public class PieDropDownViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private NotifyProperyChanged _notifyPropertyChanged;
         private SeriesCollection _series;
 
         public PieDropDownViewModel(SeriesCollection pieSeriesCollection, string titleX, string titleY)
         {
+            _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
+
             Navigation = new List<SeriesCollection>();
 
             if(pieSeriesCollection.Count() == 1)
@@ -98,5 +103,15 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public PieDropDownCommand SliceClickCommand { get; set; }
         public RelayCommand GoBackCommand { get; set; }
         public Func<double, string> Formatter { get; set; }
+
+        private void SetProperty<T>(ref T property, T value)
+        {
+            _notifyPropertyChanged.SetProperty(ref property, value);
+        }
+
+        private void OnPropertyChanged(PropertyChangedEventArgs property)
+        {
+            PropertyChanged?.Invoke(this, property);
+        }
     }
 }

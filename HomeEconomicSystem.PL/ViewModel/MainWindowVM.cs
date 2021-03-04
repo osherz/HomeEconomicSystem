@@ -1,8 +1,10 @@
 ﻿using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.ViewModel.PageDisplay;
+using HomeEconomicSystem.Utils;
 using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +13,11 @@ using System.Windows.Media;
 
 namespace HomeEconomicSystem.PL.ViewModel
 {
-    public class MainWindowVM : NotifyPropertyChanged
+    public class MainWindowVM : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private NotifyProperyChanged _notifyPropertyChanged;
+
         private Dictionary<States, Action> _stateActionDict;
         private StateMachine _stateMachine;
 
@@ -28,6 +33,8 @@ namespace HomeEconomicSystem.PL.ViewModel
 
         public MainWindowVM()
         {
+            _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
+
             IPageDisplay homePageDisplay = new HomePageDisplay();
             IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay();
             IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay();
@@ -54,6 +61,16 @@ namespace HomeEconomicSystem.PL.ViewModel
                 new MenuItem("", PackIconKind.CashCheck, _stateMachine.CreateCommand(Triggers.HomeSelected)),
             };
 
+        }
+
+        private void SetProperty<T>(ref T property, T value)
+        {
+            _notifyPropertyChanged.SetProperty(ref property, value);
+        }
+
+        private void OnPropertyChanged(PropertyChangedEventArgs property)
+        {
+            PropertyChanged?.Invoke(this, property);
         }
     }
 }

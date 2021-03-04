@@ -2,9 +2,11 @@
 using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using HomeEconomicSystem.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -13,8 +15,12 @@ using System.Windows.Input;
 
 namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    public class DraftVM : NotifyPropertyChanged, IInnerVM<States, Triggers>
+    public class DraftVM : INotifyPropertyChanged, IInnerVM<States, Triggers>
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private NotifyProperyChanged _notifyPropertyChanged;
+
         public GraphCreationVM _graphCreationVM;
         public GraphCreationVM GraphCreationVM
         {
@@ -54,6 +60,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         public DraftVM()
         {
+            _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
+
             GraphCreationVM = new GraphCreationVM();
         }
 
@@ -116,6 +124,16 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             };
             Graph = basicGraph;
             _stateMachine.Fire(Triggers.Finish);
+        }
+
+        private void SetProperty<T>(ref T property, T value)
+        {
+            _notifyPropertyChanged.SetProperty(ref property, value);
+        }
+
+        private void OnPropertyChanged(PropertyChangedEventArgs property)
+        {
+            PropertyChanged?.Invoke(this, property);
         }
     }
 }

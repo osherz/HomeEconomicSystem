@@ -295,7 +295,6 @@
     <Compile Include="ViewModel\PageDisplay\TransactionHistoryPageDisplay.cs" />
     <Compile Include="ViewModel\TransactionHistoryVM.cs" />
     <Compile Include="ViewModel\Triggers.cs" />
-    <Compile Include="ViewModel\NotifyPropertyChanged.cs" />
     <Compile Include="ViewModel\VMBasic.cs" />
     <Compile Include="View\AssociationRulesView.xaml.cs">
       <DependentUpon>AssociationRulesView.xaml</DependentUpon>
@@ -467,6 +466,10 @@
     <ProjectReference Include="..\HomeEconomicSystem.BL\HomeEconomicSystem.BL.csproj">
       <Project>{4a021c71-853d-4440-929d-59704b9e864e}</Project>
       <Name>HomeEconomicSystem.BL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HomeEconomicSystem.Utils\HomeEconomicSystem.Utils.csproj">
+      <Project>{5b0402f3-1eca-462b-bfdd-86bd3b10825c}</Project>
+      <Name>HomeEconomicSystem.Utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

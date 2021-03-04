@@ -6,14 +6,23 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeEconomicSystem.PL.ViewModel
+namespace HomeEconomicSystem.Utils
 {
-    public abstract class NotifyPropertyChanged : INotifyPropertyChanged
+    public sealed class NotifyProperyChanged
     {
-        // TODO: Move to utils and make it to be able to work as sepereate class and not as parent of another class.
-        // TODO: Make a EditableVM that manage all peocess of EditableControl.
-
-        public event PropertyChangedEventHandler? PropertyChanged;
+        private object _parent;
+        private Action<PropertyChangedEventArgs> _onPropertyChanged;
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="onPropertyChanged">Function to active when SetProperty active.</param>
+        public NotifyProperyChanged(object parent, Action<PropertyChangedEventArgs> onPropertyChanged)
+        {
+            _parent = parent;
+            _onPropertyChanged = onPropertyChanged;
+        }
 
         /// <summary>
         /// Sets property if it does not equal existing value. Notifies listeners if change occurs.
@@ -24,7 +33,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         /// <param name="propertyName">Name of the property used to notify listeners.  This
         /// value is optional and can be provided automatically when invoked from compilers
         /// that support <see cref="CallerMemberNameAttribute"/>.</param>
-        protected virtual bool SetProperty<T>(ref T member, T value, [CallerMemberName] string? propertyName = null)
+        public bool SetProperty<T>(ref T member, T value, [CallerMemberName] string propertyName = "")
         {
             if (EqualityComparer<T>.Default.Equals(member, value))
             {
@@ -40,7 +49,8 @@ namespace HomeEconomicSystem.PL.ViewModel
         /// Notifies listeners that a property value has changed.
         /// </summary>
         /// <param name="propertyName">Name of the property, used to notify listeners.</param>
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private void OnPropertyChanged(string propertyName)
+            => _onPropertyChanged(new PropertyChangedEventArgs(propertyName));
     }
+
 }

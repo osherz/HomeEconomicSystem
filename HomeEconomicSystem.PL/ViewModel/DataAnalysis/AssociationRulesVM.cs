@@ -3,23 +3,27 @@ using HomeEconomicSystem.BE;
 using HomeEconomicSystem.BL;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using HomeEconomicSystem.Utils;
 using Stateless;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
-    internal class AssociationRulesVM : NotifyPropertyChanged, IInnerVM<States, Triggers>
+    internal class AssociationRulesVM : IInnerVM<States, Triggers>, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private NotifyProperyChanged _notifyPropertyChanged;
+
         private StateMachine<States, Triggers> _stateMachine;
         private AssociationsModel _associationsModel;
 
         private ObservableCollection<RuleVM> _rules;
-
         public ObservableCollection<RuleVM> Rules
         {
             get { return _rules; }
@@ -35,6 +39,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         }
 
         private bool _isGraph;
+
         public bool IsGraph
         {
             get { return _isGraph; }
@@ -49,13 +54,13 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             set { SetProperty(ref _isTable, value); }
         }
 
-
         public ICommand SwitchVisualization { get; set; }
 
         public event EventHandler<string> InnerStateChanged;
 
         public AssociationRulesVM()
         {
+            _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property) );
             IsGraph = true;
             IsTable = false;
             _associationsModel = new AssociationsModel();
@@ -105,6 +110,16 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         {
             _stateMachine = stateMachine;
             SwitchVisualization = stateMachine.CreateCommand(Triggers.Switch);
+        }
+
+        private void SetProperty<T>(ref T property, T value)
+        {
+            _notifyPropertyChanged.SetProperty(ref property, value);
+        }
+
+        private void OnPropertyChanged(PropertyChangedEventArgs property)
+        {
+            PropertyChanged?.Invoke(this, property);
         }
     }
 }

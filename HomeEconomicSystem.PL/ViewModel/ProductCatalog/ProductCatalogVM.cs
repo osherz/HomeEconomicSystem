@@ -1,6 +1,8 @@
 ﻿using HomeEconomicSystem.PL.View;
+using HomeEconomicSystem.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,8 +10,11 @@ using System.Windows.Controls;
 
 namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
 {
-    public class ProductCatalogVM : NotifyPropertyChanged
+    public class ProductCatalogVM : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private NotifyProperyChanged _notifyPropertyChanged;
+
         public ProductCatalogStateMachine ProductCatalogStateMachine { get;}
 
         private UserControl _content;
@@ -35,6 +40,7 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
 
         public ProductCatalogVM()
         {
+            _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
             ProductVM productVM = new ProductVM();
 
             var statesEntryAction = new Dictionary<States, Action>{
@@ -54,10 +60,16 @@ namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
             //TODO: Concat to productView state machine dictionary.
 
             ProductCatalogStateMachine = new ProductCatalogStateMachine(statesEntryAction);
-
-           
         }
 
+        private void SetProperty<T>(ref T property, T value)
+        {
+            _notifyPropertyChanged.SetProperty(ref property, value);
+        }
 
+        private void OnPropertyChanged(PropertyChangedEventArgs property)
+        {
+            PropertyChanged?.Invoke(this, property);
+        }
     }
 }

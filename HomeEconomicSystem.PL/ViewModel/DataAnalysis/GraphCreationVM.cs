@@ -1,10 +1,12 @@
 ﻿using HomeEconomicSystem.BE;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using HomeEconomicSystem.Utils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -12,8 +14,11 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
     public enum Subjects { Category, Product, Store, Transaction };
 
-    public class GraphCreationVM : NotifyPropertyChanged
+    public class GraphCreationVM : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private NotifyProperyChanged _notifyPropertyChanged;
+
         public event EventHandler Done;
         public event EventHandler Canceled;
 
@@ -150,6 +155,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         public GraphCreationVM(BasicGraph graph)
         {
+            _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
+
             _categoriesModel = new CategoriesModel();
             _productsModel = new ProductsModel();
             _storesModel = new StoresModel();
@@ -276,6 +283,16 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
             if (_graph != null) _graph.Copy(newGraph);
             _graph = newGraph;
+        }
+
+        private void SetProperty<T>(ref T property, T value)
+        {
+            _notifyPropertyChanged.SetProperty(ref property, value);
+        }
+
+        private void OnPropertyChanged(PropertyChangedEventArgs property)
+        {
+            PropertyChanged?.Invoke(this, property);
         }
     }
 }
