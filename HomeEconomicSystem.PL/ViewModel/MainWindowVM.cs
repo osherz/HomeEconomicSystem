@@ -40,13 +40,15 @@ namespace HomeEconomicSystem.PL.ViewModel
             IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay();
             IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay();
             IPageDisplay transactionHistoryDisplay = new TransactionHistoryPageDisplay(_stateMachine);
+            IPageDisplay transactionCreationDisplay = new TransactionCreationPageDisplay();
 
             _stateActionDict = new Dictionary<States, Action>
             {
                 {States.Home, ()=>PageDisplay=homePageDisplay },
                 {States.DataAnalysis, ()=>PageDisplay=dataAnalysisDisplay },
                 {States.ProductCatalog, ()=>PageDisplay=productCatalogDisplay },
-                {States.TransactionHistory, ()=>PageDisplay=transactionHistoryDisplay }
+                {States.TransactionHistory, ()=>PageDisplay=transactionHistoryDisplay },
+                {States.TransactionCreation, ()=>PageDisplay=transactionCreationDisplay }
             };
             _stateMachine = new StateMachine(_stateActionDict);
 
@@ -58,7 +60,7 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             ToolBarItems = new List<MenuItem>
             {
-                new MenuItem("צור רשימת קניות", PackIconKind.ListStatus, _stateMachine.CreateCommand(Triggers.HomeSelected)),
+                new MenuItem("צור רשימת קניות", PackIconKind.ListStatus, _stateMachine.CreateCommand(Triggers.CreateTransaction)),
                 new MenuItem("", PackIconKind.CashCheck, _stateMachine.CreateCommand(Triggers.HomeSelected)),
             };
 

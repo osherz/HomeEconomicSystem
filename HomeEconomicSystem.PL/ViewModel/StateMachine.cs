@@ -9,24 +9,19 @@ using System.Windows.Input;
 namespace HomeEconomicSystem.PL.ViewModel
 {
 
-    public class StateMachine: BaseStateMachine<States, Triggers>
+    public class StateMachine : BaseStateMachine<States, Triggers>
     {
         //TODO: to check if need to unable the option to permit to themself.
-        public StateMachine(IReadOnlyDictionary<States, Action> stateActionDict) : base (States.Start, stateActionDict)
+        public StateMachine(IReadOnlyDictionary<States, Action> stateActionDict) : base(States.Start, stateActionDict)
         {
             ConfigureStart();
             ConfigureHome();
             ConfigureDataAnalysis();
             ConfigureProductCatalog();
             ConfigureTransactionHistory();
+            ConfigureTransactionCreation();
 
-            OnTransitioned
-          (
-            (t) =>
-            {
-                CommandManager.InvalidateRequerySuggested();
-            }
-        );
+            OnTransitioned((t) => CommandManager.InvalidateRequerySuggested());
 
             //used to debug commands and UI components
             OnTransitioned
@@ -41,40 +36,38 @@ namespace HomeEconomicSystem.PL.ViewModel
 
         private void ConfigureStart()
         {
-            Configure(States.Start)
+            BasicConfigure(States.Start)
                 .Permit(Triggers.HomeSelected, States.Home)
                 .Permit(Triggers.DataAnalysisSelected, States.DataAnalysis)
                 .Permit(Triggers.ProductCatalogSelected, States.ProductCatalog)
+                .Permit(Triggers.CreateTransaction, States.TransactionCreation)
                 .Permit(Triggers.TransactionHistorySelected, States.TransactionHistory);
         }
 
         private void ConfigureHome()
         {
-            Configure(States.Home)
-                .SubstateOf(States.Start)
-                .OnEntry(GetStateEntryAction(States.Home));
+            BasicConfigure(States.Home,States.Start);
         }
 
         private void ConfigureDataAnalysis()
         {
-            Configure(States.DataAnalysis)
-                .SubstateOf(States.Start)
-                .OnEntry(GetStateEntryAction(States.DataAnalysis));
+            BasicConfigure(States.DataAnalysis,States.Start);
 
         }
 
         private void ConfigureProductCatalog()
         {
-            Configure(States.ProductCatalog)
-                            .SubstateOf(States.Start)
-                            .OnEntry(GetStateEntryAction(States.ProductCatalog));
+            BasicConfigure(States.ProductCatalog,States.Start);
         }
 
         private void ConfigureTransactionHistory()
         {
-            Configure(States.TransactionHistory)
-                            .SubstateOf(States.Start)
-                            .OnEntry(GetStateEntryAction(States.TransactionHistory));
+            BasicConfigure(States.TransactionHistory,States.Start);
+        }
+
+        private void ConfigureTransactionCreation()
+        {
+            BasicConfigure(States.TransactionCreation, States.Start);
         }
 
     }

@@ -76,7 +76,7 @@ namespace HomeEconomicSystem.BL.V1
             return _db.Stores.Where(s => s.Name.Contains(storeName));
         }
 
-        public IEnumerable<Transaction> GetTransactions(DateTime startDate, DateTime endDate, IEnumerable<Store> stores = null, IEnumerable<Product> products = null, IEnumerable<Category> categories = null)
+        public IEnumerable<Transaction> GetTransactions(DateTime? startDate = null, DateTime? endDate = null, IEnumerable<Store> stores = null, IEnumerable<Product> products = null, IEnumerable<Category> categories = null)
         {
             return _db.Transactions;
         }

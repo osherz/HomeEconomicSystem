@@ -6,6 +6,7 @@
         Home, 
         DataAnalysis,
         ProductCatalog,
-        TransactionHistory
+        TransactionHistory,
+        TransactionCreation
     }
 }

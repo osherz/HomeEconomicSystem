@@ -10,6 +10,6 @@ namespace HomeEconomicSystem.PL.ViewModel
     {
         HomeSelected, DataAnalysisSelected, 
         ProductCatalogSelected, TransactionHistorySelected,
-        Edit, Search, Delete, Create
+        Edit, Search, Delete, Create, CreateTransaction
     }
 }

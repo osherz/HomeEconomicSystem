@@ -16,7 +16,7 @@ namespace HomeEconomicSystem.PL.Model
 {
     public class ProductsModel
     {
-        IDataManagement _dataMenegement ;
+        IDataManagement _dataMenegement;
         // TODO: Find a way to use a read-only ObservableCollection
         public ObservableCollection<Product> ProductsList { get; private set; }
         public ProductsModel()

@@ -249,15 +249,18 @@
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Converters\BasicGraphToGraphDataConverter.cs" />
     <Compile Include="Converters\BooleanToCollapsedVisibilityConverter.cs" />
+    <Compile Include="Converters\BooleanToNoVisibilityConverter.cs" />
     <Compile Include="Converters\KeyValuePairConverter.cs" />
     <Compile Include="Converters\BasicGraphToSubjectString.cs" />
+    <Compile Include="Converters\MultiplyConverter.cs" />
+    <Compile Include="Converters\ProductTransactionToSumConverter.cs" />
     <Compile Include="Extensions\EntitiesExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtentions.cs" />
     <Compile Include="Extensions\StateMachineExtensions.cs" />
     <Compile Include="Model\AssociationsModel.cs" />
     <Compile Include="Model\CategoriesModel.cs" />
     <Compile Include="Model\GraphsModel.cs" />
-    <Compile Include="Model\ProductsModel.cs" />
+    <Compile Include="Model\ProductTransactionModel.cs" />
     <Compile Include="ViewModel\BaseStateMachine.cs" />
     <Compile Include="ViewModel\DataAnalysis\Arrow.cs" />
     <Compile Include="ViewModel\DataAnalysis\AssociationRulesVM.cs" />
@@ -281,6 +284,7 @@
     <Compile Include="ViewModel\PageDisplay\HomePageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay\IPageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay\ProductCatalogPageDisplay.cs" />
+    <Compile Include="ViewModel\PageDisplay\TransactionCreationPageDisplay.cs" />
     <Compile Include="ViewModel\ProductCatalog\ProductCatalogStateMachine.cs" />
     <Compile Include="ViewModel\ProductCatalog\ProductCatalogVM.cs" />
     <Compile Include="ViewModel\ProductCatalog\ProductVM.cs" />
@@ -294,6 +298,7 @@
     <Compile Include="ViewModel\States.cs" />
     <Compile Include="ViewModel\PageDisplay\TransactionHistoryPageDisplay.cs" />
     <Compile Include="ViewModel\TransactionHistoryVM.cs" />
+    <Compile Include="ViewModel\Transactions\CreateTransactionVM.cs" />
     <Compile Include="ViewModel\Triggers.cs" />
     <Compile Include="ViewModel\VMBasic.cs" />
     <Compile Include="View\AssociationRulesView.xaml.cs">
@@ -301,6 +306,9 @@
     </Compile>
     <Compile Include="View\CategoryView.xaml.cs">
       <DependentUpon>CategoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CreateTransactionView.xaml.cs">
+      <DependentUpon>CreateTransactionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DataAnalysisView.xaml.cs">
       <DependentUpon>DataAnalysisView.xaml</DependentUpon>
@@ -327,6 +335,9 @@
       <DependentUpon>DateRangeUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\DropDownPoints.cs" />
+    <Compile Include="View\UserControls\EditAbleTextBox.xaml.cs">
+      <DependentUpon>EditAbleTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserControls\GraphCreationDialog.xaml.cs">
       <DependentUpon>GraphCreationDialog.xaml</DependentUpon>
     </Compile>
@@ -345,6 +356,12 @@
     </Compile>
     <Compile Include="View\UserControls\ProductCardUC.xaml.cs">
       <DependentUpon>ProductCardUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserControls\ProductTransactionUC.xaml.cs">
+      <DependentUpon>ProductTransactionUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserControls\ProductUC.xaml.cs">
+      <DependentUpon>ProductUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\ProductView.xaml.cs">
       <DependentUpon>ProductView.xaml</DependentUpon>
@@ -366,6 +383,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CategoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CreateTransactionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -401,6 +422,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\UserControls\EditAbleTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\UserControls\GraphCreationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -422,6 +447,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserControls\ProductCardUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\ProductTransactionUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\ProductUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -457,7 +490,9 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Pictures\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HomeEconomicSystem.BE\HomeEconomicSystem.BE.csproj">
       <Project>{6f102a29-acf6-4070-9662-ee8dab89ae4e}</Project>

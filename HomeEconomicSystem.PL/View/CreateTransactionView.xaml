@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="HomeEconomicSystem.PL.View.CreateTransactionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:VM="clr-namespace:HomeEconomicSystem.PL.ViewModel.Transactions"
+             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:usercontrols="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance VM:CreateTransactionVM}" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer 
+                HorizontalAlignment="Stretch" 
+                VerticalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding ProductTransaction}"  DockPanel.Dock="Top" HorizontalAlignment="Center">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <materialDesign:Card 
+                        Margin="20" 
+                        Height="360" 
+                        Width="200" 
+                        UniformCornerRadius="20"
+                        materialDesign:ShadowAssist.ShadowEdges="All"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth4"
+                        Padding="10">
+                        <usercontrols:ProductTransactionUC DataContext="{Binding .}" EditMode="True"/>
+                    </materialDesign:Card>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+
+</UserControl>
