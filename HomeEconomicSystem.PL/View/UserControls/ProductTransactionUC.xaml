@@ -34,9 +34,11 @@
 
             <Style TargetType="TextBlock">
                 <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+
                 <Style.Triggers>
-                    <Trigger Property="Grid.Column" Value="1">
-                        <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Trigger Property="Grid.Column" Value="0">
+                        <Setter Property="HorizontalAlignment" Value="Left" />
                         <Setter Property="VerticalAlignment" Value="Center" />
                     </Trigger>
                 </Style.Triggers>
@@ -56,32 +58,52 @@
                Source="{Binding Product.ImageFileName, Mode=TwoWay}" />
 
         <TextBlock Grid.Column="0" Grid.Row="1" Text="בר-קוד:" />
-        <local:EditAbleTextBox Grid.Column="1" Grid.Row="1" Text="{Binding Product.BarCode, Mode=TwoWay}"
-                   EditMode="{Binding EditMode}"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Product.BarCode, Mode=TwoWay}" />
 
         <TextBlock Grid.Column="0" Grid.Row="2" Text="שם מוצר:" />
-        <local:EditAbleTextBox Grid.Column="1" Grid.Row="2" Text="{Binding Product.Name, Mode=TwoWay}"
-                   EditMode="{Binding EditMode}" />
-      
+        <DockPanel Grid.Column="1" Grid.Row="2">
+            <TextBlock Margin="0" Padding="0"
+                       Visibility="{Binding EditMode, Converter={StaticResource BooleanToVisibilityConverter},
+                                        RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}"
+                       DockPanel.Dock="Right">
+                <Hyperlink Style="{StaticResource HyperLink}"
+                           Command="{Binding ChangeProduct, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}"
+                           CommandParameter="{Binding .}">
+                    שנה
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Text="{Binding Product.Name, Mode=TwoWay}" />
+
+        </DockPanel>
 
         <TextBlock Grid.Column="0" Grid.Row="3" Text="תיאור:" />
-        <local:EditAbleTextBox Grid.Column="1" Grid.Row="3" Text="{Binding Product.Description, Mode=TwoWay}"
-                   EditMode="{Binding EditMode}" />
-      
+        <local:EditAbleTextBox EditMode="{Binding EditMode,RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}" 
+                               Grid.Column="1" Grid.Row="3" Text="{Binding Product.Description, Mode=TwoWay}" />
 
         <TextBlock Grid.Column="0" Grid.Row="4" Text="קטגוריה:" />
-        <local:EditAbleTextBox Grid.Column="1" Grid.Row="4" Text="{Binding Product.Category.Name, Mode=TwoWay}"
-                   EditMode="{Binding EditMode}" />
+        <DockPanel Grid.Column="1" Grid.Row="4">
+            <TextBlock Margin="0" Padding="0"
+                       Visibility="{Binding EditMode, Converter={StaticResource BooleanToVisibilityConverter},
+                                        RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}"
+                       DockPanel.Dock="Right">
+                <Hyperlink Style="{StaticResource HyperLink}"
+                           Command="{Binding ChangeCategory, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}"
+                           CommandParameter="{Binding .}">
+                    שנה
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Text="{Binding Product.Category.Name, Mode=TwoWay}" />
+        </DockPanel>
       
 
         <TextBlock Grid.Column="0" Grid.Row="5" Text="כמות:" />
         <local:EditAbleTextBox Grid.Column="1" Grid.Row="5" Text="{Binding Amount, Mode=TwoWay}"
-                   EditMode="{Binding EditMode}" />
+                   EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}" />
        
 
         <TextBlock Grid.Column="0" Grid.Row="6" Text="מחיר ליחידה:" />
         <local:EditAbleTextBox Grid.Column="1" Grid.Row="6" Text="{Binding UnitPrice, Mode=TwoWay}"
-                   EditMode="{Binding EditMode}" />
+                   EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}" />
        
 
         <TextBlock Grid.Column="0" Grid.Row="7" Text="מחיר כולל:"  />
@@ -97,9 +119,20 @@
         </TextBlock>
 
         <TextBlock Grid.Column="0" Grid.Row="8" Text="חנות:" />
-        <local:EditAbleTextBox Grid.Column="1" Grid.Row="8" Text="{Binding Store.Name, Mode=TwoWay}"
-                   EditMode="{Binding EditMode}" />
-     
+        <DockPanel Grid.Column="1" Grid.Row="8">
+            <TextBlock Margin="0" Padding="0"
+                       Visibility="{Binding EditMode, Converter={StaticResource BooleanToVisibilityConverter},
+                                        RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}"
+                       DockPanel.Dock="Right">
+                <Hyperlink Style="{StaticResource HyperLink}"
+                           Command="{Binding ChangeStore, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}"
+                           CommandParameter="{Binding .}">
+                    שנה
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock Text="{Binding Store.Name, Mode=TwoWay}" />
+        </DockPanel>
+
 
     </Grid>
 </UserControl>

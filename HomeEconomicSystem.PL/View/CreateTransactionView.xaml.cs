@@ -1,4 +1,6 @@
-﻿using System;
+﻿using HomeEconomicSystem.BE;
+using HomeEconomicSystem.PL.ViewModel.Transactions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,14 @@ namespace HomeEconomicSystem.PL.View
         public CreateTransactionView()
         {
             InitializeComponent();
+        }
+
+        private void ProductsTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if(e.NewValue is Product product)
+            {
+                (DataContext as CreateTransactionVM).SelectedProductTransaction.Product = product;
+            }
         }
     }
 }

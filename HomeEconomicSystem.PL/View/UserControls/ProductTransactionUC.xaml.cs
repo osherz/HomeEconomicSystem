@@ -35,30 +35,68 @@ namespace HomeEconomicSystem.PL.View.UserControls
 
 
 
+
+        public ICommand ChangeProduct
+        {
+            get { return (ICommand)GetValue(ChangeProductProperty); }
+            set { SetValue(ChangeProductProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ChangeProduct.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ChangeProductProperty =
+            DependencyProperty.Register("ChangeProduct", typeof(ICommand), typeof(ProductTransactionUC), new PropertyMetadata(null));
+
+
+        public ICommand ChangeCategory
+        {
+            get { return (ICommand)GetValue(ChangeCategoryProperty); }
+            set { SetValue(ChangeCategoryProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ChangeCategory.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ChangeCategoryProperty =
+            DependencyProperty.Register("ChangeCategory", typeof(ICommand), typeof(ProductTransactionUC), new PropertyMetadata(null));
+
+
+        public ICommand ChangeStore
+        {
+            get { return (ICommand)GetValue(ChangeStoreProperty); }
+            set { SetValue(ChangeStoreProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ChangeStore.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ChangeStoreProperty =
+            DependencyProperty.Register("ChangeStore", typeof(ICommand), typeof(ProductTransactionUC), new PropertyMetadata(null));
+
+
+
+
         public ProductTransactionUC()
         {
+
+            //DataContext = new ProductTransaction
+            //{
+            //    Product = new Product
+            //    {
+            //        BarCode = "1111",
+            //        Name = "קטשופ",
+            //        Description = "קטשופ",
+            //        Category = new Category
+            //        {
+            //            Name = "אוכל",
+            //        }
+            //    },
+
+            //    UnitPrice = 20.1f,
+            //    Amount = 3,
+            //    Store = new Store
+            //    {
+            //        Name = "asas"
+            //    },
+            //};
+
+
             InitializeComponent();
-
-            DataContext = new ProductTransaction
-            {
-                Product = new Product
-                {
-                    BarCode = "1111",
-                    Name = "קטשופ",
-                    Description = "קטשופ",
-                    Category = new Category
-                    {
-                        Name = "אוכל",
-                    }
-                },
-
-                UnitPrice = 20.1f,
-                Amount = 3,
-                Store = new Store
-                {
-                    Name = "asas"
-                },
-            };
         }
     }
 }

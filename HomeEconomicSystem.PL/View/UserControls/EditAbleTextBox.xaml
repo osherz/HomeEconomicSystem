@@ -7,10 +7,17 @@
              mc:Ignorable="d" Margin="0" Padding="0"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock  Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:EditAbleTextBox}}"
-                   Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC},
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0"
+            Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:EditAbleTextBox}}"
+            Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC},
             Converter={StaticResource BooleanToNoVisibilityConverter}}"/>
-        <TextBox 
+        <TextBox  Grid.Row="0" Grid.Column="0"
                  Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:EditAbleTextBox}}"
                  Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC},
             Converter={StaticResource BooleanToVisibilityConverter}}" />

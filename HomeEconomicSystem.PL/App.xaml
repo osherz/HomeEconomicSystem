@@ -15,6 +15,16 @@
             <converters:ProductTransactionToSumConverter x:Key="productTransactionToSumConverter" />
             <converters:BooleanToNoVisibilityConverter x:Key="BooleanToNoVisibilityConverter" />
             <converters:MultiplyConverter x:Key="MultiplyConverter" />
+
+            <Style TargetType="Hyperlink" x:Key="HyperLink">
+                <Setter Property="Foreground" Value="#3C88D3"/>
+                <Setter Property="FontWeight" Value="Bold" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Foreground" Value="Red"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
 
     </Application.Resources>

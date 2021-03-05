@@ -4,22 +4,118 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:VM="clr-namespace:HomeEconomicSystem.PL.ViewModel.Transactions"
-             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:usercontrols="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+             xmlns:local="clr-namespace:HomeEconomicSystem.PL.View" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+             xmlns:usercontrols="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+             xmlns:entity="clr-namespace:HomeEconomicSystem.BE;assembly=HomeEconomicSystem.BE"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance VM:CreateTransactionVM}" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ScrollViewer 
+    <materialDesign:DialogHost IsOpen="{Binding OpenDialog}">
+        <materialDesign:DialogHost.DialogContent>
+            <Grid Margin="10" Width="150" MaxHeight="500">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <ListView Grid.Row="0"
+                          Visibility="{Binding CategoryChoosing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    materialDesign:HintAssist.Hint="קטגוריות" 
+                    ItemsSource="{Binding Categories}"
+                    SelectionMode="Single"
+                         SelectedItem="{Binding SelectedProductTransaction.Product.Category, Mode=TwoWay}"
+                    ScrollViewer.CanContentScroll="True"
+                    HorizontalContentAlignment="Stretch">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <ListView Grid.Row="0"
+                          Visibility="{Binding StoreChoosing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    materialDesign:HintAssist.Hint="חנויות" 
+                    ItemsSource="{Binding Stores}"
+                    SelectionMode="Single"
+                         SelectedItem="{Binding SelectedProductTransaction.Store, Mode=TwoWay}"
+                    ScrollViewer.CanContentScroll="True"
+                    HorizontalContentAlignment="Stretch">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <TreeView x:Name="ProductsTree"
+                          Visibility="{Binding ProductChoosing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    Grid.Row="0"
+                    ItemsSource="{Binding Categories}"
+                    MinWidth="220"
+                    SelectedItemChanged="ProductsTree_SelectedItemChanged">
+                    <TreeView.Resources>
+                        <HierarchicalDataTemplate
+                        DataType="{x:Type entity:Category}"
+                        ItemsSource="{Binding Products}">
+                            <TextBlock
+                            Text="{Binding Name}" />
+                        </HierarchicalDataTemplate>
+                        <DataTemplate
+                        DataType="{x:Type entity:Product}">
+                            <TextBlock
+                            Text="{Binding Name}"  />
+                        </DataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+
+                <Button Grid.Row="1" Margin="0 10 0 0" Command="{Binding Finish}">סיימתי</Button>
+            </Grid>
+        </materialDesign:DialogHost.DialogContent>
+
+        <DockPanel Margin="20">
+            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Orientation="Horizontal">
+                <TextBlock Text="נקנה ב " Style="{StaticResource MaterialDesignHeadline5TextBlock}" />
+                <DatePicker SelectedDate="{Binding Transaction.DateTime, Mode=TwoWay}" FontSize="20" Style="{StaticResource MaterialDesignDatePicker}" />
+                <materialDesign:TimePicker Is24Hours="True"
+                    SelectedTime="{Binding Transaction.DateTime, Mode=TwoWay}"  
+                    FontSize="20" 
+                    Style="{StaticResource MaterialDesignTimePicker}" 
+                    Margin="10 0 0 0" />
+            </StackPanel>
+
+            <Grid DockPanel.Dock="Bottom">
+                <Button HorizontalAlignment="Left" 
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                 Command="{Binding AddProductTransaction}">
+                    <materialDesign:PackIcon Kind="Plus" />
+                </Button>
+
+                <Button HorizontalAlignment="Right"
+                Style="{StaticResource MaterialDesignFloatingActionButton}"
+                        Background="Green" BorderBrush="Green"
+                 Command="{Binding Finish}">
+                    <materialDesign:PackIcon Kind="Done" />
+                </Button>
+            </Grid>
+            
+            <ScrollViewer  Grid.Row="1" 
                 HorizontalAlignment="Stretch" 
                 VerticalScrollBarVisibility="Auto">
-        <ItemsControl ItemsSource="{Binding ProductTransaction}"  DockPanel.Dock="Top" HorizontalAlignment="Center">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <materialDesign:Card 
+                <ItemsControl ItemsSource="{Binding ProductTransaction}" DockPanel.Dock="Top" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <materialDesign:Card 
                         Margin="20" 
                         Height="360" 
                         Width="200" 
@@ -27,11 +123,16 @@
                         materialDesign:ShadowAssist.ShadowEdges="All"
                         materialDesign:ShadowAssist.ShadowDepth="Depth4"
                         Padding="10">
-                        <usercontrols:ProductTransactionUC DataContext="{Binding .}" EditMode="True"/>
-                    </materialDesign:Card>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>
-
+                                <usercontrols:ProductTransactionUC DataContext="{Binding .}" 
+                                                           EditMode="True"
+                                                           ChangeCategory="{Binding DataContext.ChangeCategory, RelativeSource={RelativeSource AncestorType=local:CreateTransactionView}}"
+                                                                   ChangeProduct="{Binding DataContext.ChangeProduct, RelativeSource={RelativeSource AncestorType=local:CreateTransactionView}}"
+                                                           ChangeStore="{Binding DataContext.ChangeStore, RelativeSource={RelativeSource AncestorType=local:CreateTransactionView}}"/>
+                            </materialDesign:Card>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </DockPanel>
+    </materialDesign:DialogHost>
 </UserControl>

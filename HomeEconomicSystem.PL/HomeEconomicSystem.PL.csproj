@@ -299,6 +299,7 @@
     <Compile Include="ViewModel\PageDisplay\TransactionHistoryPageDisplay.cs" />
     <Compile Include="ViewModel\TransactionHistoryVM.cs" />
     <Compile Include="ViewModel\Transactions\CreateTransactionVM.cs" />
+    <Compile Include="ViewModel\Transactions\TransactionsStateMachine.cs" />
     <Compile Include="ViewModel\Triggers.cs" />
     <Compile Include="ViewModel\VMBasic.cs" />
     <Compile Include="View\AssociationRulesView.xaml.cs">
