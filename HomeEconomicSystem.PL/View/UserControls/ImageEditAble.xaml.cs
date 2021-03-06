@@ -20,7 +20,19 @@ namespace HomeEconomicSystem.PL.View.UserControls
     /// </summary>
     public partial class ImageEditAble : UserControl
     {
-        const string DEFAULT_IMAGE = "https://inature.info/w/images/0/0e/No_image.jpg";
+
+
+        public bool EditMode
+        {
+            get { return (bool)GetValue(EditModeProperty); }
+            set { SetValue(EditModeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for EditMode.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty EditModeProperty =
+            DependencyProperty.Register("EditMode", typeof(bool), typeof(ImageEditAble), new PropertyMetadata(false));
+
+
 
         public ImageSource Source
         {
@@ -41,11 +53,14 @@ namespace HomeEconomicSystem.PL.View.UserControls
 
         private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
-            if (dialog.ShowDialog() == true)
+            if (EditMode)
             {
-                Source = new BitmapImage(new Uri(dialog.FileName));
+                var dialog = new Microsoft.Win32.OpenFileDialog();
+                dialog.Filter = "Image files (*.png;*.jpeg)|*.png;*.jpeg|All files (*.*)|*.*";
+                if (dialog.ShowDialog() == true)
+                {
+                    Source = new BitmapImage(new Uri(dialog.FileName));
+                }
             }
         }
     }

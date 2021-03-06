@@ -55,7 +55,9 @@
                Source="https://inature.info/w/images/0/0e/No_image.jpg"          
                />
         <local:ImageEditAble
-               Source="{Binding Product.ImageFileName, Mode=TwoWay}" Background="Transparent" />
+                Visibility="{Binding Product, Converter={StaticResource NullableToVisibilityConverter}}"
+               Source="{Binding Product.ImageFileName, Mode=TwoWay}" Background="Transparent"
+                EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}"/>
         </Grid>
 
         <TextBlock Grid.Column="0" Grid.Row="1" Text="בר-קוד:" />
@@ -79,10 +81,11 @@
 
         <TextBlock Grid.Column="0" Grid.Row="3" Text="תיאור:" />
         <local:EditAbleTextBox EditMode="{Binding EditMode,RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}" 
+                               Visibility="{Binding Product, Converter={StaticResource NullableToVisibilityConverter}}"
                                Grid.Column="1" Grid.Row="3" Text="{Binding Product.Description, Mode=TwoWay}" />
 
         <TextBlock Grid.Column="0" Grid.Row="4" Text="קטגוריה:" />
-        <DockPanel Grid.Column="1" Grid.Row="4">
+        <DockPanel Grid.Column="1" Grid.Row="4" Visibility="{Binding Product, Converter={StaticResource NullableToVisibilityConverter}}">
             <TextBlock Margin="0" Padding="0"
                        Visibility="{Binding EditMode, Converter={StaticResource BooleanToVisibilityConverter},
                                         RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}"

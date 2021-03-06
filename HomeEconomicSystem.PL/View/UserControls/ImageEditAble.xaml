@@ -17,10 +17,17 @@
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=local:ImageEditAble}}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
-                            <Setter Property="Cursor" Value="Hand" />
-                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=local:ImageEditAble}}" Value="True" />
+                                <Condition Binding="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ImageEditAble}}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                            <MultiDataTrigger.Setters>
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Cursor" Value="Hand" />
+                            </MultiDataTrigger.Setters>
+                        </MultiDataTrigger>
+
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
