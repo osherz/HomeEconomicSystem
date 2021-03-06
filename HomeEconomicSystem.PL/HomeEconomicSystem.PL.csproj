@@ -253,6 +253,7 @@
     <Compile Include="Converters\KeyValuePairConverter.cs" />
     <Compile Include="Converters\BasicGraphToSubjectString.cs" />
     <Compile Include="Converters\MultiplyConverter.cs" />
+    <Compile Include="Converters\NotNullToVisibiltyConverter.cs" />
     <Compile Include="Converters\ProductTransactionToSumConverter.cs" />
     <Compile Include="Extensions\EntitiesExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtentions.cs" />
@@ -349,6 +350,9 @@
     <Compile Include="View\UserControls\GraphUC.xaml.cs">
       <DependentUpon>GraphUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UserControls\ImageEditAble.xaml.cs">
+      <DependentUpon>ImageEditAble.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserControls\MenuUC.xaml.cs">
       <DependentUpon>MenuUC.xaml</DependentUpon>
     </Compile>
@@ -436,6 +440,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserControls\GraphUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\ImageEditAble.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

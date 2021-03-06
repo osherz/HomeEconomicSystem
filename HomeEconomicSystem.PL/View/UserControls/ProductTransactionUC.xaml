@@ -10,15 +10,15 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -50,12 +50,13 @@
             </Style>
 
         </Grid.Resources>
-        
-        <Image Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" 
+        <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FlowDirection="LeftToRight">
+        <Image Visibility="{Binding Product.ImageFileName, Converter={StaticResource NotNullToVisibiltyConverter}}"
                Source="https://inature.info/w/images/0/0e/No_image.jpg"          
                />
-        <Image Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" 
-               Source="{Binding Product.ImageFileName, Mode=TwoWay}" />
+        <local:ImageEditAble
+               Source="{Binding Product.ImageFileName, Mode=TwoWay}" Background="Transparent" />
+        </Grid>
 
         <TextBlock Grid.Column="0" Grid.Row="1" Text="בר-קוד:" />
         <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Product.BarCode, Mode=TwoWay}" />

@@ -15,6 +15,7 @@
             <converters:ProductTransactionToSumConverter x:Key="productTransactionToSumConverter" />
             <converters:BooleanToNoVisibilityConverter x:Key="BooleanToNoVisibilityConverter" />
             <converters:MultiplyConverter x:Key="MultiplyConverter" />
+            <converters:NotNullToVisibiltyConverter x:Key="NotNullToVisibiltyConverter" />
 
             <Style TargetType="Hyperlink" x:Key="HyperLink">
                 <Setter Property="Foreground" Value="#3C88D3"/>

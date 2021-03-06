@@ -33,9 +33,6 @@ namespace HomeEconomicSystem.PL.View.UserControls
         public static readonly DependencyProperty EditModeProperty =
             DependencyProperty.Register("EditMode", typeof(bool), typeof(ProductTransactionUC), new PropertyMetadata(false));
 
-
-
-
         public ICommand ChangeProduct
         {
             get { return (ICommand)GetValue(ChangeProductProperty); }
