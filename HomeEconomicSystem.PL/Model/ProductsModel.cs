@@ -25,7 +25,7 @@ namespace HomeEconomicSystem.PL.Model
             ProductsList = new ObservableCollection<Product>();
         }
 
-        void Filter(string name = "", params Category[] categories)
+        public void Filter(string name = "", params Category[] categories)
         {
             ProductsList.Clear();
             _dataMenegement.GetProducts(name, categories).ForEach(p => ProductsList.Add(p));

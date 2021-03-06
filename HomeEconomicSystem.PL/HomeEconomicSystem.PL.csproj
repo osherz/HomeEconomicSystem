@@ -263,6 +263,7 @@
     <Compile Include="Model\GraphsModel.cs" />
     <Compile Include="Model\ProductTransactionModel.cs" />
     <Compile Include="ViewModel\BaseStateMachine.cs" />
+    <Compile Include="ViewModel\Catalog\ProductCatalogVM.cs" />
     <Compile Include="ViewModel\DataAnalysis\Arrow.cs" />
     <Compile Include="ViewModel\DataAnalysis\AssociationRulesVM.cs" />
     <Compile Include="ViewModel\DataAnalysis\GraphCreationStateMachine.cs" />
@@ -284,13 +285,12 @@
     <Compile Include="ViewModel\PageDisplay\DataAnalysisPageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay\HomePageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay\IPageDisplay.cs" />
-    <Compile Include="ViewModel\PageDisplay\ProductCatalogPageDisplay.cs" />
+    <Compile Include="ViewModel\PageDisplay\CatalogPageDisplay.cs" />
     <Compile Include="ViewModel\PageDisplay\TransactionCreationPageDisplay.cs" />
-    <Compile Include="ViewModel\ProductCatalog\ProductCatalogStateMachine.cs" />
-    <Compile Include="ViewModel\ProductCatalog\ProductCatalogVM.cs" />
-    <Compile Include="ViewModel\ProductCatalog\ProductVM.cs" />
-    <Compile Include="ViewModel\ProductCatalog\States.cs" />
-    <Compile Include="ViewModel\ProductCatalog\Triggers.cs" />
+    <Compile Include="ViewModel\Catalog\CatalogStateMachine.cs" />
+    <Compile Include="ViewModel\Catalog\CatalogVM.cs" />
+    <Compile Include="ViewModel\Catalog\CatalogStates.cs" />
+    <Compile Include="ViewModel\Catalog\CatalogTriggers.cs" />
     <Compile Include="ViewModel\SelectedableItem.cs" />
     <Compile Include="ViewModel\StateMachine.cs" />
     <Compile Include="ViewModel\MainMenuVM.cs" />
@@ -324,11 +324,11 @@
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\CatalogView.xaml.cs">
+      <DependentUpon>CatalogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ProductCatalogView.xaml.cs">
       <DependentUpon>ProductCatalogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ProductView.xaml.cs">
-      <DependentUpon>ProductView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TransactionHistoryView.xaml.cs">
       <DependentUpon>TransactionHistoryView.xaml</DependentUpon>
@@ -411,11 +411,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ProductCatalogView.xaml">
+    <Page Include="View\CatalogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\ProductView.xaml">
+    <Page Include="View\ProductCatalogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

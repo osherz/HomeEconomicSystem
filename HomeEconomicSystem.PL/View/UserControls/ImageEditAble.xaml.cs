@@ -22,6 +22,18 @@ namespace HomeEconomicSystem.PL.View.UserControls
     {
 
 
+        public bool HasSource
+        {
+            get { return (bool)GetValue(HasSourceProperty); }
+            set { SetValue(HasSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for HasSource.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HasSourceProperty =
+            DependencyProperty.Register("HasSource", typeof(bool), typeof(ImageEditAble), new PropertyMetadata(false));
+
+
+
         public bool EditMode
         {
             get { return (bool)GetValue(EditModeProperty); }
@@ -42,9 +54,12 @@ namespace HomeEconomicSystem.PL.View.UserControls
 
         // Using a DependencyProperty as the backing store for Source.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SourceProperty =
-            DependencyProperty.Register("Source", typeof(ImageSource), typeof(ImageEditAble), new PropertyMetadata(null));
+            DependencyProperty.Register("Source", typeof(ImageSource), typeof(ImageEditAble), new PropertyMetadata(null, SourcePropertyChanged));
 
-
+        private static void SourcePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as ImageEditAble).HasSource = e.NewValue != null;
+        }
 
         public ImageEditAble()
         {
@@ -60,6 +75,7 @@ namespace HomeEconomicSystem.PL.View.UserControls
                 if (dialog.ShowDialog() == true)
                 {
                     Source = new BitmapImage(new Uri(dialog.FileName));
+                    HasSource = true;
                 }
             }
         }

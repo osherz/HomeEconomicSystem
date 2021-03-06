@@ -1,5 +1,5 @@
 ﻿using HomeEconomicSystem.PL.Extensions;
-using HomeEconomicSystem.PL.ViewModel.ProductCatalog;
+using HomeEconomicSystem.PL.ViewModel.Catalog;
 using HomeEconomicSystem.Utils;
 using MaterialDesignThemes.Wpf;
 using System;
@@ -11,11 +11,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-using TriggersPC = HomeEconomicSystem.PL.ViewModel.ProductCatalog.Triggers;
+using TriggersPC = HomeEconomicSystem.PL.ViewModel.Catalog.CatalogTriggers;
 
 namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
-    class ProductCatalogPageDisplay : INotifyPropertyChanged, IPageDisplay
+    class CatalogPageDisplay : INotifyPropertyChanged, IPageDisplay
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private NotifyProperyChanged _notifyPropertyChanged;
@@ -25,7 +25,7 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public bool HasItems => MenuItems is not null && MenuItems.Count > 0;
 
-        ProductCatalogStateMachine _stateMachine;
+        CatalogStateMachine _stateMachine;
 
         private string _state;
         public string State
@@ -35,13 +35,13 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
         }
 
         
-        public ProductCatalogPageDisplay()
+        public CatalogPageDisplay()
         {
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
-            ProductCatalogVM productCatalogVM = new ProductCatalogVM();
-            Content = new View.ProductCatalogView();
+            CatalogVM productCatalogVM = new CatalogVM();
+            Content = new View.CatalogView();
             Content.DataContext = productCatalogVM;
-            _stateMachine = productCatalogVM.ProductCatalogStateMachine;
+            _stateMachine = productCatalogVM.CatalogStateMachine;
             _stateMachine.OnTransitionCompleted(t => State = t.Destination.ToString());
 
             MenuItems = new List<MenuItem>

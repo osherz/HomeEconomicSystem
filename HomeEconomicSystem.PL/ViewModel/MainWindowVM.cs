@@ -39,7 +39,7 @@ namespace HomeEconomicSystem.PL.ViewModel
 
             var homePageDisplay = new HomePageDisplay();
             var dataAnalysisDisplay = new DataAnalysisPageDisplay();
-            var productCatalogDisplay = new ProductCatalogPageDisplay();
+            var productCatalogDisplay = new CatalogPageDisplay();
             var transactionHistoryDisplay = new TransactionHistoryPageDisplay(_stateMachine);
             var transactionCreationDisplay = new TransactionCreationPageDisplay();
 

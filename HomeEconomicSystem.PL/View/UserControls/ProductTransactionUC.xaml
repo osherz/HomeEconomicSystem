@@ -51,9 +51,7 @@
 
         </Grid.Resources>
         <Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" FlowDirection="LeftToRight">
-        <Image Visibility="{Binding Product.ImageFileName, Converter={StaticResource NotNullToVisibiltyConverter}}"
-               Source="https://inature.info/w/images/0/0e/No_image.jpg"          
-               />
+
         <local:ImageEditAble
                 Visibility="{Binding Product, Converter={StaticResource NullableToVisibilityConverter}}"
                Source="{Binding Product.ImageFileName, Mode=TwoWay}" Background="Transparent"

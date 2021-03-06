@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace HomeEconomicSystem.PL.View
 {
     /// <summary>
-    /// Interaction logic for ProductView.xaml
+    /// Interaction logic for ProductCatalogView.xaml
     /// </summary>
-    public partial class ProductView : UserControl
+    public partial class CatalogView : UserControl
     {
-        public ProductView()
+        public CatalogView()
         {
             InitializeComponent();
         }

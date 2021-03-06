@@ -21,7 +21,7 @@ namespace HomeEconomicSystem.PL.Model
             Filter();
         }
 
-        void Filter(string name = "")
+        public void Filter(string name = "")
         {
             CategoriesList.Clear();
             _dataMenegement.GetCategories(name).ForEach(c => CategoriesList.Add(c));
