@@ -1,4 +1,5 @@
-﻿using HomeEconomicSystem.PL.Extensions;
+﻿using HomeEconomicSystem.BE;
+using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using HomeEconomicSystem.Utils;
 using MaterialDesignThemes.Wpf;
@@ -36,11 +37,11 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
 
-            IPageDisplay homePageDisplay = new HomePageDisplay();
-            IPageDisplay dataAnalysisDisplay = new DataAnalysisPageDisplay();
-            IPageDisplay productCatalogDisplay = new ProductCatalogPageDisplay();
-            IPageDisplay transactionHistoryDisplay = new TransactionHistoryPageDisplay(_stateMachine);
-            IPageDisplay transactionCreationDisplay = new TransactionCreationPageDisplay();
+            var homePageDisplay = new HomePageDisplay();
+            var dataAnalysisDisplay = new DataAnalysisPageDisplay();
+            var productCatalogDisplay = new ProductCatalogPageDisplay();
+            var transactionHistoryDisplay = new TransactionHistoryPageDisplay(_stateMachine);
+            var transactionCreationDisplay = new TransactionCreationPageDisplay();
 
             _stateActionDict = new Dictionary<States, Action>
             {
@@ -48,7 +49,12 @@ namespace HomeEconomicSystem.PL.ViewModel
                 {States.DataAnalysis, ()=>PageDisplay=dataAnalysisDisplay },
                 {States.ProductCatalog, ()=>PageDisplay=productCatalogDisplay },
                 {States.TransactionHistory, ()=>PageDisplay=transactionHistoryDisplay },
-                {States.TransactionCreation, ()=>PageDisplay=transactionCreationDisplay }
+                {States.TransactionCreation,
+                    ()=> {
+                        transactionCreationDisplay.GenerateTransaction();
+                        PageDisplay=transactionCreationDisplay;
+                    }
+                }
             };
             _stateMachine = new StateMachine(_stateActionDict);
 
@@ -60,13 +66,13 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             ToolBarItems = new List<MenuItem>
             {
-                new MenuItem("צור רשימת קניות", PackIconKind.ListStatus, _stateMachine.CreateCommand(Triggers.CreateTransaction)),
-                new MenuItem("", PackIconKind.CashCheck, _stateMachine.CreateCommand(Triggers.HomeSelected)),
+                new MenuItem("הצע לי רשימת קניות", PackIconKind.ListStatus, _stateMachine.CreateCommand(Triggers.CreatePurchaseList)),
+                new MenuItem("צור עסקה חדשה", PackIconKind.TagPlus, _stateMachine.CreateCommand(Triggers.CreateTransaction)),
             };
 
         }
 
-        private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName="")
+        private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")
         {
             _notifyPropertyChanged.SetProperty(ref property, value, propertyName);
         }

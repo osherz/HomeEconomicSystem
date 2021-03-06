@@ -24,14 +24,14 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
         TransactionsStateMachine _stateMachine;
 
         private ObservableCollection<ProductTransaction> _productTransaction;
-        public ObservableCollection<ProductTransaction> ProductTransaction
+        public ObservableCollection<ProductTransaction> ProductTransactions
         {
             get { return _productTransaction; }
             set { SetProperty(ref _productTransaction, value); }
         }
 
         private Transaction _transaction;
-        public Transaction Transaction { get => _transaction; set => SetProperty(ref _transaction, value); }
+        public Transaction Transaction { get => _transaction; private set => SetProperty(ref _transaction, value); }
 
         public ObservableCollection<Category> Categories { get; set; }
         public ObservableCollection<Store> Stores { get; set; }
@@ -48,7 +48,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
         public ProductTransaction SelectedProductTransaction
         {
             get { return _selectedProductTransaction; }
-            set { SetProperty(ref _selectedProductTransaction , value); }
+            set { SetProperty(ref _selectedProductTransaction, value); }
         }
 
 
@@ -85,9 +85,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             var bl = new BL.BL();
             _transactionAnalysis = bl.TransactionAnalysis;
             _dataManagement = bl.DataManagement;
-            Transaction = _dataManagement.GetTransactions()
-                .First();
-            ProductTransaction = Transaction.ProductTransactions.ToObservableCollection();
+            GenerateNewTransaction();
+            ProductTransactions = Transaction.ProductTransactions.ToObservableCollection();
             Categories = _dataManagement.GetCategories().ToObservableCollection();
             Stores = _dataManagement.GetStores().ToObservableCollection();
 
@@ -97,7 +96,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
                     {TransactionsState.ChoosingCategory, () => { OpenDialog=true; CategoryChoosing=true; } },
                     {TransactionsState.ChoosingStore, () => { OpenDialog=true; StoreChoosing=true; } },
                     {TransactionsState.ChoosingProduct, () => { OpenDialog=true; ProductChoosing=true; } },
-                    {TransactionsState.UpdatingTransaction, () =>  {_transactionAnalysis.UpdateTransaction(Transaction); _stateMachine.Fire(TransactionsTriggers.Finish); } }
+                    {TransactionsState.UpdatingTransaction, UpdateOrCreateTransaction }
                 },
                 new Dictionary<TransactionsState, Action>
                 {
@@ -110,8 +109,50 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             ChangeCategory = _stateMachine.CreateCommand(TransactionsTriggers.ChangeCategory, ChangeSelectedProductTransaction);
             ChangeStore = _stateMachine.CreateCommand(TransactionsTriggers.ChangeStore, ChangeSelectedProductTransaction);
             ChangeProduct = _stateMachine.CreateCommand(TransactionsTriggers.ChangeProduct, ChangeSelectedProductTransaction);
-            AddProductTransaction = new RelayCommand(obj => ProductTransaction.Add(new ProductTransaction()));
+            AddProductTransaction = new RelayCommand(obj =>
+            {
+                var productTransaction = new ProductTransaction
+                {
+                    Amount= 1,
+                    UnitPrice =1
+                };
+                if(ProductTransactions.Count > 0)
+                {
+                    productTransaction.Store = ProductTransactions.Last().Store;
+                }
+                ProductTransactions.Add(productTransaction);
+            });
             Finish = _stateMachine.CreateCommand(TransactionsTriggers.Finish);
+        }
+
+        public void GenerateNewTransaction()
+        {
+            Transaction = new Transaction
+            {
+                Id = 0,
+                ProductTransactions = new ObservableCollection<ProductTransaction>(),
+                DateTime = DateTime.Now,
+            };
+        }
+
+        public void SetTransaction(Transaction transaction)
+        {
+            Transaction = transaction;
+        }
+
+        private void UpdateOrCreateTransaction()
+        {
+            // Updating transaction
+            if (Transaction.Id > 0)
+            {
+                _transactionAnalysis.UpdateTransaction(Transaction);
+            }
+            else // Adding new transaction
+            {
+                _transactionAnalysis.AddTransaction(Transaction);
+            }
+            _stateMachine.Fire(TransactionsTriggers.Finish);
+
         }
 
         private void ChangeSelectedProductTransaction(object obj)

@@ -49,5 +49,11 @@ namespace HomeEconomicSystem.BL.V1
             oldTransaction.ProductTransactions = transaction.ProductTransactions;
             _db.SaveChanges();
         }
+
+        public void AddTransaction(Transaction transaction)
+        {
+            _db.Transactions.Add(transaction);
+            _db.SaveChanges();
+        }
     }
 }

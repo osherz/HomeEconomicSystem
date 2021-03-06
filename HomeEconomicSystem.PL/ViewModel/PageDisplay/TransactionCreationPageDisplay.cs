@@ -1,4 +1,5 @@
-﻿using HomeEconomicSystem.PL.View;
+﻿using HomeEconomicSystem.BE;
+using HomeEconomicSystem.PL.View;
 using HomeEconomicSystem.PL.ViewModel.Transactions;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
     public class TransactionCreationPageDisplay : IPageDisplay
     {
+        private CreateTransactionVM _vm;
         public string State => "NotImplementedException";
 
         public bool HasItems => false;
@@ -22,7 +24,18 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
         public TransactionCreationPageDisplay()
         {
             Content = new CreateTransactionView();
-            Content.DataContext = new CreateTransactionVM();
+            _vm = new CreateTransactionVM();
+            Content.DataContext = _vm;
+        }
+
+        public void SetTransaction(Transaction transaction)
+        {
+            _vm.SetTransaction(transaction);
+        }
+
+        public void GenerateTransaction()
+        {
+            _vm.GenerateNewTransaction();
         }
     }
 }

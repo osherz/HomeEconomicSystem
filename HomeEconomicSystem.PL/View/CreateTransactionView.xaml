@@ -107,7 +107,7 @@
             <ScrollViewer  Grid.Row="1" 
                 HorizontalAlignment="Stretch" 
                 VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding ProductTransaction}" DockPanel.Dock="Top" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True">
+                <ItemsControl ItemsSource="{Binding ProductTransactions}" DockPanel.Dock="Top" HorizontalAlignment="Center" ScrollViewer.CanContentScroll="True">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
