@@ -22,7 +22,7 @@ namespace HomeEconomicSystem.BL.V1
 
         public void AddCategory(Category category)
         {
-            if(_validation.Validate(category))
+            if(!_validation.Validate(category))
                 throw (new ArgumentException("Category must have: Id, Name."));
 
             _db.Categories.Add(category);
@@ -31,7 +31,7 @@ namespace HomeEconomicSystem.BL.V1
 
         public void DeleteCategory(Category category)
         {
-            if (_validation.Validate(category))
+            if (!_validation.Validate(category))
                 throw (new ArgumentException("Category must have: Id, Name."));
 
             _db.Categories.Remove(category);
@@ -65,7 +65,7 @@ namespace HomeEconomicSystem.BL.V1
 
         public void EditStore(Store store)
         {
-            if (_validation.Validate(store))
+            if (!_validation.Validate(store))
                 throw (new ArgumentException("Store must have: Id, Name, Address, initialized List of ProductTransaction."));
 
             Store oldStore= _db.Stores.Single(p => p.Id == store.Id);
