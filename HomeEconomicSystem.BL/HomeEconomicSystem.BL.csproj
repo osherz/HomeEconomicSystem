@@ -65,6 +65,7 @@
     <Compile Include="V1\AssosiationProductsAnalysis.cs" />
     <Compile Include="V1\DataManagement.cs" />
     <Compile Include="V1\TransactionAnalysis.cs" />
+    <Compile Include="V1\Validation.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HomeEconomicSystem.BE\HomeEconomicSystem.BE.csproj">
