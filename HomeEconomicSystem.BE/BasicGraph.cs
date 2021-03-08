@@ -49,7 +49,7 @@ namespace HomeEconomicSystem.BE
 
         private GraphType _graphType;
         public GraphType GraphType { get => _graphType; set => SetProperty(ref _graphType, value); }
-
+        
         private AmountOrCost _amountOrCost;
         public AmountOrCost AmountOrCost { get => _amountOrCost; set => SetProperty(ref _amountOrCost, value); }
 

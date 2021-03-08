@@ -11,37 +11,48 @@ namespace HomeEconomicSystem.BL.V1
     class GraphManagement : IGraphManagement
     {
         private IDb _db;
+        private Validation _validation;
         public GraphManagement()
         {
             _db = new DalFactory().GetDb();
+            _validation = new Validation();
         }
         public void AddGraph(CategoryGraph categoryGraph)
         {
+            if (!_validation.Validate(categoryGraph))
+                throw (new ArgumentException());
+
             _db.CategoryGraphs.Add(categoryGraph);
             _db.SaveChanges();
         }
 
         public void AddGraph(ProductGraph productGraph)
         {
+            if (!_validation.Validate(productGraph))
+                throw (new ArgumentException());
             _db.ProductGraphs.Add(productGraph);
             _db.SaveChanges();
         }
 
         public void AddGraph(StoreGraph storeGraph)
         {
+            if (!_validation.Validate(storeGraph))
+                throw (new ArgumentException());
             _db.StoreGraphs.Add(storeGraph);
             _db.SaveChanges();
         }
 
         public void AddGraph(TransactionsGraph transactionsGraph)
         {
+            if (!_validation.Validate(transactionsGraph))
+                throw (new ArgumentException());
             _db.TransactionsGraphs.Add(transactionsGraph);
             _db.SaveChanges();
         }
 
         public void DeleteGraph(BasicGraph graph)
         {
-            if(graph is CategoryGraph)
+            if (graph is CategoryGraph)
             {
                 _db.CategoryGraphs.Remove(graph as CategoryGraph);
             }
