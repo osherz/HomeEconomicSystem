@@ -26,8 +26,7 @@ namespace HomeEconomicSystem.BL.V1
                 throw (new ArgumentException("Category must have: Id, Name."));
 
             _db.Categories.Add(category);
-            _db.SaveChanges();
-            
+            _db.SaveChanges();            
         }
 
         public void DeleteCategory(Category category)
