@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace HomeEconomicSystem.PL.View
 {
     /// <summary>
-    /// Interaction logic for ProductCatalogView.xaml
+    /// Interaction logic for ProductView.xaml
     /// </summary>
     public partial class ProductCatalogView : UserControl
     {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HomeEconomicSystem.PL.ViewModel.ProductCatalog
+namespace HomeEconomicSystem.PL.ViewModel.Catalog
 {
-    public enum States
+    public enum CatalogStates
     {
         MainState,
         SavingChangesCatalog,
