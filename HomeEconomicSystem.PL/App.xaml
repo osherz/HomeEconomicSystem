@@ -26,6 +26,18 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
+            <Style TargetType="Button" x:Key="IconButton" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Padding" Value="5 0 5 0" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="Transparent" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
 
     </Application.Resources>

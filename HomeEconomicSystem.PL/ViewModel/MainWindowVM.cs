@@ -45,10 +45,10 @@ namespace HomeEconomicSystem.PL.ViewModel
 
             _stateActionDict = new Dictionary<States, Action>
             {
-                {States.Home, ()=>PageDisplay=homePageDisplay },
-                {States.DataAnalysis, ()=>PageDisplay=dataAnalysisDisplay },
-                {States.ProductCatalog, ()=>PageDisplay=productCatalogDisplay },
-                {States.TransactionHistory, ()=>PageDisplay=transactionHistoryDisplay },
+                {States.Home, ()=>PageDisplay=new HomePageDisplay() },
+                {States.DataAnalysis, ()=>PageDisplay=new DataAnalysisPageDisplay() },
+                {States.ProductCatalog, ()=>PageDisplay=new CatalogPageDisplay() },
+                {States.TransactionHistory, ()=>PageDisplay=new TransactionHistoryPageDisplay(_stateMachine) },
                 {States.TransactionCreation,
                     ()=> {
                         transactionCreationDisplay.GenerateTransaction();

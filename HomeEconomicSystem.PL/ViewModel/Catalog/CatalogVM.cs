@@ -1,5 +1,6 @@
 ﻿using HomeEconomicSystem.BE;
 using HomeEconomicSystem.BL;
+using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
 using HomeEconomicSystem.PL.View;
 using HomeEconomicSystem.Utils;
@@ -12,6 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace HomeEconomicSystem.PL.ViewModel.Catalog
 {
@@ -29,6 +31,29 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
 
         ObservableCollection<Category> _categories;
         public ObservableCollection<Category> Categories { get => _categories; set => SetProperty(ref _categories, value); }
+
+        private Category _category;
+        public Category SelectedCategory
+        {
+            get { return _category; }
+            set { SetProperty(ref _category, value); }
+        }
+
+        private Product _product;
+        public Product SelectedProduct
+        {
+            get { return _product; }
+            set { SetProperty(ref _product, value); }
+        }
+
+        private bool _editMode;
+
+        public bool EditMode
+        {
+            get { return _editMode; }
+            set { SetProperty(ref _editMode, value); }
+        }
+
 
         private bool _showProducts;
         public bool ShowProducts
@@ -53,7 +78,10 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
             set => SetProperty(ref _searchText, value);
         }
 
-
+        public ICommand EditCategory { get; }
+        public ICommand EditProduct { get; }
+        public ICommand Finish { get; }
+        public ICommand Cancel { get; }
 
         public CatalogVM()
         {
@@ -61,8 +89,40 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
             ProductCatalogVM productVM = new ProductCatalogVM();
             _productsModel = new ProductsModel();
             _categoriesModel = new CategoriesModel();
+            Dictionary<CatalogStates, Action> statesEntryAction = GetStatesEntryAction();
+            Dictionary<CatalogStates, Action> statesExitAction = GetStatesExitAction();
 
-            var statesEntryAction = new Dictionary<CatalogStates, Action>{
+            CatalogStateMachine = new CatalogStateMachine(statesEntryAction, statesExitAction);
+            EditCategory = CatalogStateMachine.CreateCommand(
+                CatalogTriggers.Edit,
+                obj =>
+                {
+                    SelectedProduct = null;
+                    SelectedCategory = new Category();
+                    (obj as Category).Copy(SelectedCategory);
+                });
+            EditProduct = CatalogStateMachine.CreateCommand(
+                CatalogTriggers.Edit,
+                obj =>
+                {
+                    SelectedCategory = null;
+                    SelectedProduct = new Product();
+                    (obj as Product).Copy(SelectedProduct);
+                });
+            Finish = CatalogStateMachine.CreateCommand(CatalogTriggers.Finish);
+            Cancel = CatalogStateMachine.CreateCommand(CatalogTriggers.Cancel);
+
+            Products = _productsModel.ProductsList;
+            Categories = _categoriesModel.CategoriesList;
+            ShowCategories = true;
+            ShowProducts = false;
+
+            CatalogStateMachine.Fire(CatalogTriggers.ProductCatalogSelected);
+        }
+
+        private Dictionary<CatalogStates, Action> GetStatesEntryAction()
+        {
+            return new Dictionary<CatalogStates, Action>{
                 {
                     CatalogStates.ProductCatalog, ()=>
                     {
@@ -92,16 +152,34 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
                         _productsModel.Filter(SearchText);
                         CatalogStateMachine.Fire(CatalogTriggers.SearchSucceeded);
                     }
+                },
+                { CatalogStates.EditingCategory, () => EditMode = true },
+                { CatalogStates.EditingProduct, () => EditMode = true },
+                {
+                    CatalogStates.SavingCategory, () =>
+                    {
+                        _categoriesModel.Update(SelectedCategory);
+                        SelectedCategory = null;
+                        CatalogStateMachine.Fire(CatalogTriggers.Finish);
+                    }
+                },
+                {
+                    CatalogStates.SavingProduct, () =>
+                    {
+                        _productsModel.Update(SelectedProduct);
+                        SelectedProduct = null;
+                        CatalogStateMachine.Fire(CatalogTriggers.Finish);
+                    }
                 }
             };
-            //TODO: Concat to productView state machine dictionary.
+        }
 
-            CatalogStateMachine = new CatalogStateMachine(statesEntryAction);
-
-            Products = _productsModel.ProductsList;
-            Categories = _categoriesModel.CategoriesList;
-            ShowCategories = true;
-            ShowProducts = false;
+        private Dictionary<CatalogStates, Action> GetStatesExitAction()
+        {
+            return new Dictionary<CatalogStates, Action>{
+                { CatalogStates.EditingCategory, () => EditMode = false },
+                { CatalogStates.EditingProduct, () => EditMode = false },
+            };
         }
 
         private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")

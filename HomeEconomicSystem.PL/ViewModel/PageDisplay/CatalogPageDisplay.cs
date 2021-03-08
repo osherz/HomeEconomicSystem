@@ -38,10 +38,10 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
         public CatalogPageDisplay()
         {
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
-            CatalogVM productCatalogVM = new CatalogVM();
+            CatalogVM catalogVM = new CatalogVM();
             Content = new View.CatalogView();
-            Content.DataContext = productCatalogVM;
-            _stateMachine = productCatalogVM.CatalogStateMachine;
+            Content.DataContext = catalogVM;
+            _stateMachine = catalogVM.CatalogStateMachine;
             _stateMachine.OnTransitionCompleted(t => State = t.Destination.ToString());
 
             MenuItems = new List<MenuItem>

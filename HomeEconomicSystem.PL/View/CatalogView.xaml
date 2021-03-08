@@ -9,92 +9,110 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance VM:CatalogVM}">
-    <StackPanel>
-        <TextBox 
-                        x:Name="DemoItemsSearchBox"
-                        Width="auto"
-                        Margin="10"
-                        Padding="10"
-                        FontSize="20"
-                        TextAlignment="Center"
-                        materialDesign:HintAssist.Hint="Search"  
-                        materialDesign:HintAssist.IsFloating="True"
-                        materialDesign:TextFieldAssist.HasClearButton="True"
-                        materialDesign:TextFieldAssist.HasOutlinedTextField="True"
-                        materialDesign:TextFieldAssist.DecorationVisibility="Collapsed"
-                        materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
-                        Text="{Binding SearchText, Mode=OneWayToSource}"
-                        />
+    <materialDesign:DialogHost IsOpen="{Binding EditMode}">
+        <materialDesign:DialogHost.DialogContent>
+            <Grid Margin="10" Width="150" MaxHeight="500">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-        <ItemsControl ItemsSource="{Binding Categories}"
+                <UserControls:CategoryUC Grid.Row="0" 
+                                         DataContext="{Binding SelectedCategory}"
+                                         Visibility="{Binding ., Converter={StaticResource NullableToVisibilityConverter}}"
+                                         EditMode="True" />
+                
+                <UserControls:ProductUC Grid.Row="0" 
+                                        DataContext="{Binding SelectedProduct}"
+                                        Visibility="{Binding ., Converter={StaticResource NullableToVisibilityConverter}}"
+                                        EditMode="True" />
+
+                <Button Grid.Row="1" Margin="0 10 0 0" Command="{Binding Finish}" HorizontalAlignment="Right">סיימתי</Button>
+                <Button Grid.Row="1" Margin="0 10 0 0" Background="Red" Command="{Binding Cancel}" HorizontalAlignment="Left">ביטול</Button>
+            </Grid>
+        </materialDesign:DialogHost.DialogContent>
+
+        <StackPanel>
+            <TextBox 
+            x:Name="ItemsSearchBox"
+            Width="auto"
+            Margin="10"
+            Padding="10"
+            FontSize="20"
+            TextAlignment="Center"
+            materialDesign:HintAssist.Hint="Search"  
+            materialDesign:HintAssist.IsFloating="True"
+            materialDesign:TextFieldAssist.HasClearButton="True"
+            materialDesign:TextFieldAssist.HasOutlinedTextField="True"
+            materialDesign:TextFieldAssist.DecorationVisibility="Collapsed"
+            materialDesign:TextFieldAssist.TextFieldCornerRadius="4"
+            Text="{Binding SearchText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+            />
+
+            <ItemsControl ItemsSource="{Binding Categories}"
                       Visibility="{Binding ShowCategories, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <materialDesign:Card Margin="10" Padding="10" Width="150" Height="150">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2*" />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="2*" />
-                            </Grid.ColumnDefinitions>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Card Margin="10" Padding="10 0 10 0" Width="150" Height="150">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Button Style="{StaticResource IconButton}"
+                                        Command="{Binding DataContext.EditCategory, RelativeSource={RelativeSource AncestorType=local:CatalogView}}"
+                                        CommandParameter="{Binding .}">
+                                    <materialDesign:PackIcon Kind="Edit" />
+                                </Button>
+                                <UserControls:CategoryUC Grid.Row="1"
+                                                         DataContext="{Binding .}" />
+                            </Grid>
+                        </materialDesign:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-                            <UserControls:ImageEditAble Grid.Row="0" Grid.ColumnSpan="2"
-                                Source="{Binding ImageFileName}" EditMode="False" VerticalAlignment="Top" />
-
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="שם:" />
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Name}" />
-                        </Grid>
-                    </materialDesign:Card>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
-        <ItemsControl ItemsSource="{Binding Products}"
+            <ItemsControl ItemsSource="{Binding Products}"
                       Visibility="{Binding ShowProducts, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <materialDesign:Card Margin="10" Padding="10" Width="150" Height="150">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2*" />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="2*" />
-                            </Grid.ColumnDefinitions>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <materialDesign:Card Margin="10" Padding="10" Width="150" Height="auto">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Button Style="{StaticResource IconButton}"
+                                        Command="{Binding DataContext.EditProduct, RelativeSource={RelativeSource AncestorType=local:CatalogView}}"
+                                        CommandParameter="{Binding .}">
+                                    <materialDesign:PackIcon Kind="Edit" />
+                                </Button>
+                                <UserControls:ProductUC Grid.Row="1"
+                                                         DataContext="{Binding .}" />
+                            </Grid>
+                        </materialDesign:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-                            <UserControls:ImageEditAble Grid.Row="0" Grid.ColumnSpan="2"
-                                Source="{Binding ImageFileName}" EditMode="False" VerticalAlignment="Top" />
-
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="שם:" />
-                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Name}" />
-                        </Grid>
-                    </materialDesign:Card>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
-        <!--
+            <!--
         <UC:ProductPanel Product="{Binding Products}"
                          Visibility="{Bindning ShowProducts}"/>
         
         <UC:CategoryPanel Categories="{Binding Categories}"
                          Visibility="{Bindning ShowCategories}"/>-->
-    </StackPanel>
+        </StackPanel>
+    </materialDesign:DialogHost>
 </UserControl>

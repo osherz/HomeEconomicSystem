@@ -333,12 +333,15 @@
     <Compile Include="View\TransactionHistoryView.xaml.cs">
       <DependentUpon>TransactionHistoryView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\UserControls\CategoryUC.xaml.cs">
+      <DependentUpon>CategoryUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserControls\DateRangeUC.xaml.cs">
       <DependentUpon>DateRangeUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\DropDownPoints.cs" />
-    <Compile Include="View\UserControls\EditAbleTextBox.xaml.cs">
-      <DependentUpon>EditAbleTextBox.xaml</DependentUpon>
+    <Compile Include="View\UserControls\TextBlockEditAble.xaml.cs">
+      <DependentUpon>TextBlockEditAble.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\GraphCreationDialog.xaml.cs">
       <DependentUpon>GraphCreationDialog.xaml</DependentUpon>
@@ -358,9 +361,6 @@
     </Compile>
     <Compile Include="View\UserControls\MenuItemUC.xaml.cs">
       <DependentUpon>MenuItemUC.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\UserControls\ProductCardUC.xaml.cs">
-      <DependentUpon>ProductCardUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\ProductTransactionUC.xaml.cs">
       <DependentUpon>ProductTransactionUC.xaml</DependentUpon>
@@ -423,11 +423,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\UserControls\CategoryUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\UserControls\DateRangeUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\UserControls\EditAbleTextBox.xaml">
+    <Page Include="View\UserControls\TextBlockEditAble.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -452,10 +456,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserControls\MenuItemUC.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\UserControls\ProductCardUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

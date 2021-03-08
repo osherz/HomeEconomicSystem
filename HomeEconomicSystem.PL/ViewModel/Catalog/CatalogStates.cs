@@ -9,23 +9,23 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
     public enum CatalogStates
     {
         MainState,
-        SavingChangesCatalog,
 
         ProductCatalog, 
         SearchingProduct,
-        ProductSelected,
         SearchProductComplete,
-        ProductNoSelected,
-        EditingProduct, 
+        EditingProduct,
+        ProductDeleting,
+        ProductDeleted,
+        SavingProduct,
+        SavingProductComplete,
 
         CategoryCatalog,
         SearchingCategory,
-        CategorySelected,
         SearchCategoryComplete,
-        CategoryNoSelected,
         EditingCategory,
-        CategoryCreated,
+        CategoryDeleting,
         CategoryDeleted,
-        SearchComplete
+        SavingCategory,
+        SavingCategoryComplete
     }
 }

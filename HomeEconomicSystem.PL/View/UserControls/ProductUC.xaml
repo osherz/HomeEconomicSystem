@@ -4,9 +4,36 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
+             xmlns:entity="clr-namespace:HomeEconomicSystem.BE;assembly=HomeEconomicSystem.BE"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance entity:Product}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <local:ImageEditAble Grid.Row="0" Grid.ColumnSpan="2"  Background="Transparent"
+                                Source="{Binding ImageFileName, Mode=TwoWay}" VerticalAlignment="Top"
+                                 EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductUC}}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="ברקוד:" />
+        <local:TextBlockEditAble Grid.Row="1" Grid.Column="1" Text="{Binding BarCode, Mode=TwoWay}"
+                                 EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductUC}}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="שם:" />
+        <local:TextBlockEditAble Grid.Row="2" Grid.Column="1" Text="{Binding Name, Mode=TwoWay}" 
+                                 EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductUC}}"/>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="תיאור:" />
+        <local:TextBlockEditAble Grid.Row="3" Grid.Column="1" Text="{Binding Description, Mode=TwoWay}"
+                                 EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductUC}}" />
     </Grid>
 </UserControl>

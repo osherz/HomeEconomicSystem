@@ -25,6 +25,11 @@ namespace HomeEconomicSystem.PL.Model
             ProductsList = new ObservableCollection<Product>();
         }
 
+        public void Update(Product product)
+        {
+            _dataMenegement.EditProduct(product);
+        }
+
         public void Filter(string name = "", params Category[] categories)
         {
             ProductsList.Clear();
