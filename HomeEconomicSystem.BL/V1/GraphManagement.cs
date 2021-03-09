@@ -108,300 +108,145 @@ namespace HomeEconomicSystem.BL.V1
         #endregion
 
         #region AnalyzeGraph
-        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(CategoryGraph categoryGraph)
+
+        private IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(BasicGraph graph, IEnumerable<ProductTransaction> productTransactions, Func<ProductTransaction,int> getKey)
         {
+            (DateTime endDate, DateTime startDate) = GetEndAndStartDates(graph.EndDate.Value, graph.StartDate.Value, graph.PastTimeType.Value, graph.PastTimeAmount.Value);
+            AmountOrCost amountOrCost = graph.AmountOrCost;
+            TimeType aggregationTimeType = graph.AggregationTimeType;
 
+            var dailyCategoryGroups =
+                            from productTransaction in productTransactions
+                            where productTransaction.Transaction.DateTime.InRange(startDate, endDate)
+                            group productTransaction by getKey(productTransaction) into newGroup1
+                            from newGroup2 in
+                                    (from productTransaction in newGroup1
+                                     group productTransaction by GetTimeType(productTransaction.Transaction.DateTime, aggregationTimeType))
+                            group newGroup2 by newGroup1.Key;
 
-            IEnumerable<(double, double)> points = new List<(double, double)>();
-            IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(categoryGraph);
+            IEnumerable<int> xCollection = GetXcollectios(startDate, endDate, aggregationTimeType);
+            return GetGroupsPoints(dailyCategoryGroups, amountOrCost, xCollection);
+        }
 
-            ICollection<Category> categories = categoryGraph.Categories;
-            DateTime StartDate = (DateTime)categoryGraph.StartDate;
-            DateTime EndDate = (DateTime)categoryGraph.StartDate;
-            AmountOrCost amountOrCost = categoryGraph.AmountOrCost;
-            TimeType AggregationTimeType = categoryGraph.AggregationTimeType;
+        private (DateTime,DateTime) GetEndAndStartDates(DateTime endDate, DateTime startDate, TimeType pastTimeType, int pastTimeAmount)
+        {
+            if (startDate == null && endDate == null)
+                return (AddPastTime(pastTimeType, pastTimeAmount), DateTime.Now);
+            return (endDate, startDate);
+        }
 
-            switch (AggregationTimeType)
+        private DateTime AddPastTime(TimeType PastTimeType, int pastTimeAmount)
+        {
+            pastTimeAmount = (-1)*(pastTimeAmount);
+            switch (PastTimeType)
             {
                 case TimeType.Day:
-                    var dailyCategoryGroups =
-                            from productTransaction1 in productTransactions
-                            where productTransaction1.Transaction.DateTime.InRange(StartDate, EndDate)
-                            group productTransaction1 by productTransaction1.Product.Category.Id into newGroup1
-                            from newGroup2 in
-                                    (from productTransaction1 in newGroup1
-                                     group productTransaction1 by productTransaction1.Transaction.DateTime.DayOfYear)
-                            group newGroup2 by newGroup1.Key;                    
-                    return GetGroupsPoints(dailyCategoryGroups, amountOrCost);
+                    return DateTime.Now.AddDays(pastTimeAmount);
                     break;
                 case TimeType.Week:
-                    var weeklyCategoryGroups =
-                            from productTransaction1 in productTransactions
-                            where productTransaction1.Transaction.DateTime.InRange(StartDate, EndDate)
-                            group productTransaction1 by productTransaction1.Product.Category.Id into newGroup1
-                            from newGroup2 in
-                                    (from productTransaction1 in newGroup1
-                                     group productTransaction1 by productTransaction1.Transaction.DateTime.weekProjector())
-                            group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(weeklyCategoryGroups, amountOrCost);
+                    return DateTime.Now.AddDays(pastTimeAmount * 7);
                     break;
                 case TimeType.Month:
-                    var monthlyCategoryGroups =
-                                                from productTransaction1 in productTransactions
-                                                where productTransaction1.Transaction.DateTime.InRange(StartDate, EndDate)
-                                                group productTransaction1 by productTransaction1.Product.Category.Id into newGroup1
-                                                from newGroup2 in
-                                                        (from productTransaction1 in newGroup1
-                                                         group productTransaction1 by productTransaction1.Transaction.DateTime.Month)
-                                                group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(monthlyCategoryGroups, amountOrCost); 
+                    return DateTime.Now.AddMonths(pastTimeAmount);
                     break;
                 case TimeType.Year:
-                    var yearlyCategoryGroups =
-                                                from productTransaction1 in productTransactions
-                                                where productTransaction1.Transaction.DateTime.InRange(StartDate, EndDate)
-                                                group productTransaction1 by productTransaction1.Product.Category.Id into newGroup1
-                                                from newGroup2 in
-                                                        (from productTransaction1 in newGroup1
-                                                         group productTransaction1 by productTransaction1.Transaction.DateTime.Year)
-                                                group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(yearlyCategoryGroups, amountOrCost);
+                    return DateTime.Now.AddYears(pastTimeAmount);
                     break;
                 default:
-                    throw new ArgumentException("AggregationTimeType not set properly");
+                    throw new ArgumentException("TimeType not initialized properly");
                     break;
             }
+        }
+
+        private IEnumerable<int> GetXcollectios(DateTime StartDate, DateTime EndDate, TimeType aggregationTimeType)
+        {
+            int startKey = GetTimeType(StartDate, aggregationTimeType);
+            int endKey = GetTimeType(EndDate, aggregationTimeType);
+            while (startKey <= endKey)
+            {
+                yield return startKey;
+                startKey += 1;
+            }
+        }
+
+        private int GetTimeType(DateTime dateTime, TimeType timeType)
+        {
+            switch (timeType)
+            {
+                case TimeType.Day:
+                    return dateTime.DayOfYear;
+                    break;
+                case TimeType.Week:
+                    return dateTime.weekProjector();
+                    break;
+                case TimeType.Month:
+                    return dateTime.Month;
+                    break;
+                case TimeType.Year:
+                    return dateTime.Year;
+                    break;
+                default:
+                    throw new ArgumentException("TimeType not initialized properly");
+                    break;
+            }
+        }
+        
+        public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(CategoryGraph categoryGraph)
+        {
+            IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(categoryGraph);
+
+            return AnalyzeGraph(categoryGraph, productTransactions, pd => pd.Product.Category.Id); 
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(ProductGraph productGraph)
         {
-            IEnumerable<(double, double)> points = new List<(double, double)>();
             IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(productGraph);
 
-            DateTime StartDate = (DateTime)productGraph.StartDate;
-            DateTime EndDate = (DateTime)productGraph.StartDate;
-            AmountOrCost amountOrCost = productGraph.AmountOrCost;
-            TimeType AggregationTimeType = productGraph.AggregationTimeType;
-
-
-            switch (AggregationTimeType)
-            {
-                case TimeType.Day:
-                    var dailyProductGroups =
-                            from productTransaction in productTransactions
-                            where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                            group productTransaction by productTransaction.Product.Id into newGroup1
-                            from newGroup2 in
-                                    (from productTransaction1 in newGroup1
-                                     group productTransaction1 by productTransaction1.Transaction.DateTime.DayOfYear)
-                            group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(dailyProductGroups, amountOrCost);
-                    break;
-                case TimeType.Week:
-                    var weeklyProductGroups =
-                            from productTransaction in productTransactions
-                            where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                            group productTransaction by productTransaction.Product.Id into newGroup1
-                            from newGroup2 in
-                                    (from productTransaction1 in newGroup1
-                                     group productTransaction1 by productTransaction1.Transaction.DateTime.DayOfYear)
-                            group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(weeklyProductGroups, amountOrCost);
-                    break;
-                case TimeType.Month:
-                    var monthlyProductGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Product.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.DayOfYear)
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(monthlyProductGroups, amountOrCost);
-                    break;
-                case TimeType.Year:
-                    var yearlyProductGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Product.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.DayOfYear)
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(yearlyProductGroups, amountOrCost);
-                    break;
-                default:
-                    throw new ArgumentException("AggregationTimeType not set properly");
-                    break;
-            }
+            return AnalyzeGraph(productGraph, productTransactions, pd => pd.Product.Id);
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(StoreGraph storeGraph)
         {
-            IEnumerable<(double, double)> points = new List<(double, double)>();
             IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(storeGraph);
 
-            DateTime StartDate = (DateTime)storeGraph.StartDate;
-            DateTime EndDate = (DateTime)storeGraph.StartDate;
-            AmountOrCost amountOrCost = storeGraph.AmountOrCost;
-            TimeType AggregationTimeType = storeGraph.AggregationTimeType;
-
-
-            switch (AggregationTimeType)
-            {
-                case TimeType.Day:
-                    var dailyStoreGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Store.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.DayOfYear)
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(dailyStoreGroups, amountOrCost);
-                    break;
-                case TimeType.Week:
-                    var weeklyStoreGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Store.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.weekProjector())
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(weeklyStoreGroups, amountOrCost);
-                    break;
-                case TimeType.Month:
-                    var monthlyStoreGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Store.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.Month)
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(monthlyStoreGroups, amountOrCost);
-                    break;
-                case TimeType.Year:
-                    var yearlyStoreGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Store.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.Year)
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(yearlyStoreGroups, amountOrCost);
-                    break;
-                default:
-                    throw new ArgumentException("AggregationTimeType not set properly");
-                    break;
-            }           
+            return AnalyzeGraph(storeGraph, productTransactions, pd => pd.Store.Id);         
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(TransactionsGraph transactionsGraph)
         {
-            IEnumerable<(double, double)> points = new List<(double, double)>();
             IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(transactionsGraph);
 
-            DateTime StartDate = (DateTime)transactionsGraph.StartDate;
-            DateTime EndDate = (DateTime)transactionsGraph.StartDate;
-            AmountOrCost amountOrCost = transactionsGraph.AmountOrCost;
-            TimeType AggregationTimeType = transactionsGraph.AggregationTimeType;
-
-            switch (AggregationTimeType)
-            {
-                case TimeType.Day:
-                    var dailyTransactionGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Transaction.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.DayOfYear)
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(dailyTransactionGroups, amountOrCost);
-                    break;
-                case TimeType.Week:
-                    var weeklyTransactionGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Transaction.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.weekProjector())
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(weeklyTransactionGroups, amountOrCost);
-                    break;
-                case TimeType.Month:
-                    var monthlyTransactionGroups =
-                           from productTransaction in productTransactions
-                           where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                           group productTransaction by productTransaction.Transaction.Id into newGroup1
-                           from newGroup2 in
-                                   (from productTransaction1 in newGroup1
-                                    group productTransaction1 by productTransaction1.Transaction.DateTime.Month)
-                           group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(monthlyTransactionGroups, amountOrCost);
-                    break;
-                case TimeType.Year:
-                    var yearlyTransactionGroups =
-                            from productTransaction in productTransactions
-                            where productTransaction.Transaction.DateTime.InRange(StartDate, EndDate)
-                            group productTransaction by productTransaction.Transaction.Id into newGroup1
-                            from newGroup2 in
-                                    (from productTransaction1 in newGroup1
-                                     group productTransaction1 by productTransaction1.Transaction.DateTime.Year)
-                            group newGroup2 by newGroup1.Key;
-                    return GetGroupsPoints(yearlyTransactionGroups, amountOrCost);
-                    break;
-                default:
-                    throw new ArgumentException("AggregationTimeType not set properly");
-                    break;
-            }
+            return AnalyzeGraph(transactionsGraph, productTransactions, pd => pd.Transaction.Id);
         }
 
-        private Dictionary<int, IEnumerable<(double, double)>> GetGroupsPoints(IEnumerable<IGrouping<int, IGrouping<int,ProductTransaction>>> groupingGroups, AmountOrCost amountOrCost)
+        private Dictionary<int, IEnumerable<(double, double)>> GetGroupsPoints(IEnumerable<IGrouping<int, IGrouping<int,ProductTransaction>>> groupingGroups, AmountOrCost amountOrCost, IEnumerable<int> xCollection)
         {
             Dictionary<int, IEnumerable<(double, double)>> analyzeGraph = new Dictionary<int, IEnumerable<(double, double)>>();
-            switch (amountOrCost)
+            foreach (var superGroup in groupingGroups)
             {
-                case AmountOrCost.Amount:
-                    foreach (var superGroup in groupingGroups)
+                Dictionary<double, double> points = new Dictionary<double, double>();
+                xCollection.ToList().ForEach(x => points.Add(x, 0));
+                foreach (var subGroup in superGroup)
+                {
+                    double temp = 0;
+                    foreach (var producrTransaction in subGroup)
                     {
-                        IEnumerable<(double, double)> points = new List<(double, double)>();
-                        foreach (var subGroup in superGroup)
+                        switch (amountOrCost)
                         {
-                            double amount = 0;
-                            foreach (var producrTransaction in subGroup)
-                            {
-                                amount += (producrTransaction.Amount);
-                            }
-                            points.ToList().Add((subGroup.Key, amount));
+                            case AmountOrCost.Amount:
+                                temp += (producrTransaction.Amount);
+                                break;
+                            case AmountOrCost.Cost:
+                                temp += (producrTransaction.UnitPrice * producrTransaction.Amount);
+                                break;
+                            default:
+                                break;
                         }
-                        analyzeGraph.Add(superGroup.Key, points);
                     }
-                    break;
-                case AmountOrCost.Cost:
-                    foreach (var superGroup in groupingGroups)
-                    {
-                        IEnumerable<(double, double)> points = new List<(double, double)>();
-                        foreach (var subGroup in superGroup)
-                        {
-                            double cost = 0;
-                            foreach (var producrTransaction in subGroup)
-                            {
-                                cost += (producrTransaction.UnitPrice * producrTransaction.Amount);
-                            }
-                            points.ToList().Add((subGroup.Key, cost));
-                        }
-                        analyzeGraph.Add(superGroup.Key, points);
-                    }
-                    break;
-                default:
-                    throw new ArgumentException("AmountOrCost not set properly");
-                    break;
-            }            
+                    points[subGroup.Key] = temp;
+                }
+                analyzeGraph.Add(superGroup.Key, points.Select(item => (item.Key, item.Value)));
+            }
             return analyzeGraph;
         }
        

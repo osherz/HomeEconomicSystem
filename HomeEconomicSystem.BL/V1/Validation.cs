@@ -20,7 +20,7 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(Category category)
         {
-            if (category.Id <= 0)
+            if (category.Id < 0)
                 return false;
             if (String.IsNullOrEmpty(category.Name))
                 return false;
@@ -42,17 +42,12 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(Product product)
         {
-            if (product.Id <= 0)
+            if (product.Id < 0)
                 return false;
             if (String.IsNullOrEmpty(product.BarCode))
                 return false;
             if (String.IsNullOrEmpty(product.Name))
                 return false;
-            if (String.IsNullOrEmpty(product.Description))
-                return false;
-            //            if (String.IsNullOrEmpty(product.ImageFileName))
-            //                return false;
-
             return true;
         }
 
@@ -64,19 +59,15 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(Store store)
         {
-            if (store.Id <= 0)
+            if (store.Id < 0)
                 return false;
             if (String.IsNullOrEmpty(store.Name))
                 return false;
             if (String.IsNullOrEmpty(store.Address))
                 return false;
-            if (store.ProductTransaction == null || store.ProductTransaction.Count == 0)
-                return false;
 
             return true;
         }
-
-
 
         /// <summary>
         /// Checks if the relevant fields in the class "CategoryGraph"
@@ -125,11 +116,8 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(TransactionsGraph transactionsGraph)
         {
-            //if (transactionsGraph.Transactions == null || transactionsGraph.Transactions.Count >= 0)
-                //  return false;
             return ValidateBaseProperty(transactionsGraph);
         }
-
 
 
         /// <summary>
@@ -144,15 +132,10 @@ namespace HomeEconomicSystem.BL.V1
                 return false;
             if (String.IsNullOrEmpty(basicGraph.Title))
                 return false;
-            if (String.IsNullOrEmpty(basicGraph.Description))
-                return false;
-            ///check if AggregationTimeType have a valid value
-            if (!Enum.IsDefined(typeof(TimeType), basicGraph.AggregationTimeType))
-                return false;
-            if (basicGraph.StartDate == null || basicGraph.EndDate == null)
+            if (basicGraph.StartDate == null || basicGraph.EndDate == null && basicGraph.PastTimeAmount == null || basicGraph.PastTimeType == null)
                 return false;
             ///check if EndDate have a valid value
-            if (DateTime.Compare((DateTime)basicGraph.StartDate, (DateTime)basicGraph.EndDate) < 0)
+            if (DateTime.Compare(basicGraph.StartDate.Value, basicGraph.EndDate.Value) < 0)
                 return false;
             if (basicGraph.PastTimeAmount < 0)
                 return false;
@@ -164,7 +147,7 @@ namespace HomeEconomicSystem.BL.V1
             ///check if AmountOrCost have a valid value
             if (!Enum.IsDefined(typeof(AmountOrCost), basicGraph.AmountOrCost))
                 return false;
-
+            //TODO: create specipice exeption for every check (instad of returns false)
             return true;
         }
 
