@@ -32,6 +32,10 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
         ObservableCollection<Category> _categories;
         public ObservableCollection<Category> Categories { get => _categories; set => SetProperty(ref _categories, value); }
 
+        ObservableCollection<Category> _allCategories;
+        public ObservableCollection<Category> AllCategories { get => _allCategories; set => SetProperty(ref _allCategories, value); }
+
+
         private Category _category;
         public Category SelectedCategory
         {
@@ -114,6 +118,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
 
             Products = _productsModel.ProductsList;
             Categories = _categoriesModel.CategoriesList;
+            AllCategories = _categoriesModel.CategoriesList.ToObservableCollection();
             ShowCategories = true;
             ShowProducts = false;
 

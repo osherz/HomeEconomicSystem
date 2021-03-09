@@ -14,10 +14,11 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
         <local:ImageEditAble Grid.Row="0" Grid.ColumnSpan="2"  Background="Transparent"
@@ -34,6 +35,12 @@
 
         <TextBlock Grid.Row="3" Grid.Column="0" Text="תיאור:" />
         <local:TextBlockEditAble Grid.Row="3" Grid.Column="1" Text="{Binding Description, Mode=TwoWay}"
+                                 EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductUC}}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="קטגוריה:" />
+        <local:TextBlockEditAble Grid.Row="4" Grid.Column="1" SelectedItem="{Binding Category, Mode=TwoWay}"
+                                 Text="{Binding Category.Name}"
+                                 Options="{Binding Categories, RelativeSource={RelativeSource AncestorType=local:ProductUC}}"
                                  EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductUC}}" />
     </Grid>
 </UserControl>

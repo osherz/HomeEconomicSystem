@@ -23,6 +23,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
         private IDataManagement _dataManagement;
         TransactionsStateMachine _stateMachine;
 
+        // TODO: Add option to add new store
+
         private ObservableCollection<ProductTransaction> _productTransaction;
         public ObservableCollection<ProductTransaction> ProductTransactions
         {

@@ -13,13 +13,29 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        
         <TextBlock Grid.Row="0" Grid.Column="0"
             Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble}}"
             Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble},
             Converter={StaticResource BooleanToNoVisibilityConverter}}"/>
-        <TextBox  Grid.Row="0" Grid.Column="0"
-                 Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble}}"
-                 Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble},
-            Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <Grid  Grid.Row="0" Grid.Column="0" 
+               DataContext="{Binding ., RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble}}"
+               Visibility="{Binding EditMode, Converter={StaticResource BooleanToVisibilityConverter}}">
+            
+            <TextBox Text="{Binding Text, Mode=TwoWay}" 
+                     Visibility="{Binding ShowComboBox, Converter={StaticResource BooleanToNoVisibilityConverter}}"/>
+
+            <ComboBox Visibility="{Binding ShowComboBox, Converter={StaticResource BooleanToVisibilityConverter}}"
+                      ItemsSource="{Binding Options}"
+                      SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:NameWithImageItemUC DataContext="{Binding .}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+
     </Grid>
 </UserControl>
