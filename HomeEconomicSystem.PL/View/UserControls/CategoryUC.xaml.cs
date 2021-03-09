@@ -16,10 +16,11 @@ using System.Windows.Shapes;
 namespace HomeEconomicSystem.PL.View.UserControls
 {
     /// <summary>
-    /// Interaction logic for ProductUC.xaml
+    /// Interaction logic for CategoryUC.xaml
     /// </summary>
-    public partial class ProductUC : UserControl
+    public partial class CategoryUC : UserControl
     {
+
 
         public bool EditMode
         {
@@ -29,10 +30,11 @@ namespace HomeEconomicSystem.PL.View.UserControls
 
         // Using a DependencyProperty as the backing store for EditMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EditModeProperty =
-            DependencyProperty.Register("EditMode", typeof(bool), typeof(ProductUC), new PropertyMetadata(false));
+            DependencyProperty.Register("EditMode", typeof(bool), typeof(CategoryUC), new PropertyMetadata(false));
 
 
-        public ProductUC()
+
+        public CategoryUC()
         {
             InitializeComponent();
         }

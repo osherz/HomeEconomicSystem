@@ -27,11 +27,6 @@
         </Grid.ColumnDefinitions>
 
         <Grid.Resources>
-            <Style TargetType="Image">
-                <Setter Property="HorizontalAlignment" Value="Center" />
-                <Setter Property="VerticalAlignment" Value="Center" />
-            </Style>
-
             <Style TargetType="TextBlock">
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -78,7 +73,7 @@
         </DockPanel>
 
         <TextBlock Grid.Column="0" Grid.Row="3" Text="תיאור:" />
-        <local:EditAbleTextBox EditMode="{Binding EditMode,RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}" 
+        <local:TextBlockEditAble EditMode="{Binding EditMode,RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}" 
                                Visibility="{Binding Product, Converter={StaticResource NullableToVisibilityConverter}}"
                                Grid.Column="1" Grid.Row="3" Text="{Binding Product.Description, Mode=TwoWay}" />
 
@@ -99,12 +94,12 @@
       
 
         <TextBlock Grid.Column="0" Grid.Row="5" Text="כמות:" />
-        <local:EditAbleTextBox Grid.Column="1" Grid.Row="5" Text="{Binding Amount, Mode=TwoWay}"
+        <local:TextBlockEditAble Grid.Column="1" Grid.Row="5" Text="{Binding Amount, Mode=TwoWay}"
                    EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}" />
        
 
         <TextBlock Grid.Column="0" Grid.Row="6" Text="מחיר ליחידה:" />
-        <local:EditAbleTextBox Grid.Column="1" Grid.Row="6" Text="{Binding UnitPrice, Mode=TwoWay}"
+        <local:TextBlockEditAble Grid.Column="1" Grid.Row="6" Text="{Binding UnitPrice, Mode=TwoWay}"
                    EditMode="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC}}" />
        
 

@@ -8,7 +8,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
 {
     public class CatalogStateMachine : BaseStateMachine<CatalogStates, CatalogTriggers>
     {
-        public CatalogStateMachine(IReadOnlyDictionary<CatalogStates, Action> stateActionDict) : base(CatalogStates.ProductCatalog, stateActionDict)
+        public CatalogStateMachine(IReadOnlyDictionary<CatalogStates, Action> stateEntryActionDict, IReadOnlyDictionary<CatalogStates, Action> stateExitActionDict) : base(CatalogStates.MainState, stateEntryActionDict, stateExitActionDict)
         {
             BasicConfigure(CatalogStates.MainState)
                 .Permit(CatalogTriggers.ProductCatalogSelected, CatalogStates.ProductCatalog)
@@ -21,50 +21,57 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
 
         private void ConfigureProductCatalog()
         {
-            BasicConfigure(CatalogStates.ProductCatalog,CatalogStates.MainState)
+            BasicConfigure(CatalogStates.ProductCatalog)
                 .Permit(CatalogTriggers.Search, CatalogStates.SearchingProduct)
-                .Permit(CatalogTriggers.Select, CatalogStates.ProductSelected);
+                .Permit(CatalogTriggers.Edit, CatalogStates.EditingProduct)
+                .Permit(CatalogTriggers.Delete, CatalogStates.ProductDeleting)
+                .Permit(CatalogTriggers.CategoryCatalogSelected, CatalogStates.CategoryCatalog);
 
-            BasicConfigure(CatalogStates.SearchingProduct, CatalogStates.ProductCatalog);
+            BasicConfigure(CatalogStates.SearchingProduct, CatalogStates.ProductCatalog)
+                .Permit(CatalogTriggers.SearchSucceeded, CatalogStates.SearchProductComplete);
 
             BasicConfigure(CatalogStates.SearchProductComplete,CatalogStates.ProductCatalog);
 
-            BasicConfigure(CatalogStates.ProductSelected,CatalogStates.ProductCatalog)
-                 .Permit(CatalogTriggers.DeSelect, CatalogStates.ProductNoSelected)
-                 .Permit(CatalogTriggers.Edit, CatalogStates.EditingProduct);
+            BasicConfigure(CatalogStates.EditingProduct)
+                 .Permit(CatalogTriggers.Finish, CatalogStates.SavingProduct)
+                 .Permit(CatalogTriggers.Cancel, CatalogStates.ProductCatalog);
 
-            BasicConfigure(CatalogStates.ProductNoSelected,CatalogStates.ProductCatalog);
+            BasicConfigure(CatalogStates.SavingProduct)
+                .Permit(CatalogTriggers.Finish, CatalogStates.SavingProductComplete);
 
-            BasicConfigure(CatalogStates.EditingProduct,CatalogStates.ProductCatalog)
-                 .Permit(CatalogTriggers.EndEdit, CatalogStates.ProductSelected)
-                 .Permit(CatalogTriggers.SaveChanges, CatalogStates.SavingChangesCatalog);
+            BasicConfigure(CatalogStates.SavingProductComplete, CatalogStates.ProductCatalog);
 
+            BasicConfigure(CatalogStates.ProductDeleting)
+                .Permit(CatalogTriggers.Finish, CatalogStates.ProductDeleted);
+
+            BasicConfigure(CatalogStates.ProductDeleted, CatalogStates.ProductCatalog);
         }
         private void ConfigureCategoryCatalog()
         {
-            BasicConfigure(CatalogStates.CategoryCatalog,CatalogStates.MainState)
+            BasicConfigure(CatalogStates.CategoryCatalog)
                 .Permit(CatalogTriggers.Search, CatalogStates.SearchingCategory)
-                .Permit(CatalogTriggers.Select, CatalogStates.CategorySelected)
-                .Permit(CatalogTriggers.Create, CatalogStates.CategoryCreated);
+                .Permit(CatalogTriggers.Edit, CatalogStates.EditingCategory)
+                .Permit(CatalogTriggers.Delete, CatalogStates.CategoryDeleting)
+                .Permit(CatalogTriggers.ProductCatalogSelected, CatalogStates.ProductCatalog);
 
-            BasicConfigure(CatalogStates.SearchingCategory,CatalogStates.CategoryCatalog);
+            BasicConfigure(CatalogStates.SearchingCategory, CatalogStates.CategoryCatalog)
+                .Permit(CatalogTriggers.SearchSucceeded, CatalogStates.SearchCategoryComplete);
 
-            BasicConfigure(CatalogStates.SearchCategoryComplete,CatalogStates.CategoryCatalog);
+            BasicConfigure(CatalogStates.SearchCategoryComplete, CatalogStates.CategoryCatalog);
 
-            BasicConfigure(CatalogStates.CategorySelected,CatalogStates.CategoryCatalog)
-                 .Permit(CatalogTriggers.DeSelect, CatalogStates.CategoryNoSelected)
-                 .Permit(CatalogTriggers.Edit, CatalogStates.EditingCategory);
+            BasicConfigure(CatalogStates.EditingCategory)
+                 .Permit(CatalogTriggers.Finish, CatalogStates.SavingCategory)
+                 .Permit(CatalogTriggers.Cancel, CatalogStates.CategoryCatalog);
 
-            BasicConfigure(CatalogStates.CategoryNoSelected,CatalogStates.CategoryCatalog);
+            BasicConfigure(CatalogStates.SavingCategory)
+                .Permit(CatalogTriggers.Finish, CatalogStates.SavingCategoryComplete);
 
-            BasicConfigure(CatalogStates.EditingCategory,CatalogStates.CategoryCatalog)
-                 .Permit(CatalogTriggers.EndEdit, CatalogStates.CategorySelected)
-                 .Permit(CatalogTriggers.Delete, CatalogStates.CategoryDeleted)
-                 .Permit(CatalogTriggers.SaveChanges, CatalogStates.SavingChangesCatalog);
+            BasicConfigure(CatalogStates.SavingCategoryComplete, CatalogStates.CategoryCatalog);
 
-            BasicConfigure(CatalogStates.CategoryCreated,CatalogStates.CategoryCatalog);
+            BasicConfigure(CatalogStates.CategoryDeleting)
+                .Permit(CatalogTriggers.Finish, CatalogStates.CategoryDeleted);
 
-            BasicConfigure(CatalogStates.CategoryDeleted,CatalogStates.CategoryCatalog);
+            BasicConfigure(CatalogStates.CategoryDeleted, CatalogStates.CategoryCatalog);
 
         }
     }

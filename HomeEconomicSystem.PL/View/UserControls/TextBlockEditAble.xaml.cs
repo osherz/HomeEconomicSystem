@@ -18,7 +18,7 @@ namespace HomeEconomicSystem.PL.View.UserControls
     /// <summary>
     /// Interaction logic for EditAbleTextBox.xaml
     /// </summary>
-    public partial class EditAbleTextBox : UserControl
+    public partial class TextBlockEditAble : UserControl
     {
 
 
@@ -30,7 +30,7 @@ namespace HomeEconomicSystem.PL.View.UserControls
 
         // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register("Text", typeof(string), typeof(EditAbleTextBox), new PropertyMetadata(""));
+            DependencyProperty.Register("Text", typeof(string), typeof(TextBlockEditAble), new PropertyMetadata(""));
 
 
 
@@ -42,10 +42,10 @@ namespace HomeEconomicSystem.PL.View.UserControls
 
         // Using a DependencyProperty as the backing store for EditMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EditModeProperty =
-            DependencyProperty.Register("EditMode", typeof(bool), typeof(EditAbleTextBox), new PropertyMetadata(false));
+            DependencyProperty.Register("EditMode", typeof(bool), typeof(TextBlockEditAble), new PropertyMetadata(false));
 
 
-        public EditAbleTextBox()
+        public TextBlockEditAble()
         {
             InitializeComponent();
         }

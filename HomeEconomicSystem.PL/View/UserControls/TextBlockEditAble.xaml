@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="HomeEconomicSystem.PL.View.UserControls.EditAbleTextBox"
+﻿<UserControl x:Class="HomeEconomicSystem.PL.View.UserControls.TextBlockEditAble"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,12 +14,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Grid.Column="0"
-            Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:EditAbleTextBox}}"
-            Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC},
+            Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble}}"
+            Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble},
             Converter={StaticResource BooleanToNoVisibilityConverter}}"/>
         <TextBox  Grid.Row="0" Grid.Column="0"
-                 Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:EditAbleTextBox}}"
-                 Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:ProductTransactionUC},
+                 Text="{Binding Text, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble}}"
+                 Visibility="{Binding EditMode, RelativeSource={RelativeSource AncestorType=local:TextBlockEditAble},
             Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

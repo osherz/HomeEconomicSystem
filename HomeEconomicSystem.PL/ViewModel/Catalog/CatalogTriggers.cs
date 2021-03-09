@@ -9,15 +9,13 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
     public enum CatalogTriggers
     {
         Edit,
-        EndEdit,
+        Finish,
         Search, 
         SearchFailed, 
         SearchSucceeded,
         Delete, 
-        Create, 
-        Select,
-        DeSelect,
-        SaveChanges,
+        Create,
+        Cancel,
         ProductCatalogSelected,
         CategoryCatalogSelected
     }
