@@ -332,8 +332,8 @@
     <Compile Include="View\TransactionHistoryView.xaml.cs">
       <DependentUpon>TransactionHistoryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\UserControls\CategoryItemUC.xaml.cs">
-      <DependentUpon>CategoryItemUC.xaml</DependentUpon>
+    <Compile Include="View\UserControls\NameWithImageItemUC.xaml.cs">
+      <DependentUpon>NameWithImageItemUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\CategoryUC.xaml.cs">
       <DependentUpon>CategoryUC.xaml</DependentUpon>
@@ -425,7 +425,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\UserControls\CategoryItemUC.xaml">
+    <Page Include="View\UserControls\NameWithImageItemUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

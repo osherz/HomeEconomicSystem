@@ -23,6 +23,7 @@ namespace HomeEconomicSystem.PL.Model
         {
             _dataMenegement = new BL.BL().DataManagement;
             ProductsList = new ObservableCollection<Product>();
+            Filter();
         }
 
         public void Update(Product product)

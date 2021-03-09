@@ -18,9 +18,9 @@ namespace HomeEconomicSystem.PL.View.UserControls
     /// <summary>
     /// Interaction logic for CategoryItemUC.xaml
     /// </summary>
-    public partial class CategoryItemUC : UserControl
+    public partial class NameWithImageItemUC : UserControl
     {
-        public CategoryItemUC()
+        public NameWithImageItemUC()
         {
             InitializeComponent();
         }

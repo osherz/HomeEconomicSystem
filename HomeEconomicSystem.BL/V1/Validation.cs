@@ -21,10 +21,8 @@ namespace HomeEconomicSystem.BL.V1
         {
             if (category.Id <= 0)
                 return false;
-            if (String.IsNullOrEmpty(category.Name))
+            if (string.IsNullOrEmpty(category.Name))
                 return false;
-            //           if (String.IsNullOrEmpty(category.ImageFileName))
-            //               return false;
 
             return true;
         }
@@ -41,15 +39,10 @@ namespace HomeEconomicSystem.BL.V1
         {
             if (product.Id <= 0)
                 return false;
-            if (String.IsNullOrEmpty(product.BarCode))
+            if (string.IsNullOrEmpty(product.BarCode))
                 return false;
-            if (String.IsNullOrEmpty(product.Name))
+            if (string.IsNullOrEmpty(product.Name))
                 return false;
-            if (String.IsNullOrEmpty(product.Description))
-                return false;
-            //            if (String.IsNullOrEmpty(product.ImageFileName))
-            //                return false;
-
             return true;
         }
 
@@ -63,11 +56,9 @@ namespace HomeEconomicSystem.BL.V1
         {
             if (store.Id <= 0)
                 return false;
-            if (String.IsNullOrEmpty(store.Name))
+            if (string.IsNullOrEmpty(store.Name))
                 return false;
-            if (String.IsNullOrEmpty(store.Address))
-                return false;
-            if (store.ProductTransaction == null || store.ProductTransaction.Count == 0)
+            if (string.IsNullOrEmpty(store.Address))
                 return false;
 
             return true;
@@ -139,12 +130,7 @@ namespace HomeEconomicSystem.BL.V1
         {
             if (basicGraph.Id <= 0)
                 return false;
-            if (String.IsNullOrEmpty(basicGraph.Title))
-                return false;
-            if (String.IsNullOrEmpty(basicGraph.Description))
-                return false;
-            ///check if AggregationTimeType have a valid value
-            if (!Enum.IsDefined(typeof(TimeType), basicGraph.AggregationTimeType))
+            if (string.IsNullOrEmpty(basicGraph.Title))
                 return false;
             if (basicGraph.StartDate == null || basicGraph.EndDate == null)
                 return false;
