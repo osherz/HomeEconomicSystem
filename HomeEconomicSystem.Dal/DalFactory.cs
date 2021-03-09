@@ -10,7 +10,7 @@ namespace HomeEconomicSystem.Dal
     {
         private static IQRCodeFetcher _qRCodeFetcher;
         private static IDb _db;
-
+        // TODO: Remove static!!
         public IQRCodeFetcher GetQRCodeFetcher() 
         {
             if(_qRCodeFetcher is null)

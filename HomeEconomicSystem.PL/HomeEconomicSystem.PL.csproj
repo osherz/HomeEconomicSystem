@@ -248,7 +248,6 @@
     </ApplicationDefinition>
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="Converters\BasicGraphToGraphDataConverter.cs" />
-    <Compile Include="Converters\BooleanToCollapsedVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToNoVisibilityConverter.cs" />
     <Compile Include="Converters\KeyValuePairConverter.cs" />
     <Compile Include="Converters\BasicGraphToSubjectString.cs" />
@@ -332,6 +331,9 @@
     </Compile>
     <Compile Include="View\TransactionHistoryView.xaml.cs">
       <DependentUpon>TransactionHistoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserControls\CategoryItemUC.xaml.cs">
+      <DependentUpon>CategoryItemUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\CategoryUC.xaml.cs">
       <DependentUpon>CategoryUC.xaml</DependentUpon>
@@ -420,6 +422,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\TransactionHistoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\CategoryItemUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

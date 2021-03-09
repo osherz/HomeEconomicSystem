@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HomeEconomicSystem.BE;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,21 @@ namespace HomeEconomicSystem.PL.View.UserControls
     /// </summary>
     public partial class ProductUC : UserControl
     {
+
+
+
+        public IEnumerable<Category> Categories
+        {
+            get { return (IEnumerable<Category>)GetValue(CategoriesProperty); }
+            set { SetValue(CategoriesProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Categories.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CategoriesProperty =
+            DependencyProperty.Register("Categories", typeof(IEnumerable<Category>), typeof(ProductUC), new PropertyMetadata(null));
+
+
+
 
         public bool EditMode
         {
