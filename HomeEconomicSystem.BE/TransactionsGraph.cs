@@ -12,6 +12,5 @@ namespace HomeEconomicSystem.BE
     /// </summary>
     public class TransactionsGraph : BasicGraph
     {
-        
     }
 }

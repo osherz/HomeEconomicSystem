@@ -14,6 +14,7 @@ namespace HomeEconomicSystem.BL.V1
         /// are initialized properly, 
         /// if not return "false".
         /// The category can be without products or Image.
+        /// The category can have 0 products.
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
@@ -23,8 +24,10 @@ namespace HomeEconomicSystem.BL.V1
                 return false;
             if (String.IsNullOrEmpty(category.Name))
                 return false;
-            //           if (String.IsNullOrEmpty(category.ImageFileName))
-            //               return false;
+           /* if (category.Products == null)
+                return false;
+            if (String.IsNullOrEmpty(category.ImageFileName))
+                return false;*/
 
             return true;
         }
@@ -83,7 +86,7 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(CategoryGraph categoryGraph)
         {
-            if (categoryGraph.Categories == null || categoryGraph.Categories.Count >= 0)
+            if (categoryGraph.Categories == null || categoryGraph.Categories.Count <= 0)
                 return false;
             return ValidateBaseProperty(categoryGraph);
         }
@@ -96,7 +99,7 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(ProductGraph productGraph)
         {
-            if (productGraph.Products == null || productGraph.Products.Count >= 0)
+            if (productGraph.Products == null || productGraph.Products.Count <= 0)
                 return false;
             return ValidateBaseProperty(productGraph);
         }
@@ -109,7 +112,7 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(StoreGraph storeGraph)
         {
-            if (storeGraph.Stores == null || storeGraph.Stores.Count >= 0)
+            if (storeGraph.Stores == null || storeGraph.Stores.Count <= 0)
                 return false;
             return ValidateBaseProperty(storeGraph);
         }

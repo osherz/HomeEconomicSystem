@@ -61,6 +61,7 @@
     <Compile Include="IGraphManagement.cs" />
     <Compile Include="ITransactionAnalysis.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="V1\Extensions\DateTimeExtensions.cs" />
     <Compile Include="V1\GraphManagement.cs" />
     <Compile Include="V1\AssosiationProductsAnalysis.cs" />
     <Compile Include="V1\DataManagement.cs" />
