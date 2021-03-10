@@ -109,23 +109,36 @@ namespace HomeEconomicSystem.BL.V1
 
         #region AnalyzeGraph
 
-        private IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(BasicGraph graph, IEnumerable<ProductTransaction> productTransactions, Func<ProductTransaction,int> getKey)
+        private IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph<T>(BasicGraph graph, IEnumerable<T> items,Func<T,IEnumerable<ProductTransaction>> getProductTransactions, Func<T,int> getKey)
         {
             (DateTime endDate, DateTime startDate) = GetEndAndStartDates(graph.EndDate, graph.StartDate, graph.PastTimeType, graph.PastTimeAmount);
             AmountOrCost amountOrCost = graph.AmountOrCost;
             TimeType aggregationTimeType = graph.AggregationTimeType;
 
+
+
             var dailyCategoryGroups =
-                            from productTransaction in productTransactions
-                            where productTransaction.Transaction.DateTime.InRange(startDate, endDate)
-                            group productTransaction by getKey(productTransaction) into newGroup1
-                            from newGroup2 in
-                                    (from productTransaction in newGroup1
-                                     group productTransaction by GetTimeType(productTransaction.Transaction.DateTime, aggregationTimeType))
-                            group newGroup2 by newGroup1.Key;
+                from item in items                
+                group getProductTransactions(item) by getKey(item) into newGroup1
+                from newGroup2 in
+                        (from productTransactionCollection in newGroup1
+                         from productTransaction in productTransactionCollection
+                         where productTransaction.Transaction.DateTime.InRange(startDate, endDate)
+                         group productTransaction by GetTimeType(productTransaction.Transaction.DateTime, aggregationTimeType))
+                group newGroup2 by newGroup1.Key;
+
+
+            //from productTransaction in productTransactions
+            //where productTransaction.Transaction.DateTime.InRange(startDate, endDate)
+            //group productTransaction by getKey(productTransaction) into newGroup1
+            //from newGroup2 in
+            //        (from productTransaction in newGroup1
+            //         group productTransaction by GetTimeType(productTransaction.Transaction.DateTime, aggregationTimeType))
+            //group newGroup2 by newGroup1.Key;
 
             IEnumerable<int> xCollection = GetXcollectios(startDate, endDate, aggregationTimeType);
-            return GetGroupsPoints(dailyCategoryGroups, amountOrCost, xCollection);
+            IEnumerable<int> keyCollection = items.Select(getKey);
+            return GetGroupsPoints(dailyCategoryGroups, amountOrCost, keyCollection, xCollection);
         }
 
         private (DateTime,DateTime) GetEndAndStartDates(DateTime? endDate, DateTime? startDate, TimeType? pastTimeType, int? pastTimeAmount)
@@ -193,35 +206,40 @@ namespace HomeEconomicSystem.BL.V1
         
         public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(CategoryGraph categoryGraph)
         {
-            IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(categoryGraph);
-
-            return AnalyzeGraph(categoryGraph, productTransactions, pd => pd.Product.Category.Id); 
+            return AnalyzeGraph(categoryGraph,
+                categoryGraph.Categories,
+                item => item.Products.Select(p => p.ProductTransactions).SelectMany(p => p),
+                item => item.Id); 
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(ProductGraph productGraph)
         {
-            IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(productGraph);
-
-            return AnalyzeGraph(productGraph, productTransactions, pd => pd.Product.Id);
+            return AnalyzeGraph(productGraph,
+                productGraph.Products ,
+                item => item.ProductTransactions,
+                item => item.Id);
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(StoreGraph storeGraph)
         {
-            IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(storeGraph);
-
-            return AnalyzeGraph(storeGraph, productTransactions, pd => pd.Store.Id);         
+            return AnalyzeGraph(storeGraph,
+                    storeGraph.Stores,
+                    item => item.ProductTransaction,
+                    item => item.Id);
         }
 
         public IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(TransactionsGraph transactionsGraph)
         {
-            IEnumerable<ProductTransaction> productTransactions = GetProductTransactions(transactionsGraph);
-
-            return AnalyzeGraph(transactionsGraph, productTransactions, pd => pd.Transaction.Id);
+            return AnalyzeGraph(transactionsGraph,
+                                new[] { 1 },
+                                item => _db.ProductTransactions,
+                                item => 1); ;
         }
 
-        private Dictionary<int, IEnumerable<(double, double)>> GetGroupsPoints(IEnumerable<IGrouping<int, IGrouping<int,ProductTransaction>>> groupingGroups, AmountOrCost amountOrCost, IEnumerable<int> xCollection)
+        private Dictionary<int, IEnumerable<(double, double)>> GetGroupsPoints(IEnumerable<IGrouping<int, IGrouping<int, ProductTransaction>>> groupingGroups, AmountOrCost amountOrCost, IEnumerable<int> keyCollection, IEnumerable<int> xCollection)
         {
             Dictionary<int, IEnumerable<(double, double)>> analyzeGraph = new Dictionary<int, IEnumerable<(double, double)>>();
+            keyCollection.ToList().ForEach(key => analyzeGraph.Add(key, new List<(double, double)>()));
             foreach (var superGroup in groupingGroups)
             {
                 Dictionary<double, double> points = new Dictionary<double, double>();
@@ -245,42 +263,9 @@ namespace HomeEconomicSystem.BL.V1
                     }
                     points[subGroup.Key] = temp;
                 }
-                analyzeGraph.Add(superGroup.Key, points.Select(item => (item.Key, item.Value)));
+                analyzeGraph[superGroup.Key] = points.Select(item => (item.Key, item.Value));
             }
             return analyzeGraph;
-        }
-       
-        private IEnumerable<ProductTransaction> GetProductTransactions(CategoryGraph categoryGraph)
-        {
-            return from category in categoryGraph.Categories
-                   from product in category.Products
-                   from productTransaction in product.ProductTransactions
-                   select productTransaction;
-        }
-
-        private IEnumerable<ProductTransaction> GetProductTransactions(ProductGraph productGraph)
-        {
-            return 
-                   from product in productGraph.Products
-                   from productTransaction in product.ProductTransactions
-                   select productTransaction;
-        }
-
-        private IEnumerable<ProductTransaction> GetProductTransactions(StoreGraph storeGraph)
-        {
-            return
-                   from store in storeGraph.Stores
-                   from productTransaction in store.ProductTransaction
-                   select productTransaction;
-        }
-
-        private IEnumerable<ProductTransaction> GetProductTransactions(TransactionsGraph transactionsGraph)
-        {
-            IEnumerable<Transaction> transactions = _db.Transactions;
-            return
-                   from transaction in _db.Transactions
-                   from productTransaction in transaction.ProductTransactions
-                   select productTransaction;
         }
 
         #endregion
