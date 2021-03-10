@@ -278,7 +278,7 @@
     <Compile Include="ViewModel\DataAnalysis\States.cs" />
     <Compile Include="Model\StoresModel.cs" />
     <Compile Include="ViewModel\DataAnalysis\Triggers.cs" />
-    <Compile Include="ViewModel\HomeVM.cs" />
+    <Compile Include="ViewModel\Home\HomeVM.cs" />
     <Compile Include="ViewModel\IInnerVM.cs" />
     <Compile Include="ViewModel\IVM.cs" />
     <Compile Include="ViewModel\PageDisplay\DataAnalysisPageDisplay.cs" />
