@@ -19,6 +19,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public string State => "NotImplementedException";
 
+        public string Title => "היסטוריית עסקאות";
+
         public TransactionHistoryPageDisplay(StateMachine stateMachine)
         {
             Content = new View.TransactionHistoryView();

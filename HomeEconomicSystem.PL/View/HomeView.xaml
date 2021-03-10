@@ -30,7 +30,7 @@
             </Style>
         </Grid.Resources>
 
-        <TextBlock Text="ברוך הבא" Style="{StaticResource MaterialDesignHeadline1TextBlock}"
+        <TextBlock Text="ברוך הבא" Style="{StaticResource MaterialDesignHeadline3TextBlock}"
                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                    TextAlignment="Center"/>
 

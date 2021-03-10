@@ -21,6 +21,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public UserControl Content { get; }
 
+        public string Title => "יצירת עסקה חדשה";
+
         public TransactionCreationPageDisplay()
         {
             Content = new CreateTransactionView();

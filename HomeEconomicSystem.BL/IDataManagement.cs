@@ -92,6 +92,9 @@ namespace HomeEconomicSystem.BL
         /// <param name="stores">If null, search in all stores</param>
         /// <returns></returns>
         IEnumerable<Transaction> GetTransactions(DateTime? startDate = null, DateTime? endDate = null, IEnumerable<Store> stores = null, IEnumerable<Product> products = null, IEnumerable<Category> categories = null);
+
+        void UpdateTransaction(Transaction transaction);
+        void AddTransaction(Transaction transaction);
         #endregion Transaction
     }
 }

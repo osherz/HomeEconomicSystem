@@ -16,6 +16,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public string State => "NotImplementedException";
 
+        public string Title => "דף הבית";
+
         public HomePageDisplay()
         {
             Content = new View.HomeView();

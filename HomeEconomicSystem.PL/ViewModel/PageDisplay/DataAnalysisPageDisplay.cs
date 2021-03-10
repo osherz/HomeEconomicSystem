@@ -32,6 +32,7 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
             set { SetProperty(ref _state, value); }
         }
 
+        public string Title => "ניתוח נתונים";
 
         public DataAnalysisPageDisplay()
         {

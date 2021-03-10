@@ -68,6 +68,18 @@ namespace HomeEconomicSystem.BL.V1
         }
 
         /// <summary>
+        /// Checks if the relevant fields in the class "TransactionsGraph"
+        /// are initialized properly, if not return "false".
+        /// </summary>
+        /// <param name="transactionsGraph"></param>
+        /// <returns></returns>
+        public bool Validate(Transaction transaction)
+        {
+            return transaction.ProductTransactions != null &&
+                transaction.ProductTransactions.Count > 0;
+        }
+
+        /// <summary>
         /// Checks if the relevant fields in the class "CategoryGraph"
         /// are initialized properly, if not return "false".
         /// </summary>

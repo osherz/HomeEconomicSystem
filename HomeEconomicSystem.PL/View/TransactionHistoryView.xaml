@@ -4,9 +4,117 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HomeEconomicSystem.PL.View"
+             xmlns:VM="clr-namespace:HomeEconomicSystem.PL.ViewModel.TransactionHistory" 
+             xmlns:usercontrols="clr-namespace:HomeEconomicSystem.PL.View.UserControls" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:Colors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance VM:TransactionHistoryVM}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Transaction History" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-    </Grid>
+    <DockPanel>
+        <DockPanel.Resources>
+            <Style TargetType="Border">
+                <Setter Property="BorderBrush" Value="Gray" />
+                <Setter Property="BorderThickness" Value="2" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Padding" Value="10" />
+            </Style>
+        </DockPanel.Resources>
+        <Border Margin="20 20 10 20"  DockPanel.Dock="Left">
+            <StackPanel x:Name="SearchBar">
+                <TextBlock Text="חיפוש עסקאות" TextAlignment="Center" 
+                           Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                           Margin="0 0 0 5"/>
+
+                <usercontrols:DateRangeUC Orientation="Vertical"
+                        StartDate="{Binding StartDate, Mode=TwoWay}" 
+                        EndDate="{Binding EndDate, Mode=TwoWay}" />
+
+                <Button Command="{Binding Search}" Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Margin="5">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Search" HorizontalAlignment="Right" />
+                        <TextBlock Text="חפש"  HorizontalAlignment="Left" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <!--#region Table-->
+        <Border Margin="10 20 20 20" Padding="0 10 5 10">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                      VerticalScrollBarVisibility="Auto">
+            <StackPanel ScrollViewer.CanContentScroll="True">
+                <ItemsControl ItemsSource="{Binding Transactions}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                            <Separator/>
+                                    <Expander
+                                HorizontalAlignment="Stretch">
+                                        <Expander.Header>
+                                            <TextBlock Text="{Binding DateTime, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" 
+                                                       Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
+                                        </Expander.Header>
+                                        <StackPanel
+                                    Orientation="Vertical"
+                                    TextBlock.Foreground="{DynamicResource MaterialDesignBody}">
+                                        <DataGrid IsReadOnly="True"
+                                          ItemsSource="{Binding ProductTransactions}"
+                                          CanUserAddRows="False"
+                                            AutoGenerateColumns="False"
+                                          SelectionUnit="Cell"
+                                          SelectionMode="Extended">
+                                            <DataGrid.Columns>
+                                                    <DataGridTextColumn Binding="{Binding Product.Category.Name}">
+                                                        <DataGridTextColumn.Header>
+                                                            <TextBlock Text="קטגוריה" />
+                                                        </DataGridTextColumn.Header>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn Binding="{Binding Product.Name}">
+                                                    <DataGridTextColumn.Header>
+                                                        <TextBlock Text="שם מוצר" />
+                                                    </DataGridTextColumn.Header>
+                                                </DataGridTextColumn>
+                                                <DataGridTextColumn Binding="{Binding Amount}">
+                                                    <DataGridTextColumn.Header>
+                                                        <TextBlock Text="כמות" />
+                                                    </DataGridTextColumn.Header>
+                                                </DataGridTextColumn>
+                                                    <DataGridTextColumn Binding="{Binding UnitPrice}">
+                                                        <DataGridTextColumn.Header>
+                                                            <TextBlock Text="מחיר ליחידה" />
+                                                        </DataGridTextColumn.Header>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn>
+                                                        <DataGridTextColumn.Binding>
+                                                            <MultiBinding Converter="{StaticResource MultiplyConverter}">
+                                                                <MultiBinding.Bindings>
+                                                                    <Binding Path="Amount" />
+                                                                    <Binding Path="UnitPrice" />
+                                                                </MultiBinding.Bindings>
+                                                            </MultiBinding>
+                                                        </DataGridTextColumn.Binding>
+                                                        <DataGridTextColumn.Header>
+                                                            <TextBlock Text="סכום כולל" />
+                                                        </DataGridTextColumn.Header>
+                                                    </DataGridTextColumn>
+                                                    <DataGridTextColumn Binding="{Binding Store.Name}">
+                                                        <DataGridTextColumn.Header>
+                                                            <TextBlock Text="חנות" />
+                                                        </DataGridTextColumn.Header>
+                                                    </DataGridTextColumn>
+                                                </DataGrid.Columns>
+                                        </DataGrid>
+                                    </StackPanel>
+                                </Expander>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+        </Border>
+        <!--#region Table-->
+    </DockPanel>
 </UserControl>
