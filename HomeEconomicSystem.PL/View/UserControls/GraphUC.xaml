@@ -40,7 +40,10 @@
             <materialDesign:PopupBox 
                 Grid.Column="2"
                 Padding="2 0 2 0" 
-                HorizontalAlignment="Right">
+                HorizontalAlignment="Right"
+                Visibility="{Binding MenuItems,
+                            Converter={StaticResource NullableToVisibilityConverter},
+                            RelativeSource={RelativeSource AncestorType=local:GraphUC}}">
                 <StackPanel>
                     <local:MenuUC FlowDirection="RightToLeft"
                                   Tag="{Binding Graph.BasicGraph, 

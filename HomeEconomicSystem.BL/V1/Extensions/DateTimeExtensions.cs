@@ -11,7 +11,7 @@ namespace HomeEconomicSystem.BL.V1.Extensions
     { 
         public static bool InRange(this DateTime dateToCheck, DateTime startDate, DateTime endDate)
         {
-            return dateToCheck >= startDate && dateToCheck < endDate;
+            return dateToCheck.Date >= startDate.Date && dateToCheck.Date <= endDate.Date;
         }
 
         public static int weekProjector(this DateTime dateTime)

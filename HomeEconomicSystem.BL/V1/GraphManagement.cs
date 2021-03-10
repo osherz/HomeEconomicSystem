@@ -128,14 +128,6 @@ namespace HomeEconomicSystem.BL.V1
                 group newGroup2 by newGroup1.Key;
 
 
-            //from productTransaction in productTransactions
-            //where productTransaction.Transaction.DateTime.InRange(startDate, endDate)
-            //group productTransaction by getKey(productTransaction) into newGroup1
-            //from newGroup2 in
-            //        (from productTransaction in newGroup1
-            //         group productTransaction by GetTimeType(productTransaction.Transaction.DateTime, aggregationTimeType))
-            //group newGroup2 by newGroup1.Key;
-
             IEnumerable<int> xCollection = GetXcollectios(startDate, endDate, aggregationTimeType);
             IEnumerable<int> keyCollection = items.Select(getKey);
             return GetGroupsPoints(dailyCategoryGroups, amountOrCost, keyCollection, xCollection);
@@ -144,7 +136,7 @@ namespace HomeEconomicSystem.BL.V1
         private (DateTime,DateTime) GetEndAndStartDates(DateTime? endDate, DateTime? startDate, TimeType? pastTimeType, int? pastTimeAmount)
         {
             if (startDate == null && endDate == null)
-                return (AddPastTime(pastTimeType.Value, pastTimeAmount.Value), DateTime.Now);
+                return (DateTime.Now, AddPastTime(pastTimeType.Value, pastTimeAmount.Value));
             return (endDate.Value, startDate.Value);
         }
 
@@ -239,7 +231,7 @@ namespace HomeEconomicSystem.BL.V1
         private Dictionary<int, IEnumerable<(double, double)>> GetGroupsPoints(IEnumerable<IGrouping<int, IGrouping<int, ProductTransaction>>> groupingGroups, AmountOrCost amountOrCost, IEnumerable<int> keyCollection, IEnumerable<int> xCollection)
         {
             Dictionary<int, IEnumerable<(double, double)>> analyzeGraph = new Dictionary<int, IEnumerable<(double, double)>>();
-            keyCollection.ToList().ForEach(key => analyzeGraph.Add(key, new List<(double, double)>()));
+            keyCollection.ToList().ForEach(key => analyzeGraph.Add(key, xCollection.Select(x => ((double)x, 0d))));
             foreach (var superGroup in groupingGroups)
             {
                 Dictionary<double, double> points = new Dictionary<double, double>();

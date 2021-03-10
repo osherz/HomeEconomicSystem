@@ -16,7 +16,8 @@
             <converters:BooleanToNoVisibilityConverter x:Key="BooleanToNoVisibilityConverter" />
             <converters:MultiplyConverter x:Key="MultiplyConverter" />
             <converters:NotNullToVisibiltyConverter x:Key="NotNullToVisibiltyConverter" />
-
+            <converters:BasicGraphToGraphDataConverter x:Key="BasicGraphToGraphDataConverter" />
+            
             <Style TargetType="Hyperlink" x:Key="HyperLink">
                 <Setter Property="Foreground" Value="#3C88D3"/>
                 <Setter Property="FontWeight" Value="Bold" />
