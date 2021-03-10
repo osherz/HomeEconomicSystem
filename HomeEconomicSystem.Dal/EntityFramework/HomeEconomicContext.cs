@@ -10,7 +10,7 @@ namespace HomeEconomicSystem.Dal.EntityFramework
 {
     public class HomeEconomicContext : DbContext, IDb
     {
-        internal HomeEconomicContext() : base()
+        public HomeEconomicContext() : base()
         {
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

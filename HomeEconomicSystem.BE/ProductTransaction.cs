@@ -1,6 +1,7 @@
 ﻿using HomeEconomicSystem.Utils;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace HomeEconomicSystem.BE
@@ -11,6 +12,7 @@ namespace HomeEconomicSystem.BE
         private NotifyProperyChanged _notifyPropertyChanged;
 
         private int _id;
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get => _id; set => SetProperty(ref _id, value); }
 
         private float _unitPrice;
@@ -21,10 +23,6 @@ namespace HomeEconomicSystem.BE
         ///Amount of products.
         /// </summary>
         public float Amount { get => _amount; set => SetProperty(ref _amount, value); }
-
-        private QRData _qRData;
-        [Required]
-        public virtual QRData QRData { get => _qRData; set => SetProperty(ref _qRData, value); }
 
         private Product _product;
         public virtual Product Product { get=> _product; set=> SetProperty(ref _product, value); }

@@ -326,9 +326,6 @@
     <Compile Include="View\CatalogView.xaml.cs">
       <DependentUpon>CatalogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ProductCatalogView.xaml.cs">
-      <DependentUpon>ProductCatalogView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\TransactionHistoryView.xaml.cs">
       <DependentUpon>TransactionHistoryView.xaml</DependentUpon>
     </Compile>
@@ -342,6 +339,9 @@
       <DependentUpon>DateRangeUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\DropDownPoints.cs" />
+    <Compile Include="View\UserControls\StoreUC.xaml.cs">
+      <DependentUpon>StoreUC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserControls\TextBlockEditAble.xaml.cs">
       <DependentUpon>TextBlockEditAble.xaml</DependentUpon>
     </Compile>
@@ -417,10 +417,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\ProductCatalogView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\TransactionHistoryView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -436,6 +432,10 @@
     <Page Include="View\UserControls\DateRangeUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControls\StoreUC.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\UserControls\TextBlockEditAble.xaml">
       <SubType>Designer</SubType>

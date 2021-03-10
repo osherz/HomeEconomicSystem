@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HomeEconomicSystem.PL.View.UserControls"
              mc:Ignorable="d" 
+             MaxHeight="150"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid MouseLeftButtonUp="Grid_MouseLeftButtonUp">
        <!-- <Image Source="https://inature.info/w/images/0/0e/No_image.jpg" /> -->

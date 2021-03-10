@@ -25,6 +25,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
                 .Permit(CatalogTriggers.Search, CatalogStates.SearchingProduct)
                 .Permit(CatalogTriggers.Edit, CatalogStates.EditingProduct)
                 .Permit(CatalogTriggers.Delete, CatalogStates.ProductDeleting)
+                .Permit(CatalogTriggers.Create, CatalogStates.ProductCreating)
                 .Permit(CatalogTriggers.CategoryCatalogSelected, CatalogStates.CategoryCatalog);
 
             BasicConfigure(CatalogStates.SearchingProduct, CatalogStates.ProductCatalog)
@@ -45,6 +46,10 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
                 .Permit(CatalogTriggers.Finish, CatalogStates.ProductDeleted);
 
             BasicConfigure(CatalogStates.ProductDeleted, CatalogStates.ProductCatalog);
+
+            BasicConfigure(CatalogStates.ProductCreating)
+                .Permit(CatalogTriggers.Finish, CatalogStates.SavingProduct)
+                .Permit(CatalogTriggers.Cancel, CatalogStates.ProductCatalog);
         }
         private void ConfigureCategoryCatalog()
         {
@@ -52,6 +57,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
                 .Permit(CatalogTriggers.Search, CatalogStates.SearchingCategory)
                 .Permit(CatalogTriggers.Edit, CatalogStates.EditingCategory)
                 .Permit(CatalogTriggers.Delete, CatalogStates.CategoryDeleting)
+                .Permit(CatalogTriggers.Create, CatalogStates.CategoryCreating)
                 .Permit(CatalogTriggers.ProductCatalogSelected, CatalogStates.ProductCatalog);
 
             BasicConfigure(CatalogStates.SearchingCategory, CatalogStates.CategoryCatalog)
@@ -72,6 +78,10 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
                 .Permit(CatalogTriggers.Finish, CatalogStates.CategoryDeleted);
 
             BasicConfigure(CatalogStates.CategoryDeleted, CatalogStates.CategoryCatalog);
+
+            BasicConfigure(CatalogStates.CategoryCreating)
+                .Permit(CatalogTriggers.Finish, CatalogStates.SavingCategory)
+                .Permit(CatalogTriggers.Cancel, CatalogStates.CategoryCatalog);
 
         }
     }

@@ -32,17 +32,61 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             set { SetProperty(ref _productTransaction, value); }
         }
 
+        private bool _chooseFromExistence;
+        public bool ChooseFromExistence
+        {
+            get { return _chooseFromExistence; }
+            set { SetProperty(ref _chooseFromExistence, value); }
+        }
+
+        private bool _createNew;
+
+        public bool CreateNew
+        {
+            get { return _createNew; }
+            set { SetProperty(ref _createNew, value); }
+        }
+
+
+        private Store _newStore;
+        public Store NewStore
+        {
+            get { return _newStore; }
+            set { SetProperty(ref _newStore, value); }
+        }
+
+        private Product _newProduct;
+        public Product NewProduct
+        {
+            get { return _newProduct; }
+            set { SetProperty(ref _newProduct, value); }
+        }
+
+        private Category _newCategory;
+        public Category NewCategory
+        {
+            get { return _newCategory; }
+            set { SetProperty(ref _newCategory, value); }
+        }
+
         private Transaction _transaction;
         public Transaction Transaction { get => _transaction; private set => SetProperty(ref _transaction, value); }
 
-        public ObservableCollection<Category> Categories { get; set; }
-        public ObservableCollection<Store> Stores { get; set; }
+        private ObservableCollection<Category> _categories;
+        public ObservableCollection<Category> Categories { get => _categories; set => SetProperty(ref _categories, value); }
+
+        private ObservableCollection<Store> _stores;
+        public ObservableCollection<Store> Stores { get => _stores; set => SetProperty(ref _stores, value); }
 
         private bool _openDialog;
         public bool OpenDialog
         {
             get { return _openDialog; }
-            set { SetProperty(ref _openDialog, value); }
+            set
+            {
+                SetProperty(ref _openDialog, value);
+                if (OpenDialog) ChooseFromExistence = true;
+            }
         }
 
         private ProductTransaction _selectedProductTransaction;
@@ -84,20 +128,46 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
         public CreateTransactionVM()
         {
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
+            NewCategory = new Category();
+            NewStore = new Store();
+            NewProduct = new Product();
+
             var bl = new BL.BL();
             _transactionAnalysis = bl.TransactionAnalysis;
             _dataManagement = bl.DataManagement;
             GenerateNewTransaction();
-            ProductTransactions = Transaction.ProductTransactions.ToObservableCollection();
-            Categories = _dataManagement.GetCategories().ToObservableCollection();
-            Stores = _dataManagement.GetStores().ToObservableCollection();
+            LoadAllData();
 
             _stateMachine = new TransactionsStateMachine(
                 new Dictionary<TransactionsState, Action>
                 {
                     {TransactionsState.ChoosingCategory, () => { OpenDialog=true; CategoryChoosing=true; } },
                     {TransactionsState.ChoosingStore, () => { OpenDialog=true; StoreChoosing=true; } },
-                    {TransactionsState.ChoosingProduct, () => { OpenDialog=true; ProductChoosing=true; } },
+                    {TransactionsState.ChoosingProduct, () => { OpenDialog=true; ProductChoosing=true;  } },
+                    {TransactionsState.ChoosedProduct, () =>
+                    {
+                        if(!ChooseFromExistence)
+                        {
+                            SelectedProductTransaction.Product = NewProduct;
+                            NewProduct = new Product();
+                        }
+                    } },
+                    {TransactionsState.ChoosedCategory, () =>
+                    {
+                        if(!ChooseFromExistence)
+                        {
+                            SelectedProductTransaction.Product.Category = NewCategory;
+                            NewCategory = new Category();
+                        }
+                    } },
+                    {TransactionsState.ChoosedStore, () =>
+                    {
+                        if(!ChooseFromExistence)
+                        {
+                            SelectedProductTransaction.Store = NewStore;
+                            NewStore= new Store();
+                        }
+                    }},
                     {TransactionsState.UpdatingTransaction, UpdateOrCreateTransaction }
                 },
                 new Dictionary<TransactionsState, Action>
@@ -115,10 +185,10 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             {
                 var productTransaction = new ProductTransaction
                 {
-                    Amount= 1,
-                    UnitPrice =1
+                    Amount = 1,
+                    UnitPrice = 1
                 };
-                if(ProductTransactions.Count > 0)
+                if (ProductTransactions.Count > 0)
                 {
                     productTransaction.Store = ProductTransactions.Last().Store;
                 }
@@ -127,12 +197,20 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             Finish = _stateMachine.CreateCommand(TransactionsTriggers.Finish);
         }
 
+        private void LoadAllData()
+        {
+            ProductTransactions = Transaction.ProductTransactions.ToObservableCollection();
+            Categories = _dataManagement.GetCategories().ToObservableCollection();
+            Stores = _dataManagement.GetStores().ToObservableCollection();
+        }
+
         public void GenerateNewTransaction()
         {
+            ProductTransactions = new ObservableCollection<ProductTransaction>();
             Transaction = new Transaction
             {
                 Id = 0,
-                ProductTransactions = new ObservableCollection<ProductTransaction>(),
+                ProductTransactions = ProductTransactions,
                 DateTime = DateTime.Now,
             };
         }
@@ -145,6 +223,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
         private void UpdateOrCreateTransaction()
         {
             // Updating transaction
+            Transaction.ProductTransactions = ProductTransactions;
             if (Transaction.Id > 0)
             {
                 _transactionAnalysis.UpdateTransaction(Transaction);
@@ -153,6 +232,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             {
                 _transactionAnalysis.AddTransaction(Transaction);
             }
+            LoadAllData();
+            GenerateNewTransaction();
             _stateMachine.Fire(TransactionsTriggers.Finish);
 
         }

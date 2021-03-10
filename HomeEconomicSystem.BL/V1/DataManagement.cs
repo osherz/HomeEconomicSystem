@@ -63,6 +63,16 @@ namespace HomeEconomicSystem.BL.V1
             _db.SaveChanges();
         }
 
+        public void AddProduct(Product product)
+        {
+            if (!_validation.Validate(product))
+                throw (new ArgumentException("Product must have: Id, Name, BarCode, Description."));
+
+            _db.Products.Add(product);
+            _db.SaveChanges();
+        }
+
+
         public void EditStore(Store store)
         {
             if (!_validation.Validate(store))

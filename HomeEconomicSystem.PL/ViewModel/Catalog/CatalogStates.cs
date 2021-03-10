@@ -26,6 +26,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
         CategoryDeleting,
         CategoryDeleted,
         SavingCategory,
-        SavingCategoryComplete
+        SavingCategoryComplete,
+        ProductCreating,
+        CategoryCreating
     }
 }

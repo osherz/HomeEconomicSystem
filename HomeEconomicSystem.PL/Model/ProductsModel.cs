@@ -26,6 +26,11 @@ namespace HomeEconomicSystem.PL.Model
             Filter();
         }
 
+        public void AddProduct(Product product)
+        {
+            _dataMenegement.AddProduct(product);
+        }
+
         public void Update(Product product)
         {
             _dataMenegement.EditProduct(product);

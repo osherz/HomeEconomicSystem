@@ -18,14 +18,14 @@
                 </Grid.RowDefinitions>
 
                 <UserControls:CategoryUC Grid.Row="0" 
-                                         DataContext="{Binding SelectedCategory}"
-                                         Visibility="{Binding ., Converter={StaticResource NullableToVisibilityConverter}}"
+                                         Category="{Binding SelectedCategory}"
+                                         Visibility="{Binding SelectedCategory, Converter={StaticResource NullableToVisibilityConverter}}"
                                          EditMode="True" />
                 
                 <UserControls:ProductUC Grid.Row="0" 
-                                        DataContext="{Binding SelectedProduct}"
-                                        Visibility="{Binding ., Converter={StaticResource NullableToVisibilityConverter}}"
-                                        Categories="{Binding DataContext.AllCategories, RelativeSource={RelativeSource AncestorType=local:CatalogView}}"
+                                        Product="{Binding SelectedProduct}"
+                                        Visibility="{Binding SelectedProduct, Converter={StaticResource NullableToVisibilityConverter}}"
+                                        Categories="{Binding AllCategories}"
                                         EditMode="True" />
 
                 <Button Grid.Row="1" Margin="0 10 0 0" Command="{Binding Finish}" HorizontalAlignment="Right">סיימתי</Button>
@@ -33,8 +33,17 @@
             </Grid>
         </materialDesign:DialogHost.DialogContent>
 
-        <StackPanel>
-            <TextBox 
+        <DockPanel>
+
+            <Grid DockPanel.Dock="Bottom" Margin="10">
+                <Button HorizontalAlignment="Left" 
+                Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+                 Command="{Binding CreateNew}">
+                    <materialDesign:PackIcon Kind="Plus" />
+                </Button>
+            </Grid>
+            
+            <TextBox DockPanel.Dock="Top"
             x:Name="ItemsSearchBox"
             Width="auto"
             Margin="10"
@@ -60,8 +69,8 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card Margin="10" Padding="10 0 10 0" Width="150" Height="150">
-                            <Grid>
+                        <materialDesign:Card Margin="10" Width="150" MaxHeight="200">
+                            <Grid Margin="10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="auto" />
                                     <RowDefinition Height="auto"/>
@@ -72,7 +81,7 @@
                                     <materialDesign:PackIcon Kind="Edit" />
                                 </Button>
                                 <UserControls:CategoryUC Grid.Row="1"
-                                                         DataContext="{Binding .}" />
+                                                         Category="{Binding .}" />
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>
@@ -101,7 +110,7 @@
                                     <materialDesign:PackIcon Kind="Edit" />
                                 </Button>
                                 <UserControls:ProductUC Grid.Row="1"
-                                                         DataContext="{Binding .}" />
+                                                         Product="{Binding .}" />
                             </Grid>
                         </materialDesign:Card>
                     </DataTemplate>
@@ -114,6 +123,6 @@
         
         <UC:CategoryPanel Categories="{Binding Categories}"
                          Visibility="{Bindning ShowCategories}"/>-->
-        </StackPanel>
+        </DockPanel>
     </materialDesign:DialogHost>
 </UserControl>

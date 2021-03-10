@@ -21,7 +21,7 @@ namespace HomeEconomicSystem.BE
         public int Id { get => _id; set => SetProperty(ref _id, value); }
 
         private string _barCode;
-        [MinLength(13), MaxLength(15)]
+        [MaxLength(20)]
         public string BarCode { get => _barCode; set => SetProperty(ref _barCode, value); }
 
 

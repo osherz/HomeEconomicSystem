@@ -24,7 +24,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
         private ProductsModel _productsModel;
         private CategoriesModel _categoriesModel;
 
-        public CatalogStateMachine CatalogStateMachine { get;}
+        public CatalogStateMachine CatalogStateMachine { get; }
 
         ObservableCollection<Product> _products;
         public ObservableCollection<Product> Products { get => _products; set => SetProperty(ref _products, value); }
@@ -48,6 +48,13 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
         {
             get { return _product; }
             set { SetProperty(ref _product, value); }
+        }
+
+        private bool _creatingNew;
+        public bool CreatingNew
+        {
+            get => _creatingNew;
+            set => SetProperty(ref _creatingNew, value);
         }
 
         private bool _editMode;
@@ -86,6 +93,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
         public ICommand EditProduct { get; }
         public ICommand Finish { get; }
         public ICommand Cancel { get; }
+        public ICommand CreateNew { get; }
 
         public CatalogVM()
         {
@@ -115,14 +123,20 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
                 });
             Finish = CatalogStateMachine.CreateCommand(CatalogTriggers.Finish);
             Cancel = CatalogStateMachine.CreateCommand(CatalogTriggers.Cancel);
+            CreateNew = CatalogStateMachine.CreateCommand(CatalogTriggers.Create);
 
             Products = _productsModel.ProductsList;
             Categories = _categoriesModel.CategoriesList;
-            AllCategories = _categoriesModel.CategoriesList.ToObservableCollection();
+            LoadData();
             ShowCategories = true;
             ShowProducts = false;
 
             CatalogStateMachine.Fire(CatalogTriggers.ProductCatalogSelected);
+        }
+
+        private void LoadData()
+        {
+            AllCategories = new CategoriesModel().CategoriesList.ToObservableCollection();
         }
 
         private Dictionary<CatalogStates, Action> GetStatesEntryAction()
@@ -158,22 +172,58 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
                         CatalogStateMachine.Fire(CatalogTriggers.SearchSucceeded);
                     }
                 },
+                {
+                    CatalogStates.ProductCreating , () =>
+                    {
+                        SelectedProduct = new Product();
+                        CreatingNew = true;
+                        EditMode = true;
+                    }
+                },
+                {
+                    CatalogStates.CategoryCreating , () =>
+                    {
+                        SelectedCategory = new Category();
+                        CreatingNew = true;
+                        EditMode = true;
+                    }
+                },
                 { CatalogStates.EditingCategory, () => EditMode = true },
                 { CatalogStates.EditingProduct, () => EditMode = true },
                 {
                     CatalogStates.SavingCategory, () =>
                     {
-                        _categoriesModel.Update(SelectedCategory);
+                        if(CreatingNew)
+                        {
+                            _categoriesModel.AddCategory(SelectedCategory);
+                            CreatingNew = false;
+                        }
+                        else
+                        {
+                            _categoriesModel.Update(SelectedCategory);
+                            CreatingNew = false;
+                        }
                         SelectedCategory = null;
                         CatalogStateMachine.Fire(CatalogTriggers.Finish);
+                        LoadData();
+                        CatalogStateMachine.Fire(CatalogTriggers.Search);
                     }
                 },
                 {
                     CatalogStates.SavingProduct, () =>
                     {
-                        _productsModel.Update(SelectedProduct);
+                        if(CreatingNew)
+                        {
+                            _productsModel.AddProduct(SelectedProduct);
+                        }
+                        else
+                        {
+                            _productsModel.Update(SelectedProduct);
+                        }
                         SelectedProduct = null;
                         CatalogStateMachine.Fire(CatalogTriggers.Finish);
+                        LoadData();
+                        CatalogStateMachine.Fire(CatalogTriggers.Search);
                     }
                 }
             };
@@ -184,6 +234,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
             return new Dictionary<CatalogStates, Action>{
                 { CatalogStates.EditingCategory, () => EditMode = false },
                 { CatalogStates.EditingProduct, () => EditMode = false },
+                { CatalogStates.ProductCreating, () => EditMode = false },
+                { CatalogStates.CategoryCreating, () => EditMode = false },
             };
         }
 
@@ -195,7 +247,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Catalog
         private void OnPropertyChanged(PropertyChangedEventArgs property)
         {
             PropertyChanged?.Invoke(this, property);
-            if(property.PropertyName == nameof(SearchText))
+            if (property.PropertyName == nameof(SearchText))
             {
                 CatalogStateMachine.Fire(CatalogTriggers.Search);
             }

@@ -24,6 +24,19 @@ namespace HomeEconomicSystem.PL.View.UserControls
 
 
 
+        public Product Product
+        {
+            get { return (Product)GetValue(ProductProperty); }
+            set { SetValue(ProductProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Product.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ProductProperty =
+            DependencyProperty.Register("Product", typeof(Product), typeof(ProductUC), new PropertyMetadata(null));
+
+
+
+
         public IEnumerable<Category> Categories
         {
             get { return (IEnumerable<Category>)GetValue(CategoriesProperty); }
@@ -33,8 +46,6 @@ namespace HomeEconomicSystem.PL.View.UserControls
         // Using a DependencyProperty as the backing store for Categories.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CategoriesProperty =
             DependencyProperty.Register("Categories", typeof(IEnumerable<Category>), typeof(ProductUC), new PropertyMetadata(null));
-
-
 
 
         public bool EditMode

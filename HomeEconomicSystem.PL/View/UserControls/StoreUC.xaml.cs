@@ -17,21 +17,21 @@ using System.Windows.Shapes;
 namespace HomeEconomicSystem.PL.View.UserControls
 {
     /// <summary>
-    /// Interaction logic for CategoryUC.xaml
+    /// Interaction logic for ProductUC.xaml
     /// </summary>
-    public partial class CategoryUC : UserControl
+    public partial class StoreUC : UserControl
     {
 
 
-        public Category Category
+        public Store Store
         {
-            get { return (Category)GetValue(CategoryProperty); }
-            set { SetValue(CategoryProperty, value); }
+            get { return (Store)GetValue(StoreProperty); }
+            set { SetValue(StoreProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Category.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CategoryProperty =
-            DependencyProperty.Register("Category", typeof(Category), typeof(CategoryUC), new PropertyMetadata(null));
+        // Using a DependencyProperty as the backing store for Store.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty StoreProperty =
+            DependencyProperty.Register("Store", typeof(Store), typeof(StoreUC), new PropertyMetadata(null));
 
 
 
@@ -43,11 +43,10 @@ namespace HomeEconomicSystem.PL.View.UserControls
 
         // Using a DependencyProperty as the backing store for EditMode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty EditModeProperty =
-            DependencyProperty.Register("EditMode", typeof(bool), typeof(CategoryUC), new PropertyMetadata(false));
+            DependencyProperty.Register("EditMode", typeof(bool), typeof(StoreUC), new PropertyMetadata(false));
 
 
-
-        public CategoryUC()
+        public StoreUC()
         {
             InitializeComponent();
         }

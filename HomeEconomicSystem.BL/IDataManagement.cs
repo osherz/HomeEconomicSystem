@@ -24,6 +24,7 @@ namespace HomeEconomicSystem.BL
         /// <exception cref="KeyNotFoundException">Raise an exception if category id is not found.</exception>
         /// <exception cref="SystemException">Raise an exception if action failed.</exception>
         void EditCategory(Category category);
+        void AddProduct(Product product);
 
         /// <summary>
         /// Delete existing category from DB.

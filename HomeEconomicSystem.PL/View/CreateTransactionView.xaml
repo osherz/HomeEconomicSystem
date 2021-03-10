@@ -11,71 +11,123 @@
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance VM:CreateTransactionVM}" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Binding x:Key="VM" Path="DataContext" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <materialDesign:DialogHost IsOpen="{Binding OpenDialog}">
         <materialDesign:DialogHost.DialogContent>
-            <Grid Margin="10" Width="150" MaxHeight="500">
+
+                <Grid Margin="10" Width="180" MaxHeight="700">
                 <Grid.RowDefinitions>
+                    <RowDefinition />
                     <RowDefinition />
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <ListView Grid.Row="0"
-                          Visibility="{Binding CategoryChoosing, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    materialDesign:HintAssist.Hint="קטגוריות" 
-                    ItemsSource="{Binding Categories}"
-                    SelectionMode="Single"
-                         SelectedItem="{Binding SelectedProductTransaction.Product.Category, Mode=TwoWay}"
-                    ScrollViewer.CanContentScroll="True"
-                    HorizontalContentAlignment="Stretch">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Name}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <ComboBox Name="NewOrChoose" Grid.Row="0"
+                          Margin="0 0 0 20">
+                    <ComboBoxItem IsSelected="{Binding ChooseFromExistence, Mode=TwoWay}">
+                        <TextBlock Text="בחירה מקיימים" />
+                    </ComboBoxItem>
+                    <ComboBoxItem Name="CreateNewCombo"
+                        IsSelected="{Binding CreateNew, Mode=TwoWay}">
+                        <TextBlock Text="צור חדש" />
+                    </ComboBoxItem>
+                </ComboBox>
+                    
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <StackPanel Visibility="{Binding CategoryChoosing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <ListView
+                                   Visibility="{Binding ChooseFromExistence, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    materialDesign:HintAssist.Hint="קטגוריות" 
+                                    ItemsSource="{Binding Categories}"
+                                    SelectionMode="Single"
+                                         SelectedItem="{Binding SelectedProductTransaction.Product.Category, Mode=TwoWay}"
+                                    ScrollViewer.CanContentScroll="True"
+                                    HorizontalContentAlignment="Stretch">   
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                          </ListView>
 
-                <ListView Grid.Row="0"
-                          Visibility="{Binding StoreChoosing, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    materialDesign:HintAssist.Hint="חנויות" 
-                    ItemsSource="{Binding Stores}"
-                    SelectionMode="Single"
-                         SelectedItem="{Binding SelectedProductTransaction.Store, Mode=TwoWay}"
-                    ScrollViewer.CanContentScroll="True"
-                    HorizontalContentAlignment="Stretch">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Name}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                            <usercontrols:CategoryUC  
+                                Visibility="{Binding CreateNew,
+                                            Converter={StaticResource BooleanToVisibilityConverter}}"
+                                EditMode="True"
+                                Category="{Binding NewCategory, Mode=TwoWay}"
+                                />
+                        </StackPanel>
 
-                <TreeView x:Name="ProductsTree"
-                          Visibility="{Binding ProductChoosing, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    Grid.Row="0"
-                    ItemsSource="{Binding Categories}"
-                    MinWidth="220"
-                    SelectedItemChanged="ProductsTree_SelectedItemChanged">
-                    <TreeView.Resources>
-                        <HierarchicalDataTemplate
-                        DataType="{x:Type entity:Category}"
-                        ItemsSource="{Binding Products}">
-                            <TextBlock
-                            Text="{Binding Name}" />
-                        </HierarchicalDataTemplate>
-                        <DataTemplate
-                        DataType="{x:Type entity:Product}">
-                            <TextBlock
-                            Text="{Binding Name}"  />
-                        </DataTemplate>
-                    </TreeView.Resources>
-                </TreeView>
+                        <StackPanel Visibility="{Binding StoreChoosing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <ListView  Visibility="{Binding ChooseFromExistence, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                materialDesign:HintAssist.Hint="חנויות" 
+                                ItemsSource="{Binding Stores}"
+                                SelectionMode="Single"
+                                     SelectedItem="{Binding SelectedProductTransaction.Store, Mode=TwoWay}"
+                                ScrollViewer.CanContentScroll="True"
+                                HorizontalContentAlignment="Stretch">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
 
-                <Button Grid.Row="1" Margin="0 10 0 0" Command="{Binding Finish}">סיימתי</Button>
+                            <usercontrols:StoreUC  
+                                Visibility="{Binding CreateNew,
+                                            Converter={StaticResource BooleanToVisibilityConverter}}"
+                                EditMode="True"
+                                Store="{Binding NewStore, Mode=TwoWay}"
+                                />
+                        </StackPanel>
+
+                        <StackPanel  ScrollViewer.CanContentScroll="True"
+                            Visibility="{Binding ProductChoosing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TreeView x:Name="ProductsTree"
+                                  Visibility="{Binding ChooseFromExistence, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            ItemsSource="{Binding Categories}"
+                            MinWidth="220"
+                            SelectedItemChanged="ProductsTree_SelectedItemChanged">
+                                <TreeView.Resources>
+                                    <HierarchicalDataTemplate
+                                DataType="{x:Type entity:Category}"
+                                ItemsSource="{Binding Products}">
+                                        <TextBlock
+                                    Text="{Binding Name}" />
+                                    </HierarchicalDataTemplate>
+                                    <DataTemplate
+                                DataType="{x:Type entity:Product}">
+                                        <TextBlock
+                                    Text="{Binding Name}"  />
+                                    </DataTemplate>
+                                </TreeView.Resources>
+                            </TreeView>
+
+                            <usercontrols:ProductUC  
+                                Visibility="{Binding CreateNew,
+                                Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Categories="{Binding Categories}"
+                                EditMode="True"
+                                Product="{Binding NewProduct, Mode=TwoWay}"
+                                />
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+            <Button Grid.Row="2" Margin="0 20 0 0" Command="{Binding Finish}">סיימתי</Button>
             </Grid>
+
         </materialDesign:DialogHost.DialogContent>
 
         <DockPanel Margin="20">

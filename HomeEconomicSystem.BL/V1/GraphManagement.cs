@@ -111,7 +111,7 @@ namespace HomeEconomicSystem.BL.V1
 
         private IReadOnlyDictionary<int, IEnumerable<(double, double)>> AnalyzeGraph(BasicGraph graph, IEnumerable<ProductTransaction> productTransactions, Func<ProductTransaction,int> getKey)
         {
-            (DateTime endDate, DateTime startDate) = GetEndAndStartDates(graph.EndDate.Value, graph.StartDate.Value, graph.PastTimeType.Value, graph.PastTimeAmount.Value);
+            (DateTime endDate, DateTime startDate) = GetEndAndStartDates(graph.EndDate, graph.StartDate, graph.PastTimeType, graph.PastTimeAmount);
             AmountOrCost amountOrCost = graph.AmountOrCost;
             TimeType aggregationTimeType = graph.AggregationTimeType;
 
@@ -128,11 +128,11 @@ namespace HomeEconomicSystem.BL.V1
             return GetGroupsPoints(dailyCategoryGroups, amountOrCost, xCollection);
         }
 
-        private (DateTime,DateTime) GetEndAndStartDates(DateTime endDate, DateTime startDate, TimeType pastTimeType, int pastTimeAmount)
+        private (DateTime,DateTime) GetEndAndStartDates(DateTime? endDate, DateTime? startDate, TimeType? pastTimeType, int? pastTimeAmount)
         {
             if (startDate == null && endDate == null)
-                return (AddPastTime(pastTimeType, pastTimeAmount), DateTime.Now);
-            return (endDate, startDate);
+                return (AddPastTime(pastTimeType.Value, pastTimeAmount.Value), DateTime.Now);
+            return (endDate.Value, startDate.Value);
         }
 
         private DateTime AddPastTime(TimeType PastTimeType, int pastTimeAmount)
