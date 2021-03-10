@@ -53,7 +53,7 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Name}" />
+                                            <usercontrols:NameWithImageItemUC DataContext="{Binding .}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -78,7 +78,7 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel>
-                                            <TextBlock Text="{Binding Name}" />
+                                            <usercontrols:NameWithImageItemUC DataContext="{Binding .}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -103,13 +103,12 @@
                                     <HierarchicalDataTemplate
                                 DataType="{x:Type entity:Category}"
                                 ItemsSource="{Binding Products}">
-                                        <TextBlock
-                                    Text="{Binding Name}" />
+                                        <usercontrols:NameWithImageItemUC DataContext="{Binding .}" />
                                     </HierarchicalDataTemplate>
                                     <DataTemplate
                                 DataType="{x:Type entity:Product}">
-                                        <TextBlock
-                                    Text="{Binding Name}"  />
+                                        <usercontrols:NameWithImageItemUC DataContext="{Binding .}" />
+
                                     </DataTemplate>
                                 </TreeView.Resources>
                             </TreeView>
