@@ -75,7 +75,7 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(CategoryGraph categoryGraph)
         {
-            if (categoryGraph.Categories == null || categoryGraph.Categories.Count <= 0)
+            if (categoryGraph.Categories == null || categoryGraph.Categories.Count < 0)
                 return false;
             return ValidateBaseProperty(categoryGraph);
         }
@@ -88,7 +88,7 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(ProductGraph productGraph)
         {
-            if (productGraph.Products == null || productGraph.Products.Count <= 0)
+            if (productGraph.Products == null || productGraph.Products.Count < 0)
                 return false;
             return ValidateBaseProperty(productGraph);
         }
@@ -101,7 +101,7 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(StoreGraph storeGraph)
         {
-            if (storeGraph.Stores == null || storeGraph.Stores.Count <= 0)
+            if (storeGraph.Stores == null || storeGraph.Stores.Count < 0)
                 return false;
             return ValidateBaseProperty(storeGraph);
         }
@@ -126,22 +126,26 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool ValidateBaseProperty(BasicGraph basicGraph)
         {
-            if (basicGraph.Id <= 0)
+            if (basicGraph.Id < 0)
                 return false;
             if (String.IsNullOrEmpty(basicGraph.Title))
                 return false;
-            if (basicGraph.StartDate == null || basicGraph.EndDate == null && basicGraph.PastTimeAmount == null || basicGraph.PastTimeType == null)
+
+            if ((basicGraph.StartDate == null || basicGraph.EndDate == null) && (basicGraph.PastTimeAmount == null || basicGraph.PastTimeType == null))
                 return false;
             if (string.IsNullOrEmpty(basicGraph.Title))
                 return false;
+            if (basicGraph.StartDate == null && basicGraph.EndDate == null)
+                if (basicGraph.PastTimeAmount == null || basicGraph.PastTimeType == null || basicGraph.PastTimeAmount < 0 || !basicGraph.PastTimeType.HasValue)
+                    return false;
+            if (basicGraph.PastTimeAmount == null && basicGraph.PastTimeType == null)
+                if (basicGraph.StartDate == null || basicGraph.EndDate == null)
+                    return false;
 
             ///check if EndDate have a valid value
-            if (DateTime.Compare(basicGraph.StartDate.Value, basicGraph.EndDate.Value) < 0)
+            if (DateTime.Compare(basicGraph.StartDate.Value, basicGraph.EndDate.Value) > 0)
                 return false;
-            if (basicGraph.PastTimeAmount < 0)
-                return false;
-            if (!basicGraph.PastTimeType.HasValue)
-                return false;
+
             ///check if GraphType have a valid value
             if (!Enum.IsDefined(typeof(GraphType), basicGraph.GraphType))
                 return false;
