@@ -6,7 +6,7 @@ namespace HomeEconomicSystem.BL
     public interface IAssociationRule
     {
         IEnumerable<Product> GoesWith { get; set; }
-        float Probability { get; set; }
+        double Probability { get; set; }
         IEnumerable<Product> Product { get; set; }
     }
 }

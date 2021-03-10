@@ -123,18 +123,9 @@ namespace HomeEconomicSystem.BL.V1
                 from newGroup2 in
                         (from productTransactionCollection in newGroup1
                          from productTransaction in productTransactionCollection
-                         where productTransaction.Transaction.DateTime.InRange(startDate, endDate)
+                         where productTransaction.Transaction.DateTime.InRange(startDate.Date, endDate.Date)
                          group productTransaction by GetTimeType(productTransaction.Transaction.DateTime, aggregationTimeType))
                 group newGroup2 by newGroup1.Key;
-
-
-            //from productTransaction in productTransactions
-            //where productTransaction.Transaction.DateTime.InRange(startDate, endDate)
-            //group productTransaction by getKey(productTransaction) into newGroup1
-            //from newGroup2 in
-            //        (from productTransaction in newGroup1
-            //         group productTransaction by GetTimeType(productTransaction.Transaction.DateTime, aggregationTimeType))
-            //group newGroup2 by newGroup1.Key;
 
             IEnumerable<int> xCollection = GetXcollectios(startDate, endDate, aggregationTimeType);
             IEnumerable<int> keyCollection = items.Select(getKey);
