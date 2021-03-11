@@ -26,7 +26,7 @@ namespace HomeEconomicSystem.BL.V1
 
         public void CreateShopingListRecommendation(string path)
         {
-            IEnumerable<Product> productList = GetNewRecommendedProductList();
+            IEnumerable<IEnumerable<Product>> products = GetNewRecommendedProductList();
 
             //Create a new PDF document
             PdfDocument doc = new PdfDocument();
@@ -40,10 +40,16 @@ namespace HomeEconomicSystem.BL.V1
             table.Columns.Add("Product Name");
             table.Columns.Add("Bar Code");
             //Include rows to the DataTable
-            foreach (var product in productList)
-            {
-                table.Rows.Add(new string[] { product.Name, product.BarCode });
-            }
+            if(products == null || products.Count() == 0)
+                table.Rows.Add(new string[] { "There is still no shoping list", "" });
+            else
+                foreach (var productGroup in products)
+                {
+                    foreach (var product in productGroup)
+                    {
+                        table.Rows.Add(new string[] { product.Name.ToString(), product.BarCode.ToString() });
+                    }
+                }
             //Applying cell padding to table
             pdfLightTable.Style.CellPadding = 3;
             pdfLightTable.ApplyBuiltinStyle(PdfLightTableBuiltinStyle.GridTable3Accent3);
@@ -54,29 +60,28 @@ namespace HomeEconomicSystem.BL.V1
             //Draw PdfLightTable
             pdfLightTable.Draw(page, new PointF(0, 0));
             //Save the document
-            doc.Save("ShopingList" + DateTime.Now.ToString() + ".pdf");
+            //doc.Save("ShopingList" + DateTime.Now.ToString() + ".pdf");
+            doc.Save("PdfTable.pdf");
             //Close the document
             doc.Close(true);
             //This will open the PDF file so, the result will be seen in default PDF viewer
-            //Process.Start("PdfTable.pdf");
+            Process.Start("PdfTable.pdf");
 
         }
 
 
-        private IEnumerable<Product> GetNewRecommendedProductList()
+        private IEnumerable<IEnumerable<Product>> GetNewRecommendedProductList()
         {
-            SortedSet<int>[] dataset = GetBasicPoductList();
+            IEnumerable<IAssociationRule> associationRules = GetAssosiatonRules();
+            Transaction transaction = _db.Transactions.OrderBy(t => t.DateTime).ToList().Last();
+            IEnumerable<Product> transactionProduct = from productTransaction in transaction.ProductTransactions
+                                                      select productTransaction.Product;
+            var p = from rule in associationRules
+                    from pt in transactionProduct
+                    where rule.Product.Count() == 1 && rule.Product.First().Id == pt.Id
+                    select rule.GoesWith;
 
-            // Create a new a-priori learning algorithm with support 2
-            Apriori apriori = new Apriori(threshold: 2, confidence: 0);
-
-            // Use the algorithm to learn a set matcher
-            AssociationRuleMatcher<int> classifier = apriori.Learn(dataset);
-
-            AssociationRule<int>[] rules = classifier.Rules;
-
-            return GetProductListByAssosiatonRules(rules);
-
+            return p;
         }
 
         private IEnumerable<Product> GetProductListByAssosiatonRules(AssociationRule<int>[] rules)
@@ -96,7 +101,7 @@ namespace HomeEconomicSystem.BL.V1
 
         private SortedSet<int>[] GetLastTransactionByBarCode()
         {
-            Transaction transactions = _db.Transactions.OrderBy(t => t.DateTime).Last();
+            Transaction transactions = _db.Transactions.OrderBy(t => t.DateTime).ToList().Last();
             List<SortedSet<int>> dataset = new List<SortedSet<int>>();
             SortedSet<int> transactionBarCodes = new SortedSet<int>();
             foreach (var producrTransaction in transactions.ProductTransactions)
