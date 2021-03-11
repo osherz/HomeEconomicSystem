@@ -1,8 +1,10 @@
 ﻿using HomeEconomicSystem.BE;
 using HomeEconomicSystem.PL.Extensions;
+using HomeEconomicSystem.PL.Model;
 using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using HomeEconomicSystem.Utils;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -54,12 +56,25 @@ namespace HomeEconomicSystem.PL.ViewModel
                         transactionCreationDisplay.GenerateTransaction();
                         PageDisplay=transactionCreationDisplay;
                     }
+                },
+                {
+                    States.CreatingList, () =>
+                    {
+                        SaveFileDialog saveFileDialog = new SaveFileDialog();
+                        saveFileDialog.Filter = "Pdf File |*.pdf";
+                        saveFileDialog.FileName = "Shop List";
+                        if (saveFileDialog.ShowDialog() == true)
+                        {
+                            new AssociationsModel().CreateShopingListRecommendation(saveFileDialog.FileName);
+                        }
+                    }
                 }
             };
             _stateMachine = new StateMachine(_stateActionDict);
 
             MainMenuVM = new MainMenuVM(_stateMachine);
             InitToolBarItems();
+            _stateMachine.Fire(Triggers.HomeSelected);
         }
 
         private void InitToolBarItems()

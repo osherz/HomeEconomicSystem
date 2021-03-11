@@ -115,7 +115,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private void SaveNewGraph()
         {
-            BasicGraph basicGraph = GraphCreationVM.SelectedSubject.Key switch
+            BasicGraph basicGraph = GraphCreationVM.SelectedSubject.Value.Key switch
             {
                 Subjects.Category => GraphCreationVM.GetGraph<CategoryGraph>(),
                 Subjects.Product => GraphCreationVM.GetGraph<ProductGraph>(),

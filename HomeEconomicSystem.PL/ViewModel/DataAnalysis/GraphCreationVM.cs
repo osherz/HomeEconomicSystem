@@ -55,46 +55,49 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             set => SetProperty(ref _subSubjects, value);
         }
 
-        KeyValuePair<Subjects, string> _selectedSubject;
-        public KeyValuePair<Subjects, string> SelectedSubject
+        KeyValuePair<Subjects, string>? _selectedSubject;
+        public KeyValuePair<Subjects, string>? SelectedSubject
         {
             get => _selectedSubject;
             set => SetProperty(ref _selectedSubject, value);
         }
         public IReadOnlyCollection<KeyValuePair<Subjects, string>> SubjectsOptions { get; }
 
-        KeyValuePair<GraphType, string> _selectedGraphType;
-        public KeyValuePair<GraphType, string> SelectedGraphType
+        KeyValuePair<GraphType, string>? _selectedGraphType;
+        public KeyValuePair<GraphType, string>? SelectedGraphType
         {
             get => _selectedGraphType;
             set
             {
                 SetProperty(ref _selectedGraphType, value);
-                _graph.GraphType = value.Key;
+                if(value.HasValue)
+                    _graph.GraphType = value.Value.Key;
             }
         }
         public IReadOnlyCollection<KeyValuePair<GraphType, string>> GraphTypeOptions { get; }
 
-        KeyValuePair<AmountOrCost, string> _selectedAmountOrCost;
-        public KeyValuePair<AmountOrCost, string> SelectedAmountOrCost
+        KeyValuePair<AmountOrCost, string>? _selectedAmountOrCost;
+        public KeyValuePair<AmountOrCost, string>? SelectedAmountOrCost
         {
             get => _selectedAmountOrCost;
             set
             {
                 SetProperty(ref _selectedAmountOrCost, value);
-                _graph.AmountOrCost = value.Key;
+                if (value.HasValue)
+                    _graph.AmountOrCost = value.Value.Key;
             }
         }
         public IReadOnlyCollection<KeyValuePair<AmountOrCost, string>> AmountOrCostOptions { get; }
 
-        KeyValuePair<TimeType, string> _selectedAggregationTimeType;
-        public KeyValuePair<TimeType, string> SelectedAggregationTimeType
+        KeyValuePair<TimeType, string>? _selectedAggregationTimeType;
+        public KeyValuePair<TimeType, string>? SelectedAggregationTimeType
         {
             get => _selectedAggregationTimeType;
             set
             {
                 SetProperty(ref _selectedAggregationTimeType, value);
-                _graph.AggregationTimeType = value.Key;
+                if (value.HasValue)
+                    _graph.AggregationTimeType = value.Value.Key;
             }
         }
         public IReadOnlyCollection<KeyValuePair<TimeType, string>> TimeTypeOptions { get; }
@@ -183,10 +186,10 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public TGraph GetGraph<TGraph>()
             where TGraph : BasicGraph
         {
-            if (SelectedSubject.Key != Subjects.Transaction)
+            if (SelectedSubject.Value.Key != Subjects.Transaction)
             {
                 var selectedSubSubjects = SubSubjects.Where(item => item.IsSelected).Select(item => item.Item);
-                switch (SelectedSubject.Key)
+                switch (SelectedSubject.Value.Key)
                 {
                     case Subjects.Category:
                         (_graph as CategoryGraph).Categories = selectedSubSubjects.Cast<Category>().ToList();
@@ -257,33 +260,46 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         private void LoadSubSubject()
         {
             BasicGraph newGraph;
-            Subjects selectedSubject = SelectedSubject.Key;
-            if (selectedSubject != Subjects.Transaction)
+            if (SelectedSubject.HasValue)
             {
-                IEnumerable<IName> subSubjectsNames;
-                switch (selectedSubject)
+                Subjects selectedSubject = SelectedSubject.Value.Key;
+                if (selectedSubject != Subjects.Transaction)
                 {
-                    case Subjects.Category:
-                        subSubjectsNames = _categoriesModel.CategoriesList;
-                        newGraph = new CategoryGraph();
-                        break;
-                    case Subjects.Product:
-                        subSubjectsNames = _productsModel.ProductsList;
-                        newGraph = new ProductGraph();
-                        break;
-                    case Subjects.Store:
-                        subSubjectsNames = _storesModel.StoresList;
-                        newGraph = new StoreGraph();
-                        break;
-                    default:
-                        throw new NotSupportedException();
+                    IEnumerable<IName> subSubjectsNames;
+                    switch (selectedSubject)
+                    {
+                        case Subjects.Category:
+                            subSubjectsNames = _categoriesModel.CategoriesList;
+                            newGraph = new CategoryGraph();
+                            break;
+                        case Subjects.Product:
+                            subSubjectsNames = _productsModel.ProductsList;
+                            newGraph = new ProductGraph();
+                            break;
+                        case Subjects.Store:
+                            subSubjectsNames = _storesModel.StoresList;
+                            newGraph = new StoreGraph();
+                            break;
+                        default:
+                            throw new NotSupportedException();
+                    }
+                    SubSubjects = subSubjectsNames.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
                 }
-                SubSubjects = subSubjectsNames.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
-            }
-            else newGraph = new TransactionsGraph();
+                else newGraph = new TransactionsGraph();
 
-            if (_graph != null) _graph.Copy(newGraph);
-            _graph = newGraph;
+                if (_graph != null) _graph.Copy(newGraph);
+                _graph = newGraph;
+            }
+        }
+
+        public void Reset()
+        {
+            Graph = new TransactionsGraph() { StartDate = DateTime.Now, EndDate = DateTime.Now };
+            SelectedAggregationTimeType = null;
+            SelectedAmountOrCost = null;
+            SelectedGraphType = null;
+            SelectedSubject = null;
+            SubSubjects = null;
         }
 
         private void SetProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = "")

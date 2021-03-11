@@ -66,7 +66,7 @@
             <!--#region Title & Description-->
             <StackPanel Grid.Column="1">
                 <TextBlock
-                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                        Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                         HorizontalAlignment="Center"
                        FontWeight="ExtraBold"
                         Text="{Binding Title}" 
@@ -75,7 +75,6 @@
                 <TextBlock  Text="{Binding Description}" 
                         Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
                         HorizontalAlignment="Center"/>
-
                 <TextBlock HorizontalAlignment="Center">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} בין {1:dd/MM/yyyy} ל-{2:dd/MM/yyyy}">
@@ -135,7 +134,7 @@
         <!--#endregion Column-->
 
         <!--#region Table-->
-        <ScrollViewer Grid.Row="2" 
+        <ScrollViewer Grid.Row="2" FlowDirection="RightToLeft"
                       HorizontalScrollBarVisibility="Auto" 
                       VerticalScrollBarVisibility="Auto"
                        Visibility="{Binding IsTable, Converter={StaticResource BooleanToVisibilityConverter}}">

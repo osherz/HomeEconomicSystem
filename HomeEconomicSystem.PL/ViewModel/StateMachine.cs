@@ -21,6 +21,8 @@ namespace HomeEconomicSystem.PL.ViewModel
             ConfigureTransactionHistory();
             ConfigureTransactionCreation();
 
+            BasicConfigure(States.CreatingList, States.Start);
+
             OnTransitioned((t) => CommandManager.InvalidateRequerySuggested());
 
             //used to debug commands and UI components
@@ -41,7 +43,8 @@ namespace HomeEconomicSystem.PL.ViewModel
                 .Permit(Triggers.DataAnalysisSelected, States.DataAnalysis)
                 .Permit(Triggers.ProductCatalogSelected, States.ProductCatalog)
                 .Permit(Triggers.CreateTransaction, States.TransactionCreation)
-                .Permit(Triggers.TransactionHistorySelected, States.TransactionHistory);
+                .Permit(Triggers.TransactionHistorySelected, States.TransactionHistory)
+                .Permit(Triggers.CreatePurchaseList, States.CreatingList);
         }
 
         private void ConfigureHome()

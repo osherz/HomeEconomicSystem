@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.BL.V1
 {
-    class Validation
+    public class Validation : IValidation
     {
         /// <summary>
         /// Checks if the relevant fields in the class "category"

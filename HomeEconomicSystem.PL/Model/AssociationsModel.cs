@@ -19,5 +19,10 @@ namespace HomeEconomicSystem.PL.Model
             _bl = new BL.BL();
             _assosiationAnalysis = _bl.AssosiationProductsAnalysis;
         }
+
+        public void CreateShopingListRecommendation(string path)
+        {
+            _assosiationAnalysis.CreateShopingListRecommendation(path);
+        }
     }
 }
