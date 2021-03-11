@@ -68,7 +68,8 @@ namespace HomeEconomicSystem.BL.V1
         private SortedSet<int>[] GetAllTransactionByBarCodes()
         {
             IEnumerable<Transaction> transactions = _db.Transactions;
-            SortedSet<int>[] dataset = new SortedSet<int>[transactions.ToList().Count];
+            List<SortedSet<int>> dataset = new List<SortedSet<int>>();
+            
             foreach (var transaction in transactions)
             {
                 SortedSet<int> transactionBarCodes = new SortedSet<int>();
@@ -76,9 +77,9 @@ namespace HomeEconomicSystem.BL.V1
                 {
                     transactionBarCodes.Add(producrTransaction.Product.Id);
                 }
-                dataset = dataset.Append(transactionBarCodes).ToArray();
+                dataset.Add(transactionBarCodes);
             }
-            return dataset;
+            return dataset.ToArray();
         }
 
     }
