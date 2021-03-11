@@ -1,4 +1,5 @@
-﻿using HomeEconomicSystem.Utils;
+﻿using HomeEconomicSystem.PL.ViewModel.PageDisplay;
+using HomeEconomicSystem.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,6 +14,9 @@ namespace HomeEconomicSystem.PL.ViewModel
     public abstract class VMBasic<TState, TTrigger> : INotifyPropertyChanged, IVM
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public IPageDisplay ParentPageDisplay { get; }
+
         private NotifyProperyChanged _notifyPropertyChanged;
         public BaseStateMachine<TState, TTrigger> StateMachine { get; }
 
@@ -28,8 +32,9 @@ namespace HomeEconomicSystem.PL.ViewModel
 
         public event EventHandler<string> InnerStateChanged;
 
-        public VMBasic()
+        public VMBasic(IPageDisplay parentPageDisplay)
         {
+            ParentPageDisplay = parentPageDisplay;
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
             _innerVMs = CreateInnerVM();
             _innerViewsCreation = CreateViewsCreation();

@@ -163,31 +163,40 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private bool ValidateTransitionFromSubjectChoosing()
         {
-            if (string.IsNullOrEmpty(ParentVM.GraphTitle) || ParentVM.SelectedSubject is null) 
-                return false;
-            else
+            try
             {
-                var graphsModel = new GraphsModel();
-                var title = ParentVM.GraphTitle;
-                IEnumerable<BasicGraph> graphs = null;
-                switch (ParentVM.SelectedSubject.Value.Key)
+                if (string.IsNullOrEmpty(ParentVM.GraphTitle) || ParentVM.SelectedSubject is null)
+                    return false;
+                else
                 {
-                    case Subjects.Category:
-                        graphs = graphsModel.GetCategoryGraphs();
-                        break;
-                    case Subjects.Product:
-                        graphs = graphsModel.GetProductGraphs();
-                        break;
-                    case Subjects.Store:
-                        graphs = graphsModel.GetStoreGraphs();
-                        break;
-                    case Subjects.Transaction:
-                        graphs = graphsModel.GetTransactionGraphs();
-                        break;
-                    default:
-                        break;
+                    var graphsModel = new GraphsModel();
+                    var title = ParentVM.GraphTitle;
+                    IEnumerable<BasicGraph> graphs = null;
+                    switch (ParentVM.SelectedSubject.Value.Key)
+                    {
+                        case Subjects.Category:
+                            graphs = graphsModel.GetCategoryGraphs();
+                            break;
+                        case Subjects.Product:
+                            graphs = graphsModel.GetProductGraphs();
+                            break;
+                        case Subjects.Store:
+                            graphs = graphsModel.GetStoreGraphs();
+                            break;
+                        case Subjects.Transaction:
+                            graphs = graphsModel.GetTransactionGraphs();
+                            break;
+                        default:
+                            break;
+                    }
+                    return graphs.All(g => g.Title != title);
                 }
-                return graphs.All(g => g.Title != title);
+            }
+            catch (Exception e)
+            {
+                ParentVM.ParentPageDisplay.MessageToShow = e.Message;
+                ParentVM.ParentPageDisplay.ShowMessage = true;
+                return false;
             }
         }
     }

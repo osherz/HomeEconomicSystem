@@ -39,7 +39,7 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type Graphviz4NetVM:EdgeLabelViewModel}">
             <StackPanel>
-                <TextBlock Text="{Binding Path=Label}" FontFamily="Comic Sans MS"/>
+                <TextBlock Text="{Binding Path=Label,StringFormat={}{0:#0.00'%'}}" FontFamily="Comic Sans MS"/>
             </StackPanel>
         </DataTemplate>
         <DataTemplate DataType="{x:Type Graphviz4NetVM:EdgeViewModel}">

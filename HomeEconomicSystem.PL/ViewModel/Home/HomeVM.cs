@@ -48,8 +48,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Home
                 AggregationTimeType = TimeType.Month,
                 AmountOrCost = AmountOrCost.Cost,
                 GraphType = GraphType.Linear,
-                PastTimeType = TimeType.Month,
-                PastTimeAmount = 2,
+                EndDate = DateTime.Now,
+                StartDate = DateTime.Now.AddMonths(-2),
                 Title = "הוצאות ב3 החודשים האחרונים"
             };
 
@@ -58,8 +58,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Home
                 AggregationTimeType = TimeType.Week,
                 AmountOrCost = AmountOrCost.Cost,
                 GraphType = GraphType.Pie,
-                PastTimeType = TimeType.Month,
-                PastTimeAmount = 1,
+                EndDate = DateTime.Now,
+                StartDate = DateTime.Now.AddMonths(-1),
                 Title = "קטגוריות לעלות בחודש האחרון",
                 Categories = dataManagement.GetCategories().ToObservableCollection(),
             };
@@ -69,8 +69,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Home
                 AggregationTimeType = TimeType.Month,
                 AmountOrCost = AmountOrCost.Cost,
                 GraphType = GraphType.Bar,
-                PastTimeType = TimeType.Month,
-                PastTimeAmount = 1,
+                EndDate = DateTime.Now,
+                StartDate = DateTime.Now.AddMonths(-1),
                 Title = "מוצרים לעלות בחודש האחרון",
                 Products = dataManagement.GetProducts().ToObservableCollection(),
             };

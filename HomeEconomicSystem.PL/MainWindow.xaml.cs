@@ -32,5 +32,10 @@ namespace HomeEconomicSystem.PL
         {
             MenuToggleButton.IsChecked = false;
         }
+
+        private void SnackbarMessage_ActionClick(object sender, RoutedEventArgs e)
+        {
+            (DataContext as MainWindowVM).CloseMessage();
+        }
     }
 }

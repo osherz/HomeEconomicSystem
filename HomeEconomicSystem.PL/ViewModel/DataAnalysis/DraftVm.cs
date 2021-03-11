@@ -2,6 +2,7 @@
 using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using HomeEconomicSystem.Utils;
 using System;
 using System.Collections.Generic;
@@ -58,11 +59,11 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public ICommand CreateGraph { get; private set; }
         #endregion Commands
 
-        public DraftVM()
+        public DraftVM(IPageDisplay parentPageDisplay)
         {
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
 
-            GraphCreationVM = new GraphCreationVM();
+            GraphCreationVM = new GraphCreationVM(parentPageDisplay);
         }
 
         public void SetStateMachine(Stateless.StateMachine<States, Triggers> stateMachine)

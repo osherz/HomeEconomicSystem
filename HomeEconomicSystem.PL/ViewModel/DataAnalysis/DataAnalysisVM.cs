@@ -1,4 +1,5 @@
 ﻿using HomeEconomicSystem.PL.View;
+using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 {
     public class DataAnalysisVM : VMBasic<States, Triggers>
     {
-        public DataAnalysisVM()
+        public DataAnalysisVM(IPageDisplay parentPageDisplay) : base(parentPageDisplay)
         {
             StateMachine.Fire(Triggers.FavoriteSelected);
         }
@@ -24,19 +25,20 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         {
             return new Dictionary<States, Func<UserControl>>
             {
-                 {States.Favorites, () =>  new FavoritesView() },
+                 {States.Favorites, () =>new FavoritesView() },
                  {States.Draft, () => new DraftView() },
-                {States.AssociationRules, () => new AssociationRulesView() }
+                {States.AssociationRules, () => new AssociationRulesView() },
             };
         }
+
 
         protected override Dictionary<States, IInnerVM<States, Triggers>> CreateInnerVM()
         {
             return new Dictionary<States, IInnerVM<States, Triggers>>
             {
-                {States.Favorites, new FavoritesVM() },
-                 {States.Draft, new DraftVM() },
-                {States.AssociationRules, new AssociationRulesVM() }
+                {States.Favorites, new FavoritesVM(ParentPageDisplay) },
+                 {States.Draft, new DraftVM(ParentPageDisplay) },
+                {States.AssociationRules, new AssociationRulesVM(ParentPageDisplay) }
             };
         }
     }

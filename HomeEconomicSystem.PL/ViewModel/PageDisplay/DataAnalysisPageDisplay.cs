@@ -34,19 +34,26 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public string Title => "ניתוח נתונים";
 
+        private bool _showMessage;
+        public bool ShowMessage { get => _showMessage; set => SetProperty(ref _showMessage, value); }
+
+
+        private string _messageToShow;
+        public string MessageToShow { get => _messageToShow; set => SetProperty(ref _messageToShow, value); }
+
         public DataAnalysisPageDisplay()
         {
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
 
             Content = new View.DataAnalysisView();
-            var VM = new DataAnalysisVM();
+            var VM = new DataAnalysisVM(this);
             VM.InnerStateChanged += VM_InnerStateChanged;
             Content.DataContext = VM;
             _stateMachine = VM.StateMachine;
             _stateMachine.OnTransitionCompleted(e => VM_InnerStateChanged(this, e.Destination.ToString()));
             MenuItems = new List<MenuItem>
             {
-                new MenuItem("שמורים", PackIconKind.StarCircle, _stateMachine.CreateCommand(TriggersDA.FavoriteSelected)),
+                new MenuItem("גרפים", PackIconKind.StarCircle, _stateMachine.CreateCommand(TriggersDA.FavoriteSelected)),
                 new MenuItem("Rules", PackIconKind.ChartSankeyVariant, _stateMachine.CreateCommand(TriggersDA.AssociationRulesSelected)),
                 new MenuItem("טיוטה", PackIconKind.File, _stateMachine.CreateCommand(TriggersDA.DraftSelected))
             };

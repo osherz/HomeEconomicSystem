@@ -1,4 +1,5 @@
 ﻿using HomeEconomicSystem.BE;
+using System.Collections.Generic;
 
 namespace HomeEconomicSystem.BL
 {
@@ -12,6 +13,6 @@ namespace HomeEconomicSystem.BL
         bool Validate(StoreGraph storeGraph);
         bool Validate(Transaction transaction);
         bool Validate(TransactionsGraph transactionsGraph);
-        bool ValidateBaseProperty(BasicGraph basicGraph);
+        bool ValidateBaseProperty(BasicGraph basicGraph, IEnumerable<BasicGraph> graphsToCheck);
     }
 }

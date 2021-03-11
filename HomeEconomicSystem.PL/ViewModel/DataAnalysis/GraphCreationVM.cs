@@ -1,6 +1,7 @@
 ﻿using HomeEconomicSystem.BE;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using HomeEconomicSystem.Utils;
 using System;
 using System.Collections;
@@ -122,6 +123,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         private bool _measureChoosing;
 
         private bool _rangeChoosing;
+        public IPageDisplay ParentPageDisplay { get; }
+
         public bool TypeChoosing
         {
             get { return _typeChoosing; }
@@ -152,9 +155,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public ICommand Prev { get; private set; }
         public ICommand Cancel { get; private set; }
 
-        public GraphCreationVM() : this(new TransactionsGraph() {StartDate = DateTime.Now, EndDate=DateTime.Now }) // Just to get the properties of BasicGraph
+        public GraphCreationVM(IPageDisplay parentPageDisplay) : this(new TransactionsGraph() {StartDate = DateTime.Now, EndDate=DateTime.Now }) // Just to get the properties of BasicGraph
         {
-
+            ParentPageDisplay = parentPageDisplay;
         }
 
         public GraphCreationVM(BasicGraph graph)
@@ -259,36 +262,44 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         private void LoadSubSubject()
         {
-            BasicGraph newGraph;
-            if (SelectedSubject.HasValue)
+            try
             {
-                Subjects selectedSubject = SelectedSubject.Value.Key;
-                if (selectedSubject != Subjects.Transaction)
+                BasicGraph newGraph;
+                if (SelectedSubject.HasValue)
                 {
-                    IEnumerable<IName> subSubjectsNames;
-                    switch (selectedSubject)
+                    Subjects selectedSubject = SelectedSubject.Value.Key;
+                    if (selectedSubject != Subjects.Transaction)
                     {
-                        case Subjects.Category:
-                            subSubjectsNames = _categoriesModel.CategoriesList;
-                            newGraph = new CategoryGraph();
-                            break;
-                        case Subjects.Product:
-                            subSubjectsNames = _productsModel.ProductsList;
-                            newGraph = new ProductGraph();
-                            break;
-                        case Subjects.Store:
-                            subSubjectsNames = _storesModel.StoresList;
-                            newGraph = new StoreGraph();
-                            break;
-                        default:
-                            throw new NotSupportedException();
+                        IEnumerable<IName> subSubjectsNames;
+                        switch (selectedSubject)
+                        {
+                            case Subjects.Category:
+                                subSubjectsNames = _categoriesModel.CategoriesList;
+                                newGraph = new CategoryGraph();
+                                break;
+                            case Subjects.Product:
+                                subSubjectsNames = _productsModel.ProductsList;
+                                newGraph = new ProductGraph();
+                                break;
+                            case Subjects.Store:
+                                subSubjectsNames = _storesModel.StoresList;
+                                newGraph = new StoreGraph();
+                                break;
+                            default:
+                                throw new NotSupportedException();
+                        }
+                        SubSubjects = subSubjectsNames.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
                     }
-                    SubSubjects = subSubjectsNames.Select(c => new SelectedableItem<IName>(c)).ToObservableCollection();
-                }
-                else newGraph = new TransactionsGraph();
+                    else newGraph = new TransactionsGraph();
 
-                if (_graph != null) _graph.Copy(newGraph);
-                _graph = newGraph;
+                    if (_graph != null) _graph.Copy(newGraph);
+                    _graph = newGraph;
+                }
+            }
+            catch (Exception e)
+            {
+                ParentPageDisplay.MessageToShow = e.Message;
+                ParentPageDisplay.ShowMessage = true;
             }
         }
 

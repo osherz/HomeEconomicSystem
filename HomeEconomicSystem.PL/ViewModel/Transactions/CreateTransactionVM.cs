@@ -3,6 +3,7 @@ using HomeEconomicSystem.BL;
 using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using HomeEconomicSystem.Utils;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
     public class CreateTransactionVM : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private IPageDisplay _parentPageDisplay;
         private NotifyProperyChanged _notifyPropertyChanged;
         private TransactionsModel _transactionsModel;
         
@@ -126,8 +129,9 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
         public ICommand AddProductTransaction { get; set; }
         public ICommand Finish { get; set; }
 
-        public CreateTransactionVM()
+        public CreateTransactionVM(IPageDisplay parentPageDisplay)
         {
+            _parentPageDisplay = parentPageDisplay;
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
             NewCategory = new Category();
             NewStore = new Store();
@@ -138,7 +142,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             GenerateNewTransaction();
             LoadAllData();
 
-            _stateMachine = new TransactionsStateMachine(
+            _stateMachine = new TransactionsStateMachine(this,
                 new Dictionary<TransactionsState, Action>
                 {
                     {TransactionsState.ChoosingCategory, () => { OpenDialog=true; CategoryChoosing=true; } },
@@ -168,7 +172,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
                             NewStore= new Store();
                         }
                     }},
-                    {TransactionsState.UpdatingTransaction, UpdateOrCreateTransaction }
+                    {TransactionsState.UpdatingTransaction, UpdateOrCreateTransaction },
+                    { TransactionsState.DoneCreating, ShowSuccessMessage },
                 },
                 new Dictionary<TransactionsState, Action>
                 {
@@ -197,6 +202,11 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             Finish = _stateMachine.CreateCommand(TransactionsTriggers.Finish);
         }
 
+        private void ShowSuccessMessage()
+        {
+            _parentPageDisplay.MessageToShow = "בוצע בהצלחה";
+            _parentPageDisplay.ShowMessage = true;
+        }
         private void LoadAllData()
         {
             ProductTransactions = Transaction.ProductTransactions.ToObservableCollection();
@@ -222,20 +232,27 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
 
         private void UpdateOrCreateTransaction()
         {
-            // Updating transaction
-            Transaction.ProductTransactions = ProductTransactions;
-            if (Transaction.Id > 0)
+            try
             {
-                _transactionsModel.Update(Transaction);
+                // Updating transaction
+                Transaction.ProductTransactions = ProductTransactions;
+                if (Transaction.Id > 0)
+                {
+                    _transactionsModel.Update(Transaction);
+                }
+                else // Adding new transaction
+                {
+                    _transactionsModel.Add(Transaction);
+                }
+                LoadAllData();
+                GenerateNewTransaction();
+                _stateMachine.Fire(TransactionsTriggers.Finish);
             }
-            else // Adding new transaction
+            catch(Exception e)
             {
-                _transactionsModel.Add(Transaction);
+                _parentPageDisplay.MessageToShow = e.Message;
+                _parentPageDisplay.ShowMessage = true;
             }
-            LoadAllData();
-            GenerateNewTransaction();
-            _stateMachine.Fire(TransactionsTriggers.Finish);
-
         }
 
         private void ChangeSelectedProductTransaction(object obj)
