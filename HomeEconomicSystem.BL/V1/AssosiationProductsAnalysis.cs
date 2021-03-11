@@ -30,7 +30,7 @@ namespace HomeEconomicSystem.BL.V1
             SortedSet<int>[] dataset = GetAllTransactionByBarCodes();
 
             // Create a new a-priori learning algorithm with support 3
-            Apriori apriori = new Apriori(threshold: 3, confidence: 0);
+            Apriori apriori = new Apriori(threshold: 2, confidence: 0);
 
             // Use the algorithm to learn a set matcher
             AssociationRuleMatcher<int> classifier = apriori.Learn(dataset);
@@ -42,10 +42,10 @@ namespace HomeEconomicSystem.BL.V1
 
         private IEnumerable<IAssociationRule> GetAssosiatonRules(AssociationRule<int>[] rules)
         {
-            IEnumerable<AssosiatonRule> assosiatonRules = new List<AssosiatonRule>();
+            List<AssosiatonRule> assosiatonRules = new List<AssosiatonRule>();
             foreach (var rule in rules)
             {
-                assosiatonRules.ToList().Add(new AssosiatonRule(BarCodesToProducts(rule.X), 
+                assosiatonRules.Add(new AssosiatonRule(BarCodesToProducts(rule.X), 
                                                                 BarCodesToProducts(rule.Y), 
                                                                 rule.Confidence));
             }
@@ -58,9 +58,9 @@ namespace HomeEconomicSystem.BL.V1
             IEnumerable <Product> products = new List<Product>();
             foreach (var barCode in barcodes)
             {
-                products.Concat(from product in allProducts
-                                where product.Id == barCode
-                                select product);
+                products = products.Concat(from product in allProducts
+                                            where product.Id == barCode
+                                            select product);
             }
             return products;
         }
@@ -69,7 +69,6 @@ namespace HomeEconomicSystem.BL.V1
         {
             IEnumerable<Transaction> transactions = _db.Transactions;
             List<SortedSet<int>> dataset = new List<SortedSet<int>>();
-            
             foreach (var transaction in transactions)
             {
                 SortedSet<int> transactionBarCodes = new SortedSet<int>();

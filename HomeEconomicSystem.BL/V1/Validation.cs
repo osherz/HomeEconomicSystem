@@ -1,4 +1,5 @@
 ﻿using HomeEconomicSystem.BE;
+using HomeEconomicSystem.Dal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,13 @@ namespace HomeEconomicSystem.BL.V1
 {
     public class Validation : IValidation
     {
+        private IDb _db;
+        private GraphManagement graphManagement;
+        public Validation()
+        {
+            _db = new DalFactory().GetDb();
+            graphManagement = new GraphManagement();
+        }
         /// <summary>
         /// Checks if the relevant fields in the class "category"
         /// are initialized properly, 
@@ -20,6 +28,14 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(Category category)
         {
+            var dupliCategory =
+                from category1 in _db.Categories
+                where category1.Id == category.Id
+                select category1;
+            if (dupliCategory.Any())
+                return false;
+
+
             if (category.Id < 0)
                 return false;
             if (string.IsNullOrEmpty(category.Name))
@@ -39,6 +55,13 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(Product product)
         {
+            var dupliProduct =
+                from product1 in _db.Products
+                where product1.Id == product.Id || product1.BarCode == product.BarCode
+                select product1;
+            if (dupliProduct.Any())
+                return false;
+
             if (product.Id < 0)
                 return false;
             if (string.IsNullOrEmpty(product.BarCode))
@@ -56,6 +79,13 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(Store store)
         {
+            var dupliStore =
+                from store1 in _db.Stores
+                where store1.Id == store.Id
+                select store1;
+            if (dupliStore.Any())
+                return false;
+
             if (store.Id < 0)
                 return false;
             if (string.IsNullOrEmpty(store.Name))
@@ -75,6 +105,13 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool Validate(Transaction transaction)
         {
+            var duplitransaction =
+                from transaction1 in _db.Transactions
+                where transaction1.Id == transaction.Id
+                select transaction1;
+            if (duplitransaction.Any())
+                return false;
+
             return transaction.ProductTransactions != null &&
                 transaction.ProductTransactions.Count > 0;
         }
@@ -138,6 +175,13 @@ namespace HomeEconomicSystem.BL.V1
         /// <returns></returns>
         public bool ValidateBaseProperty(BasicGraph basicGraph)
         {
+            var dupliGraph =
+                from graph in graphManagement.GetAllGraphs()
+                where graph.Id == basicGraph.Id
+                select graph;
+            if (dupliGraph.Any())
+                return false;
+
             if (basicGraph.Id < 0)
                 return false;
             if (String.IsNullOrEmpty(basicGraph.Title))

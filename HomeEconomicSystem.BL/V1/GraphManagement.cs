@@ -76,6 +76,14 @@ namespace HomeEconomicSystem.BL.V1
             return _db.TransactionsGraphs;
         }
 
+        public IEnumerable<BasicGraph> GetAllGraphs()
+        {
+            return GetCategoryGraphs().ToList().Concat
+                (GetProductGraphs().ToList().Concat
+                (GetStoreGraphs().ToList().Concat
+                (GetTransactionGraphs())));
+        }
+
         #endregion
 
         #region DeleteGraph
