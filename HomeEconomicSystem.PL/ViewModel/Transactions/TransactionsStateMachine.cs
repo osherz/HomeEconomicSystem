@@ -39,7 +39,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
                 .Permit(TransactionsTriggers.ChangeCategory, TransactionsState.ChoosingCategory)
                 .Permit(TransactionsTriggers.ChangeProduct, TransactionsState.ChoosingProduct)
                 .Permit(TransactionsTriggers.ChangeStore, TransactionsState.ChoosingStore)
-                .PermitIf(TransactionsTriggers.Finish, TransactionsState.UpdatingTransaction, () => new BL.BL().Validation.Validate(ParentVM.Transaction));
+                .PermitIf(TransactionsTriggers.Finish, TransactionsState.UpdatingTransaction);
 
             BasicConfigure(TransactionsState.ChoosingCategory)
                 .Permit(TransactionsTriggers.Finish, TransactionsState.ChoosedCategory);
@@ -57,7 +57,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             BasicConfigure(TransactionsState.ChoosedStore, TransactionsState.NewTransactionCreating);
 
             BasicConfigure(TransactionsState.UpdatingTransaction)
-                .PermitIf(TransactionsTriggers.Finish, TransactionsState.DoneCreating, () => new BL.BL().Validation.Validate(ParentVM.Transaction));
+                .PermitIf(TransactionsTriggers.Finish, TransactionsState.DoneCreating);
 
             BasicConfigure(TransactionsState.DoneCreating, TransactionsState.NewTransactionCreating);
         }
