@@ -11,6 +11,13 @@ namespace HomeEconomicSystem.BL
     {
         public IEnumerable<Product> Product { get; set; }
         public IEnumerable<Product> GoesWith { get; set; }
-        public float Probability { get; set; }
+        public double Probability { get; set; }
+
+        public AssosiatonRule(IEnumerable<Product> product, IEnumerable<Product> goesWith, double probability)
+        {
+            Product = product;
+            GoesWith = goesWith;
+            Probability = probability;
+        }
     }
 }

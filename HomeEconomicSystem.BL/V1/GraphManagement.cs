@@ -123,7 +123,7 @@ namespace HomeEconomicSystem.BL.V1
                 from newGroup2 in
                         (from productTransactionCollection in newGroup1
                          from productTransaction in productTransactionCollection
-                         where productTransaction.Transaction.DateTime.InRange(startDate, endDate)
+                         where productTransaction.Transaction.DateTime.InRange(startDate.Date, endDate.Date)
                          group productTransaction by GetTimeType(productTransaction.Transaction.DateTime, aggregationTimeType))
                 group newGroup2 by newGroup1.Key;
 
