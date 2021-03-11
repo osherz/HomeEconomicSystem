@@ -68,7 +68,11 @@
                             x:Name="MenuToggleButton"
                             Style="{StaticResource MaterialDesignHamburgerToggleButton}"
                             IsChecked="False"/>
-                            <TextBlock Text="מערכת לניהול כלכלת הבית" VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}" />
+                            <TextBlock VerticalAlignment="Center" Style="{StaticResource MaterialDesignHeadline6TextBlock}">
+                                <Run Text="מערכת לניהול כלכלת הבית" />
+                                <Run Text="/" />
+                                <Run Text="{Binding PageDisplay.Title, Mode=OneWay}" />
+                            </TextBlock>
                         </StackPanel>
                         <!--#endregion Right Stack-->
                     </DockPanel>

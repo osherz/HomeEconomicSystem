@@ -7,6 +7,7 @@
         DataAnalysis,
         ProductCatalog,
         TransactionHistory,
-        TransactionCreation
+        TransactionCreation,
+        CreatingList
     }
 }

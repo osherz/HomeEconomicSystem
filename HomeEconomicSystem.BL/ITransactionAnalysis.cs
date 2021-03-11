@@ -27,7 +27,5 @@ namespace HomeEconomicSystem.BL
         /// Stop StartFetchRemotePurchasesForTransactions.
         /// </summary>
         void StopFetchRemotePurchasesForTransactions();
-        void UpdateTransaction(Transaction transaction);
-        void AddTransaction(Transaction transaction);
     }
 }

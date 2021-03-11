@@ -103,7 +103,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         private void SaveNewGraph()
         {
             BasicGraph basicGraph;
-            switch (GraphCreationVM.SelectedSubject.Key)
+            switch (GraphCreationVM.SelectedSubject.Value.Key)
             {
                 case Subjects.Category:
                     basicGraph = GraphCreationVM.GetGraph<CategoryGraph>();
@@ -129,6 +129,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
                     throw new NotSupportedException();
             }
             GraphsCollection.Add(basicGraph);
+            GraphCreationVM.Reset();
         }
 
         private void LoadGraphs()

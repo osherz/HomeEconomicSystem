@@ -41,19 +41,5 @@ namespace HomeEconomicSystem.BL.V1
         {
             if (_timer != null) _timer.Stop();
         }
-
-        public void UpdateTransaction(Transaction transaction)
-        {
-            var oldTransaction = _db.Transactions.Single(t => t.Id == transaction.Id);
-            oldTransaction.DateTime = transaction.DateTime;
-            oldTransaction.ProductTransactions = transaction.ProductTransactions;
-            _db.SaveChanges();
-        }
-
-        public void AddTransaction(Transaction transaction)
-        {
-            _db.Transactions.Add(transaction);
-            _db.SaveChanges();
-        }
     }
 }

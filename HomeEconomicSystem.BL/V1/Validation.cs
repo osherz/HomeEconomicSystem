@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HomeEconomicSystem.BL.V1
 {
-    class Validation
+    public class Validation : IValidation
     {
         /// <summary>
         /// Checks if the relevant fields in the class "category"
@@ -65,6 +65,18 @@ namespace HomeEconomicSystem.BL.V1
                 return false;
 
             return true;
+        }
+
+        /// <summary>
+        /// Checks if the relevant fields in the class "TransactionsGraph"
+        /// are initialized properly, if not return "false".
+        /// </summary>
+        /// <param name="transactionsGraph"></param>
+        /// <returns></returns>
+        public bool Validate(Transaction transaction)
+        {
+            return transaction.ProductTransactions != null &&
+                transaction.ProductTransactions.Count > 0;
         }
 
         /// <summary>

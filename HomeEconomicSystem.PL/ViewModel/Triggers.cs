@@ -11,6 +11,5 @@ namespace HomeEconomicSystem.PL.ViewModel
         HomeSelected, DataAnalysisSelected, 
         ProductCatalogSelected, TransactionHistorySelected,
         Edit, Search, Delete, Create, CreateTransaction,
-        CreatePurchaseList
-    }
+        CreatePurchaseList    }
 }

@@ -13,6 +13,7 @@ namespace HomeEconomicSystem.BL
         public IGraphManagement GraphManagement { get;  }
         public IDataManagement DataManagement { get; }
         public IAssosiationProductsAnalysis AssosiationProductsAnalysis { get; }
+        public IValidation Validation { get; }
 
         public BL()
         {
@@ -20,6 +21,7 @@ namespace HomeEconomicSystem.BL
             GraphManagement = new GraphManagement();
             DataManagement = new DataManagement();
             AssosiationProductsAnalysis = new AssosiationProductsAnalysis();
+            Validation = new Validation();
         }
     }
 }

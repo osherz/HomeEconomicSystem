@@ -32,6 +32,7 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
             set { SetProperty(ref _state, value); }
         }
 
+        public string Title => "ניתוח נתונים";
 
         public DataAnalysisPageDisplay()
         {
@@ -46,7 +47,7 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
             MenuItems = new List<MenuItem>
             {
                 new MenuItem("שמורים", PackIconKind.StarCircle, _stateMachine.CreateCommand(TriggersDA.FavoriteSelected)),
-                new MenuItem("AR", PackIconKind.ChartSankeyVariant, _stateMachine.CreateCommand(TriggersDA.AssociationRulesSelected)),
+                new MenuItem("Rules", PackIconKind.ChartSankeyVariant, _stateMachine.CreateCommand(TriggersDA.AssociationRulesSelected)),
                 new MenuItem("טיוטה", PackIconKind.File, _stateMachine.CreateCommand(TriggersDA.DraftSelected))
             };
         }

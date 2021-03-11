@@ -11,7 +11,9 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
     public class DataAnalysisVM : VMBasic<States, Triggers>
     {
         public DataAnalysisVM()
-        { }
+        {
+            StateMachine.Fire(Triggers.FavoriteSelected);
+        }
 
         protected override BaseStateMachine<States, Triggers> CreateStateMachine(Dictionary<States, Action> statesEntryAction, Dictionary<States, Action> statesExitAction)
         {

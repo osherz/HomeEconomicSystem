@@ -34,7 +34,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
             set { SetProperty(ref _state, value); }
         }
 
-        
+        public string Title => "קטלוג";
+
         public CatalogPageDisplay()
         {
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));

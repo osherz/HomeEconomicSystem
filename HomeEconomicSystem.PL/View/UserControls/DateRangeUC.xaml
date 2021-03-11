@@ -8,10 +8,11 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="200">
-    <StackPanel>
+    <StackPanel Orientation="{Binding Orientation, 
+                            RelativeSource={RelativeSource AncestorType=local:DateRangeUC}}">
         <DatePicker
                 Name="_startDatePicker" 
-                Margin="0 5" 
+                Margin="5" 
                 materialDesign:HintAssist.Hint="תאריך התחלה"
                 SelectedDate="{Binding Path=StartDate, 
                              RelativeSource={RelativeSource FindAncestor, 
@@ -21,7 +22,7 @@
 
         <DatePicker 
                 Name="_endDatePicker" 
-                Margin="0 5"
+                Margin="5"
                 materialDesign:HintAssist.Hint="תאריך סיום"
                 SelectedDate="{Binding Path=EndDate, 
                              RelativeSource={RelativeSource FindAncestor, 

@@ -2,6 +2,7 @@
 using HomeEconomicSystem.BL;
 using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.Extensions;
+using HomeEconomicSystem.PL.Model;
 using HomeEconomicSystem.Utils;
 using System;
 using System.Collections.Generic;
@@ -19,8 +20,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private NotifyProperyChanged _notifyPropertyChanged;
-        private ITransactionAnalysis _transactionAnalysis;
-        private IDataManagement _dataManagement;
+        private TransactionsModel _transactionsModel;
+        
         TransactionsStateMachine _stateMachine;
 
         // TODO: Add option to add new store
@@ -133,8 +134,7 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             NewProduct = new Product();
 
             var bl = new BL.BL();
-            _transactionAnalysis = bl.TransactionAnalysis;
-            _dataManagement = bl.DataManagement;
+            _transactionsModel = new TransactionsModel();
             GenerateNewTransaction();
             LoadAllData();
 
@@ -200,8 +200,8 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
         private void LoadAllData()
         {
             ProductTransactions = Transaction.ProductTransactions.ToObservableCollection();
-            Categories = _dataManagement.GetCategories().ToObservableCollection();
-            Stores = _dataManagement.GetStores().ToObservableCollection();
+            Categories = new CategoriesModel().CategoriesList;
+            Stores = new StoresModel().StoresList;
         }
 
         public void GenerateNewTransaction()
@@ -226,11 +226,11 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             Transaction.ProductTransactions = ProductTransactions;
             if (Transaction.Id > 0)
             {
-                _transactionAnalysis.UpdateTransaction(Transaction);
+                _transactionsModel.Update(Transaction);
             }
             else // Adding new transaction
             {
-                _transactionAnalysis.AddTransaction(Transaction);
+                _transactionsModel.Add(Transaction);
             }
             LoadAllData();
             GenerateNewTransaction();
