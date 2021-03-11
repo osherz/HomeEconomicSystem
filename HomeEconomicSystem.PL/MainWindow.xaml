@@ -103,7 +103,6 @@
                             <TextBlock Text="{Binding PageDisplay.State}" />
                         </StackPanel>
                         <!--#endregion Right Stack-->
-
                     </DockPanel>
                 </materialDesign:ColorZone>
                 <!--#endregion Bottom-->
@@ -111,6 +110,20 @@
                 <!--#region Main-Content-->
                 <Grid DataContext="{Binding PageDisplay}">
                     <ContentControl Content="{Binding Content}" />
+                    <!-- simplest form -->
+                    <materialDesign:Snackbar
+                          x:Name="SnackbarOne"
+                          IsActive="{Binding ShowMessage}">
+                        <materialDesign:SnackbarMessage
+                            Content="{Binding MessageToShow}" 
+                            ActionClick="SnackbarMessage_ActionClick">
+                            <materialDesign:SnackbarMessage.ActionContent>
+                                <TextBlock Text="סגור"
+                                           Foreground="DarkCyan">
+                                </TextBlock>
+                            </materialDesign:SnackbarMessage.ActionContent>
+                        </materialDesign:SnackbarMessage>
+                    </materialDesign:Snackbar>
                 </Grid>
                 <!--#endregion Main-Content-->
             </DockPanel>

@@ -3,6 +3,7 @@ using HomeEconomicSystem.BE;
 using HomeEconomicSystem.BL;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using HomeEconomicSystem.Utils;
 using Stateless;
 using System;
@@ -19,6 +20,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
     internal class AssociationRulesVM : IInnerVM<States, Triggers>, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private IPageDisplay _parentPageDisplay;
         private NotifyProperyChanged _notifyPropertyChanged;
 
         private StateMachine<States, Triggers> _stateMachine;
@@ -32,8 +35,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         }
 
 
-        private Graph<IEnumerable<Product>> _graph;
-        public Graph<IEnumerable<Product>> Graph
+        private Graph<Product[]> _graph;
+        public Graph<Product[]> Graph
         {
             get => _graph;
             set => SetProperty(ref _graph, value);
@@ -59,29 +62,38 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
 
         public event EventHandler<string> InnerStateChanged;
 
-        public AssociationRulesVM()
+        public AssociationRulesVM(IPageDisplay parentPageDisplay)
         {
+            _parentPageDisplay = parentPageDisplay;
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property) );
             IsGraph = true;
             IsTable = false;
             _associationsModel = new AssociationsModel();
-            InitAssociationRules();
+            try
+            {
+                InitAssociationRules();
+            }
+            catch (Exception e)
+            {
+                _parentPageDisplay.MessageToShow = e.Message;
+                _parentPageDisplay.ShowMessage = true;
+            }
         }
 
         private void InitAssociationRules()
         {
-            Graph = new Graph<IEnumerable<Product>>();
+            Graph = new Graph<Product[]>();
             Rules = _associationsModel.AssosiatonRules
                 .Select(rule=>new RuleVM(rule))
                 .ToObservableCollection();
             foreach (var rule in _associationsModel.AssosiatonRules)
             {
-                var a = rule.Product;
-                var b = rule.GoesWith;
+                var a = rule.Product.ToArray();
+                var b = rule.GoesWith.ToArray();
                 Graph.AddVertex(a);
                 Graph.AddVertex(b);
 
-                var edge = new Edge<IEnumerable<Product>>(a, b, new Arrow()) { Label = rule.Probability.ToString()};
+                var edge = new Edge<Product[]>(a, b, new Arrow()) { Label = rule.Probability.ToString("P")};
                 Graph.AddEdge(edge);
             }
 

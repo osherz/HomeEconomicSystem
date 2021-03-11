@@ -2,6 +2,7 @@
 using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
+using HomeEconomicSystem.PL.ViewModel.PageDisplay;
 using HomeEconomicSystem.Utils;
 using MaterialDesignThemes.Wpf;
 using System;
@@ -19,6 +20,8 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
     public class FavoritesVM : INotifyPropertyChanged, IInnerVM<States, Triggers>
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private IPageDisplay _parentPageDisplay;
         private NotifyProperyChanged _notifyPropertyChanged;
 
         public GraphCreationVM GraphCreationVM { get; }
@@ -50,10 +53,11 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         public ICommand CreateGraph { get; private set; }
         #endregion Commands
 
-        public FavoritesVM()
+        public FavoritesVM(IPageDisplay parentPageDisplay)
         {
+            _parentPageDisplay = parentPageDisplay;
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
-            GraphCreationVM = new GraphCreationVM();
+            GraphCreationVM = new GraphCreationVM(parentPageDisplay);
             _graphsModel = new GraphsModel();
             LoadGraphs();
         }
@@ -82,17 +86,32 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
             {
                 { States.GraphCreatingForFavorite, ()=> {GraphCreationVM.GoToFirst(); CreatingGraph= true; } },
                 {States.SavingNewGraphFavorite, ()=>SaveNewGraph() },
-                {States.NewGraphFavoriteSaved, ()=> CreatingGraph= false },
+                {States.NewGraphFavoriteSaved, ()=> {CreatingGraph= false; ShowSuccessMessage(); } },
                 {States.FavoriteCreatingCanceled, ()=> CreatingGraph= false },
-                {States.DeleteFavorite, () => DeleteSelectedGraph()}
+                {States.DeleteFavorite, () => DeleteSelectedGraph()},
+                {States.FavoriteDeleted, () =>{ ShowSuccessMessage();  } },
             };
+        }
+
+        private void ShowSuccessMessage()
+        {
+            _parentPageDisplay.MessageToShow = "בוצע בהצלחה";
+            _parentPageDisplay.ShowMessage = true;
         }
 
         private void DeleteSelectedGraph()
         {
-            _graphsModel.DeleteGraph(_graphToDelete);
-            _graphsCollection.Remove(_graphToDelete);
-            _stateMachine.Fire(Triggers.Finish);
+            try
+            {
+                _graphsModel.DeleteGraph(_graphToDelete);
+                _graphsCollection.Remove(_graphToDelete);
+                _stateMachine.Fire(Triggers.Finish);
+            }
+            catch (Exception e)
+            {
+                _parentPageDisplay.MessageToShow = e.Message;
+                _parentPageDisplay.ShowMessage = true;
+            }
         }
 
         public IReadOnlyDictionary<States, Action> GetStatesExitAction()
@@ -103,41 +122,57 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         private void SaveNewGraph()
         {
             BasicGraph basicGraph;
-            switch (GraphCreationVM.SelectedSubject.Value.Key)
+            try
             {
-                case Subjects.Category:
-                    basicGraph = GraphCreationVM.GetGraph<CategoryGraph>();
-                    _graphsModel.AddGraph(GraphCreationVM.GetGraph<CategoryGraph>());
-                    _stateMachine.Fire(Triggers.Finish);
-                    break;
-                case Subjects.Product:
-                    basicGraph = GraphCreationVM.GetGraph<ProductGraph>();
-                    _graphsModel.AddGraph(GraphCreationVM.GetGraph<ProductGraph>());
-                    _stateMachine.Fire(Triggers.Finish);
-                    break;
-                case Subjects.Store:
-                    basicGraph = GraphCreationVM.GetGraph<StoreGraph>();
-                    _graphsModel.AddGraph(GraphCreationVM.GetGraph<StoreGraph>());
-                    _stateMachine.Fire(Triggers.Finish);
-                    break;
-                case Subjects.Transaction:
-                    basicGraph = GraphCreationVM.GetGraph<TransactionsGraph>();
-                    _graphsModel.AddGraph(GraphCreationVM.GetGraph<TransactionsGraph>());
-                    _stateMachine.Fire(Triggers.Finish);
-                    break;
-                default:
-                    throw new NotSupportedException();
+                switch (GraphCreationVM.SelectedSubject.Value.Key)
+                {
+                    case Subjects.Category:
+                        basicGraph = GraphCreationVM.GetGraph<CategoryGraph>();
+                        _graphsModel.AddGraph(GraphCreationVM.GetGraph<CategoryGraph>());
+                        _stateMachine.Fire(Triggers.Finish);
+                        break;
+                    case Subjects.Product:
+                        basicGraph = GraphCreationVM.GetGraph<ProductGraph>();
+                        _graphsModel.AddGraph(GraphCreationVM.GetGraph<ProductGraph>());
+                        _stateMachine.Fire(Triggers.Finish);
+                        break;
+                    case Subjects.Store:
+                        basicGraph = GraphCreationVM.GetGraph<StoreGraph>();
+                        _graphsModel.AddGraph(GraphCreationVM.GetGraph<StoreGraph>());
+                        _stateMachine.Fire(Triggers.Finish);
+                        break;
+                    case Subjects.Transaction:
+                        basicGraph = GraphCreationVM.GetGraph<TransactionsGraph>();
+                        _graphsModel.AddGraph(GraphCreationVM.GetGraph<TransactionsGraph>());
+                        _stateMachine.Fire(Triggers.Finish);
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+                GraphsCollection.Add(basicGraph);
+                GraphCreationVM.Reset();
             }
-            GraphsCollection.Add(basicGraph);
-            GraphCreationVM.Reset();
+            catch(Exception e)
+            {
+                _parentPageDisplay.MessageToShow = e.Message;
+                _parentPageDisplay.ShowMessage = true;
+            }
         }
 
         private void LoadGraphs()
         {
-            GraphsCollection = _graphsModel.GetCategoryGraphs()
-                .Concat(_graphsModel.GetStoreGraphs().Select(g => g as BasicGraph))
-                .Concat(_graphsModel.GetTransactionGraphs().Select(g => g as BasicGraph))
-                .Concat(_graphsModel.GetProductGraphs().Select(g => g as BasicGraph)).ToObservableCollection();
+            try
+            {
+                GraphsCollection = _graphsModel.GetCategoryGraphs()
+                    .Concat(_graphsModel.GetStoreGraphs().Select(g => g as BasicGraph))
+                    .Concat(_graphsModel.GetTransactionGraphs().Select(g => g as BasicGraph))
+                    .Concat(_graphsModel.GetProductGraphs().Select(g => g as BasicGraph)).ToObservableCollection();
+            }
+            catch (Exception e)
+            {
+                _parentPageDisplay.MessageToShow = e.Message;
+                _parentPageDisplay.ShowMessage = true;
+            }
         }
 
         private void OnStateChanged(string state)

@@ -29,13 +29,17 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
 
     public class TransactionsStateMachine : BaseStateMachine<TransactionsState, TransactionsTriggers>
     {
-        public TransactionsStateMachine(IReadOnlyDictionary<TransactionsState, Action> stateActionDict, IReadOnlyDictionary<TransactionsState, Action> stateExitActionDict = null) : base(TransactionsState.NewTransactionCreating, stateActionDict, stateExitActionDict)
+
+
+        public TransactionsStateMachine(CreateTransactionVM parentVM, IReadOnlyDictionary<TransactionsState, Action> stateActionDict, IReadOnlyDictionary<TransactionsState, Action> stateExitActionDict = null) : base(TransactionsState.NewTransactionCreating, stateActionDict, stateExitActionDict)
         {
+            ParentVM = parentVM;
+
             BasicConfigure(TransactionsState.NewTransactionCreating)
                 .Permit(TransactionsTriggers.ChangeCategory, TransactionsState.ChoosingCategory)
                 .Permit(TransactionsTriggers.ChangeProduct, TransactionsState.ChoosingProduct)
                 .Permit(TransactionsTriggers.ChangeStore, TransactionsState.ChoosingStore)
-                .Permit(TransactionsTriggers.Finish, TransactionsState.UpdatingTransaction);
+                .PermitIf(TransactionsTriggers.Finish, TransactionsState.UpdatingTransaction, () => new BL.BL().Validation.Validate(ParentVM.Transaction));
 
             BasicConfigure(TransactionsState.ChoosingCategory)
                 .Permit(TransactionsTriggers.Finish, TransactionsState.ChoosedCategory);
@@ -53,9 +57,11 @@ namespace HomeEconomicSystem.PL.ViewModel.Transactions
             BasicConfigure(TransactionsState.ChoosedStore, TransactionsState.NewTransactionCreating);
 
             BasicConfigure(TransactionsState.UpdatingTransaction)
-                .Permit(TransactionsTriggers.Finish, TransactionsState.DoneCreating);
+                .PermitIf(TransactionsTriggers.Finish, TransactionsState.DoneCreating, () => new BL.BL().Validation.Validate(ParentVM.Transaction));
 
             BasicConfigure(TransactionsState.DoneCreating, TransactionsState.NewTransactionCreating);
         }
+
+        public CreateTransactionVM ParentVM { get; }
     }
 }

@@ -9,6 +9,8 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 {
     public interface IPageDisplay
     {
+        bool ShowMessage { get; set; }
+        string MessageToShow { get; set; }
         string Title { get; }
         string State { get; }
         bool HasItems { get; }

@@ -34,12 +34,19 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
 
         public string Title => "ניתוח נתונים";
 
+        private bool _showMessage;
+        public bool ShowMessage { get => _showMessage; set => SetProperty(ref _showMessage, value); }
+
+
+        private string _messageToShow;
+        public string MessageToShow { get => _messageToShow; set => SetProperty(ref _messageToShow, value); }
+
         public DataAnalysisPageDisplay()
         {
             _notifyPropertyChanged = new NotifyProperyChanged(this, (property) => OnPropertyChanged(property));
 
             Content = new View.DataAnalysisView();
-            var VM = new DataAnalysisVM();
+            var VM = new DataAnalysisVM(this);
             VM.InnerStateChanged += VM_InnerStateChanged;
             Content.DataContext = VM;
             _stateMachine = VM.StateMachine;

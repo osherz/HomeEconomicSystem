@@ -1,4 +1,5 @@
 ﻿using HomeEconomicSystem.BE;
+using HomeEconomicSystem.PL.Command;
 using HomeEconomicSystem.PL.Extensions;
 using HomeEconomicSystem.PL.Model;
 using HomeEconomicSystem.PL.ViewModel.PageDisplay;
@@ -12,7 +13,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace HomeEconomicSystem.PL.ViewModel
@@ -74,6 +77,7 @@ namespace HomeEconomicSystem.PL.ViewModel
 
             MainMenuVM = new MainMenuVM(_stateMachine);
             InitToolBarItems();
+
             _stateMachine.Fire(Triggers.HomeSelected);
         }
 
@@ -96,5 +100,12 @@ namespace HomeEconomicSystem.PL.ViewModel
         {
             PropertyChanged?.Invoke(this, property);
         }
+
+        public void CloseMessage()
+        {
+            PageDisplay.ShowMessage = false;
+            PageDisplay.MessageToShow = "";
+        }
+
     }
 }
