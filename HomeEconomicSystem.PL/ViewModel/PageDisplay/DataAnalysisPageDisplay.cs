@@ -53,7 +53,7 @@ namespace HomeEconomicSystem.PL.ViewModel.PageDisplay
             _stateMachine.OnTransitionCompleted(e => VM_InnerStateChanged(this, e.Destination.ToString()));
             MenuItems = new List<MenuItem>
             {
-                new MenuItem("שמורים", PackIconKind.StarCircle, _stateMachine.CreateCommand(TriggersDA.FavoriteSelected)),
+                new MenuItem("גרפים", PackIconKind.StarCircle, _stateMachine.CreateCommand(TriggersDA.FavoriteSelected)),
                 new MenuItem("Rules", PackIconKind.ChartSankeyVariant, _stateMachine.CreateCommand(TriggersDA.AssociationRulesSelected)),
                 new MenuItem("טיוטה", PackIconKind.File, _stateMachine.CreateCommand(TriggersDA.DraftSelected))
             };

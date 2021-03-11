@@ -25,7 +25,7 @@ namespace HomeEconomicSystem.PL.ViewModel.DataAnalysis
         {
             return new Dictionary<States, Func<UserControl>>
             {
-                 {States.Favorites, () =>  new FavoritesView() },
+                 {States.Favorites, () =>new FavoritesView() },
                  {States.Draft, () => new DraftView() },
                 {States.AssociationRules, () => new AssociationRulesView() },
             };

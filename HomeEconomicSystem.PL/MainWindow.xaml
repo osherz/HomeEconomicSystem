@@ -100,7 +100,10 @@
 
                         <!--#region Right Stack-->
                         <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
-                            <TextBlock Text="{Binding PageDisplay.State}" />
+                            <TextBlock Text="שהייה נעימה"
+                                       Margin="30 0 0 0"
+                                       VerticalAlignment="Center"
+                                       Style="{StaticResource MaterialDesignSubtitle2TextBlock}"/>
                         </StackPanel>
                         <!--#endregion Right Stack-->
                     </DockPanel>
